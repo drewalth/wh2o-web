@@ -1,5 +1,5 @@
 import { http } from 'lib'
-import { IGageReading } from '../interfaces'
+import { IGage, IGageReading } from '../interfaces'
 
 export const getGages = async () => {
   return http.get('/gages').then((res) => res.data)
@@ -16,5 +16,5 @@ export const getGageReadings = async (
 }
 
 export const searchGages = async (term: string) => {
-  return http.get(`/gages?name=${term}`).then((res) => res.data)
+  return http.get(`/gages/search?term=${term}`).then((res) => res.data)
 }
