@@ -3,7 +3,7 @@ import { Button, message } from 'antd'
 import { userBookmarkRiver, removeBookmarkRiver } from 'controllers'
 import { useAppSelector } from 'store'
 import { selectUserData } from 'store/slices/user.slice'
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 
 interface BookMarkProps {
   riverId: number
@@ -14,15 +14,15 @@ export const Bookmark = (props: BookMarkProps) => {
   const [buttonText, setButtonText] = useState('Bookmark')
   const [bookmarked, setBookmarked] = useState(false)
 
+  useEffect(() => {
+    const data = user.reaches.map(reach => reach.id).includes(props.riverId)
+    setBookmarked(data)
+    setButtonText(data ? 'Remove Bookmark' : 'Bookmark')
+  }, [user])
+
   const handleBookmark = async () => {
     try {
-      if (
-        bookmarked ||
-        user.reaches
-          // @ts-ignore
-          .map((river) => river.riverId)
-          .includes(props.riverId)
-      ) {
+      if (bookmarked) {
         if (!user.id) return
 
         await removeBookmarkRiver(user.id, props.riverId)

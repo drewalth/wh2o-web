@@ -262,7 +262,6 @@ export const FlowChart = (props: FlowChartProps) => {
       renderChart()
     }
   })
-
   return (
     <Card
       title={(gage && gage.name) || ''}
@@ -284,8 +283,12 @@ export const FlowChart = (props: FlowChartProps) => {
         </>
       }
     >
-      {/* @ts-ignore */}
-      <canvas ref={chartRef} />
+      {chartRef && chartRef.current && (
+        <>
+          {/* @ts-ignore */}
+          <canvas ref={chartRef} />
+        </>
+      )}
     </Card>
   )
 }
