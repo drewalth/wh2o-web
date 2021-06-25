@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { IMedia, MediaModel } from 'interfaces'
 import { createMedia, deleteMedia, deletePendingMedia } from 'controllers'
 import { useAppSelector } from 'store'
-import {selectUserData, selectUserIsPublisher} from 'store/slices/user.slice'
+import { selectUserData, selectUserIsPublisher } from 'store/slices/user.slice'
 
 interface GalleryProps {
   apiUrl: string
@@ -53,9 +53,9 @@ export const Gallery = (props: GalleryProps) => {
         // @ts-ignore
         user: {
           connect: {
-            id: user.id
-          }
-        }
+            id: user.id,
+          },
+        },
         // features
         // pick from existing or upload new
       })

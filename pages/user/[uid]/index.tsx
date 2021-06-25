@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { PageHeader, Layout, Spin, Menu } from 'antd'
-import { FlowReport, Rivers, Settings, Media, Notifications } from 'components/user'
+import {
+  FlowReport,
+  Rivers,
+  Settings,
+  Media,
+  Notifications,
+} from 'components/user'
 import FlowRangeEditor from 'components/flow-range-editor/flow-range-editor'
 import { useAppSelector, useAppDispatch } from 'store'
 import {
@@ -59,8 +65,12 @@ const index = () => {
         {user && !userLoading && (
           <Layout.Content style={{ padding: '24px' }}>
             {activeTab === '1' && <FlowReport gages={user.gages} />}
-            {activeTab === '2' && user.id && <Rivers userId={user.id} />}
-            {activeTab === '3' && user.id && <Media userId={user.id} media={user.media} />}
+            {activeTab === '2' && user.id && (
+              <Rivers userId={user.id} reaches={user.reaches} />
+            )}
+            {activeTab === '3' && user.id && (
+              <Media userId={user.id} media={user.media} />
+            )}
             {activeTab === '8' && user.id && <Notifications userId={user.id} />}
             {activeTab === '4' && user.id && (
               <FlowRangeEditor

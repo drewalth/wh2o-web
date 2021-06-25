@@ -23,27 +23,27 @@ export const removeBookmarkGage = async (userId: number, gageId: number) => {
 
 export const userBookmarkRiver = async (
   userId: number,
-  riverId: number,
+  reachId: number,
   primary = false
 ) => {
   return http
-    .post('users/reaches', { userId, riverId, primary })
+    .post('/reach-users', { userId, reachId, primary })
     .then((res) => res.data)
 }
 
 export const removeBookmarkRiver = async (
   userId: number | undefined,
-  riverId: number
+  reachId: number
 ) => {
   return http
-    .delete(`users/rivers/${userId}/${riverId}`)
+    .delete(`/reach-users/${userId}/${reachId}`)
     .then((res) => res.data)
 }
 
 export const getUserRivers = async (
   userId: string | number
 ): Promise<IRiver[]> => {
-  return http.get(`/users/rivers/${userId}`).then((res) => res.data)
+  return http.get(`/users/reaches/${userId}`).then((res) => res.data)
 }
 
 export const createUserGageNotify = async (data: { userId: number }) => {

@@ -43,7 +43,13 @@ const columns = [
     title: 'Updated',
     dataIndex: 'updatedAt',
     key: 'updatedAt',
-    render: (updatedAt: Date, val:IRiver) => <span>{!updatedAt ? moment(val.createdAt).format('LL') : moment(updatedAt).format('LL')}</span>,
+    render: (updatedAt: Date, val: IRiver) => (
+      <span>
+        {!updatedAt
+          ? moment(val.createdAt).format('LL')
+          : moment(updatedAt).format('LL')}
+      </span>
+    ),
   },
   {
     dataIndex: 'id',

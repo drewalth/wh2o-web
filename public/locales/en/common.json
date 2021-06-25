@@ -2,6 +2,7 @@
   "common": {
     "flow": "Flow",
     "dashboard": "Dashboard",
+    "subscribers": "Subscribers",
     "features": "Features",
     "media": "Media",
     "map": "Map",

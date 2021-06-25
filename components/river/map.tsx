@@ -26,6 +26,8 @@ export const RiverMap = (props: MapProps) => {
   }
 
   useEffect(() => {
+    if (!props.mapboxToken) return
+
     const map = new mapboxgl.Map({
       container: 'map', // container ID
       style: 'mapbox://styles/mapbox/streets-v11', // style URL
