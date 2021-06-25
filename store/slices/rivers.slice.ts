@@ -16,7 +16,7 @@ const initialState: RiverState = {
 }
 
 export const fetchRivers = createAsyncThunk(
-  'reaches/fetchRiversStatus',
+  'rivers/fetchRiversStatus',
   async (val, thunkAPI) => {
     return await getRivers()
   }

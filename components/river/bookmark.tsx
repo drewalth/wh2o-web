@@ -18,7 +18,7 @@ export const Bookmark = (props: BookMarkProps) => {
     try {
       if (
         bookmarked ||
-        user.rivers
+        user.reaches
           // @ts-ignore
           .map((river) => river.riverId)
           .includes(props.riverId)

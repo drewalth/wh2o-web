@@ -51,8 +51,8 @@ export enum ClassRating {
 }
 
 export interface IRiver {
-  gages: IGage[]
-  posts: IPost[]
+  gages?: IGage[]
+  posts?: IPost[]
   id: number
   name: string
   section?: string
@@ -61,8 +61,8 @@ export interface IRiver {
   maximumGradient?: number
   averageGradient?: number
   features: IFeature[]
-  media: IMedia[]
-  users: IUser[]
+  media?: IMedia[]
+  users?: IUser[]
   length?: number
   description?: string
   updatedAt: Date
