@@ -26,9 +26,13 @@ import {
   UserOutlined,
 } from '@ant-design/icons'
 import { withRouter, NextRouter } from 'next/router'
-import {useAppDispatch, useAppSelector} from "store";
-import {fetchRiver, selectRiverData, selectRiverError, selectRiverLoading} from "store/slices/river.slice";
-import {selectUserData} from "../../store/slices/user.slice";
+import { useAppDispatch, useAppSelector } from 'store'
+import {
+  fetchRiver,
+  selectRiverData,
+  selectRiverError,
+  selectRiverLoading,
+} from 'store/slices/river.slice'
 
 interface RiverDetailProps {
   id: number
@@ -39,7 +43,7 @@ interface RiverDetailProps {
 }
 
 const RiverDetail = (props: RiverDetailProps) => {
-  const {id} = props
+  const { id } = props
   const { t } = useTranslation('common')
   const [activeTab, setActiveTab] = useState('1')
   const dispatch = useAppDispatch()
@@ -49,7 +53,7 @@ const RiverDetail = (props: RiverDetailProps) => {
 
   useEffect(() => {
     dispatch(fetchRiver(id))
-  },[id])
+  }, [id])
 
   return (
     <>
@@ -137,7 +141,9 @@ const RiverDetail = (props: RiverDetailProps) => {
             {activeTab === '6' && river.posts && (
               <Board riverId={props.id} posts={river.posts} />
             )}
-            {activeTab === '7' && <Subscribers subscribers={river.users || []} />}
+            {activeTab === '7' && (
+              <Subscribers subscribers={river.users || []} />
+            )}
           </Layout.Content>
         </Layout>
       </Layout.Content>
