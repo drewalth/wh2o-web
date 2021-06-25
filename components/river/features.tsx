@@ -11,12 +11,12 @@ interface FeaturesProps {
 }
 
 export const Features = (props: FeaturesProps) => {
-  let { features: data, riverId } = props
+  let { riverId } = props
   const [saveLoading, setSaveLoading] = useState(false)
   const [saveError, setSaveError] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
   const [form, setForm] = useState<IFeature>({ ...FeatureModel })
-  const [features, setFeatures] = useState<IFeature[]>([...data])
+  const [features, setFeatures] = useState<IFeature[]>([...props.features])
   const userIsPublisher = useAppSelector(selectUserIsPublisher)
 
   const handleSubmit = async () => {

@@ -51,6 +51,7 @@ export enum ClassRating {
 }
 
 export interface IRiver {
+  gages: IGage[]
   posts: IPost[]
   id: number
   name: string
@@ -59,8 +60,9 @@ export interface IRiver {
   minimumGradient?: number
   maximumGradient?: number
   averageGradient?: number
-  features_features_riverIdTorivers: IFeature[]
-  media_media_riversTorivers: IMedia[] // any
+  features: IFeature[]
+  media: IMedia[]
+  users: IUser[]
   length?: number
   description?: string
   updatedAt: Date
@@ -77,9 +79,11 @@ export const RiverModel: IRiver = {
   averageGradient: 0,
   length: 0,
   description: '',
-  features_features_riverIdTorivers: [],
+  features: [],
   posts: [],
-  media_media_riversTorivers: [],
+  media: [],
+  gages: [],
+  users: [],
   updatedAt: new Date(),
   createdAt: new Date(),
 }
@@ -106,7 +110,7 @@ export const MediaModel: IMedia = {
   fileName: '',
   url: '',
   entityType: mediaEntityType.photo,
-  user:0
+  user: 0,
 }
 
 export enum user_role {
@@ -125,7 +129,7 @@ export interface IUser {
   password?: string
   email: string
   gages: IGage[]
-  rivers: IRiver[]
+  reaches: IRiver[]
   createdAt?: Date
   updatedAt?: Date
 }
@@ -145,7 +149,7 @@ export const UserModel: IUser = {
   lastName: '',
   email: '',
   gages: [],
-  rivers: [],
+  reaches: [],
   media: [],
   role: user_role.USER,
 }

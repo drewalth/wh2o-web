@@ -12,6 +12,8 @@ import {
   RiverMap,
   Board,
   Bookmark,
+  Subscribers,
+  Flow,
 } from 'components/river'
 import {
   DashboardOutlined,
@@ -23,6 +25,7 @@ import {
   DownloadOutlined,
   FacebookOutlined,
   NotificationOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
 import { withRouter, NextRouter } from 'next/router'
 
@@ -52,6 +55,7 @@ const RiverDetail = (props: RiverDetailProps) => {
     try {
       setLoading(true)
       const result = await getRiver(id)
+      console.log(result)
       setRiver(result)
     } catch (e) {
       console.log('e', e)
@@ -115,6 +119,9 @@ const RiverDetail = (props: RiverDetailProps) => {
               <Menu.Item icon={<NotificationOutlined />} key="6">
                 {t('common.board')}
               </Menu.Item>
+              <Menu.Item icon={<UserOutlined />} key="7">
+                {t('common.subscribers')}
+              </Menu.Item>
             </Menu>
           </Layout.Sider>
           <Layout.Content
@@ -132,25 +139,23 @@ const RiverDetail = (props: RiverDetailProps) => {
                 <Typography.Paragraph>{river.description}</Typography.Paragraph>
               </>
             )}
-            {activeTab === '2' && <h1>Flow</h1>}
+            {activeTab === '2' && <Flow gages={river.gages} />}
             {activeTab === '3' && (
-              <Features
-                riverId={props.id}
-                features={river.features_features_riverIdTorivers}
-              />
+              <Features riverId={props.id} features={river.features} />
             )}
             {activeTab === '4' && (
               <Gallery
                 id={props.id}
                 apiUrl={props.apiUrl}
                 awsS3RootPath={props.awsS3RootPath}
-                sources={river.media_media_riversTorivers}
+                sources={river.media}
               />
             )}
             {activeTab === '5' && <RiverMap mapboxToken={props.mapboxToken} />}
             {activeTab === '6' && river.posts && (
               <Board riverId={props.id} posts={river.posts} />
             )}
+            {activeTab === '7' && <Subscribers subscribers={river.users} />}
           </Layout.Content>
         </Layout>
       </Layout.Content>
@@ -169,9 +174,9 @@ export const getServerSideProps: GetServerSideProps = async (
   return {
     props: {
       id: Number(context.query.rid),
-      apiUrl: process.env.API_BASE_URL,
+      apiUrl: process.env.API_BASE_URL || '',
       awsS3RootPath: process.env.AWS_S3_BASE_URL,
-      mapboxToken: process.env.MAPBOX_ACCESS_TOKEN,
+      mapboxToken: process.env.MAPBOX_ACCESS_TOKEN || '',
       ...(await serverSideTranslations(context.locale as string)),
     },
   }

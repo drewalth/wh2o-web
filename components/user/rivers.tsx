@@ -1,11 +1,10 @@
 import {
-  getUserRivers,
   removeBookmarkRiver,
   searchRiver,
   userBookmarkRiver,
 } from 'controllers'
 import debounce from 'lodash.debounce'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   message,
   Table,
@@ -25,13 +24,14 @@ import { selectRiversData } from 'store/slices/rivers.slice'
 
 interface RiversProps {
   userId: number
+  reaches: IRiver[]
 }
 
 export const Rivers = (props: RiversProps) => {
-  const { userId } = props
+  const { userId, reaches } = props
   const [loading, setLoading] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
-  const [rivers, setRivers] = useState<IRiver[]>([])
+  const [rivers, setRivers] = useState<IRiver[]>(reaches)
   const [bookmarkForm, setBookmarkForm] = useState(0)
   const cachedRivers = useAppSelector(selectRiversData)
   const [options, setOptions] = useState<{ label: string; value: number }[]>(
@@ -50,7 +50,7 @@ export const Rivers = (props: RiversProps) => {
     try {
       if (!bookmarkForm) return
       const result = await userBookmarkRiver(userId, bookmarkForm)
-      setRivers([...rivers, result.rivers])
+      setRivers([...rivers, result])
       setModalVisible(false)
       setBookmarkForm(0)
       message.success('River Bookmarked')
@@ -88,8 +88,12 @@ export const Rivers = (props: RiversProps) => {
       title: 'Updated',
       dataIndex: 'updatedAt',
       key: 'updatedAt',
-      render: (updatedAt: Date, val:IRiver) => (
-        <span>{!updatedAt ? moment(val.createdAt).format('LL') : moment(updatedAt).format('LL')}</span>
+      render: (updatedAt: Date, val: IRiver) => (
+        <span>
+          {!updatedAt
+            ? moment(val.createdAt).format('LL')
+            : moment(updatedAt).format('LL')}
+        </span>
       ),
     },
     {
@@ -112,33 +116,16 @@ export const Rivers = (props: RiversProps) => {
     },
   ]
 
-  const load = async () => {
-    try {
-      setLoading(true)
-      const result = await getUserRivers(userId)
-      setRivers(result)
-    } catch (e) {
-      console.log('e', e)
-      message.error('Failed to load reaches')
-    } finally {
-      setLoading(false)
-    }
-  }
-
   const handleRemoveBookmark = async (riverId: number) => {
     try {
-      const result = await removeBookmarkRiver(userId, riverId)
-      setRivers(rivers.filter((r) => r.id !== result.rivers.id))
+      await removeBookmarkRiver(userId, riverId)
+      setRivers(rivers.filter((r) => r.id !== riverId))
       message.success('Bookmark removed')
     } catch (e) {
       console.log('e', e)
       message.error('Failed to remove bookmark')
     }
   }
-
-  useEffect(() => {
-    load()
-  }, [])
 
   return (
     <>

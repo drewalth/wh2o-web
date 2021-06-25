@@ -1,4 +1,4 @@
-import { Chart } from 'Chart.js'
+import { Chart } from 'chart.js'
 
 // TODO make this work
 const flowChartBackground = {
