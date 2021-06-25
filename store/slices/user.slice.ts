@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { RootState } from '../index'
 import { IUser, UserModel } from '../../interfaces'
-import { getUser } from '../../controllers'
-import { fetchGages } from './gages.slice'
+import { getUser } from 'controllers'
 
 interface UserState {
   data: IUser
@@ -18,9 +17,8 @@ const initialState: UserState = {
 
 export const fetchUser = createAsyncThunk(
   'user/fetchUserStatus',
-  async (val: string | number, thunkAPI) => {
-    console.log(val)
-    return await getUser(val)
+  async (userId: string | number, thunkAPI) => {
+    return await getUser(userId)
   }
 )
 
@@ -40,13 +38,6 @@ export const userSlice = createSlice({
     setUserError: (state, action) => {
       state.error = action.payload
     },
-    setUserGages: (state, action) => {
-      if (action.payload.length === 1) {
-        state.data.gages.push(action.payload)
-      } else {
-        state.data.gages = [...state.data.gages, ...action.payload]
-      }
-    },
   },
   extraReducers: {
     // @ts-ignore
@@ -61,7 +52,6 @@ export const {
   resetUser,
   setUserLoading,
   setUserError,
-  setUserGages,
 } = userSlice.actions
 
 export const selectUserData = (state: RootState) => state.user.data

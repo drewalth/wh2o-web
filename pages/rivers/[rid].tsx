@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
-import { getRiver } from 'controllers'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Breadcrumb, Button, Layout, PageHeader, Typography, Menu } from 'antd'
-import { IRiver, RiverModel } from 'interfaces'
 import {
   BetaBox,
   Gallery,
@@ -28,6 +26,9 @@ import {
   UserOutlined,
 } from '@ant-design/icons'
 import { withRouter, NextRouter } from 'next/router'
+import {useAppDispatch, useAppSelector} from "store";
+import {fetchRiver, selectRiverData, selectRiverError, selectRiverLoading} from "store/slices/river.slice";
+import {selectUserData} from "../../store/slices/user.slice";
 
 interface RiverDetailProps {
   id: number
@@ -37,37 +38,18 @@ interface RiverDetailProps {
   mapboxToken: string
 }
 
-interface RiverDetailState {
-  river: IRiver
-  loading: boolean
-  error: boolean
-  activeTab: string
-}
-
 const RiverDetail = (props: RiverDetailProps) => {
+  const {id} = props
   const { t } = useTranslation('common')
-  const [river, setRiver] = useState<IRiver>({ ...RiverModel })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
   const [activeTab, setActiveTab] = useState('1')
-
-  const load = async (id: number) => {
-    try {
-      setLoading(true)
-      const result = await getRiver(id)
-      console.log(result)
-      setRiver(result)
-    } catch (e) {
-      console.log('e', e)
-      setError(true)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const dispatch = useAppDispatch()
+  const river = useAppSelector(selectRiverData)
+  const loading = useAppSelector(selectRiverLoading)
+  const error = useAppSelector(selectRiverError)
 
   useEffect(() => {
-    load(props.id)
-  }, [])
+    dispatch(fetchRiver(id))
+  },[id])
 
   return (
     <>
@@ -79,7 +61,7 @@ const RiverDetail = (props: RiverDetailProps) => {
         <PageHeader
           title={river.name}
           subTitle={river.section}
-          onBack={() => props.router.push('/reaches')}
+          onBack={() => props.router.push('/rivers')}
           extra={[
             props.id && <Bookmark key={'bookmark'} riverId={props.id} />,
             <Button icon={<FacebookOutlined />}>
@@ -139,7 +121,7 @@ const RiverDetail = (props: RiverDetailProps) => {
                 <Typography.Paragraph>{river.description}</Typography.Paragraph>
               </>
             )}
-            {activeTab === '2' && <Flow gages={river.gages} />}
+            {activeTab === '2' && <Flow gages={river.gages || []} />}
             {activeTab === '3' && (
               <Features riverId={props.id} features={river.features} />
             )}
@@ -148,14 +130,14 @@ const RiverDetail = (props: RiverDetailProps) => {
                 id={props.id}
                 apiUrl={props.apiUrl}
                 awsS3RootPath={props.awsS3RootPath}
-                sources={river.media}
+                sources={river.media || []}
               />
             )}
             {activeTab === '5' && <RiverMap mapboxToken={props.mapboxToken} />}
             {activeTab === '6' && river.posts && (
               <Board riverId={props.id} posts={river.posts} />
             )}
-            {activeTab === '7' && <Subscribers subscribers={river.users} />}
+            {activeTab === '7' && <Subscribers subscribers={river.users || []} />}
           </Layout.Content>
         </Layout>
       </Layout.Content>
