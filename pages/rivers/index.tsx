@@ -22,7 +22,7 @@ import {
 import debounce from 'lodash.debounce'
 import { searchRiver } from 'controllers'
 import { IRiver } from '../../interfaces'
-import {fetchReach} from "../../store/slices/river.slice";
+import { fetchReach } from '../../store/slices/river.slice'
 
 const columns = [
   {

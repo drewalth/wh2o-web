@@ -47,12 +47,8 @@ export const userSlice = createSlice({
   },
 })
 
-export const {
-  setUser,
-  resetUser,
-  setUserLoading,
-  setUserError,
-} = userSlice.actions
+export const { setUser, resetUser, setUserLoading, setUserError } =
+  userSlice.actions
 
 export const selectUserData = (state: RootState) => state.user.data
 export const selectUserIsPublisher = (state: RootState) =>

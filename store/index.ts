@@ -12,7 +12,7 @@ export const store = configureStore({
     rivers: riversReducer,
     gages: gagesReducer,
     user: userReducer,
-    river: riverReducer
+    river: riverReducer,
   },
 })
 
