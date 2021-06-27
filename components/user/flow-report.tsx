@@ -106,7 +106,7 @@ export const FlowReport = (props: FlowReportProps) => {
         <Col span={24} lg={24} xl={18} style={columnStyle}>
           {userGages && userGages.length ? (
             <FlowChart
-              gageId={userGages[0].gageId}
+              gageId={userGages[0].id}
               handleDelete={handleDelete}
             />
           ) : (
