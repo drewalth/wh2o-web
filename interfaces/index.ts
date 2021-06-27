@@ -279,3 +279,15 @@ export interface UserRiver {
   createdAt: Date
   updatedAt?: Date
 }
+
+export interface ICountry {
+  id: number
+  name: string
+  code: string
+}
+
+export interface ReachSearchParams {
+  name: string
+  section?: string
+  country: string
+}

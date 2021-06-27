@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { RootState } from '../index'
-import { IRiver } from '../../interfaces'
+import { IRiver, ReachSearchParams } from '../../interfaces'
 import { getRivers } from '../../controllers'
 
 interface RiverState {
@@ -17,8 +17,8 @@ const initialState: RiverState = {
 
 export const fetchRivers = createAsyncThunk(
   'rivers/fetchRiversStatus',
-  async (val, thunkAPI) => {
-    return await getRivers()
+  async (val: ReachSearchParams, thunkAPI) => {
+    return await getRivers(val)
   }
 )
 
@@ -41,8 +41,17 @@ export const riversSlice = createSlice({
   },
   extraReducers: {
     // @ts-ignore
+    [fetchRivers.pending]: (state, action) => {
+      state.loading = true
+    },
+    // @ts-ignore
     [fetchRivers.fulfilled]: (state, action) => {
       state.data = [...action.payload]
+      state.loading = false
+    },
+    // @ts-ignore
+    [fetchRivers.rejected]: (state, action) => {
+      state.loading = false
     },
   },
 })

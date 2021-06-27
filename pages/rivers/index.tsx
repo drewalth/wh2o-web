@@ -9,7 +9,6 @@ import {
   Button,
   Form,
   Input,
-  message,
   Select,
 } from 'antd'
 import moment from 'moment'
@@ -21,8 +20,9 @@ import {
   fetchRivers,
 } from 'store/slices/rivers.slice'
 import debounce from 'lodash.debounce'
-import { searchRiver } from 'controllers'
-import { IRiver } from 'interfaces'
+import { ICountry, IRiver, ReachSearchParams } from 'interfaces'
+import { GetStaticProps } from 'next'
+import { selectUserIsPublisher } from 'store/slices/user.slice'
 
 const columns = [
   {
@@ -65,55 +65,53 @@ const columns = [
   },
 ]
 
-const Rivers = () => {
+interface RiversProps {
+  countriesList: ICountry[]
+  activeCountries: ICountry[]
+}
+
+const Rivers = (props: RiversProps) => {
   const dispatch = useAppDispatch()
   const rivers = useAppSelector(selectRiversData)
   const loading = useAppSelector(selectRiversLoading)
-  const [searchResults, setSearchResults] = useState<IRiver[]>([])
+  const userIsPublisher = useAppSelector(selectUserIsPublisher)
+  const [params, setParams] = useState<ReachSearchParams>({
+    name: '',
+    country: 'US',
+  })
+
+  const handleParamChange = (evt: any) => {
+    setParams(Object.assign({}, params, evt))
+  }
 
   useEffect(() => {
-    if (!rivers.length) {
-      dispatch(fetchRivers())
-    }
-  }, [])
-
-  const submitSearch = async ({ term }: { term: string }) => {
-    if (!term) {
-      setSearchResults([])
-      return
-    }
-
-    try {
-      const result = await searchRiver(term)
-      setSearchResults(result)
-    } catch (e) {
-      console.log('e', e)
-      message.error('Search Failed...')
-    }
-  }
+    dispatch(fetchRivers(params))
+  }, [params])
 
   return (
     <>
       <PageHeader
         title="Rivers"
-        extra={[
-          <Button key="1" type="primary">
-            Create River
-          </Button>,
-        ]}
+        extra={
+          userIsPublisher && (
+            <Button key="1" type="primary">
+              Create River
+            </Button>
+          )
+        }
       />
       <Layout.Content style={{ padding: '0 24px' }}>
         <Row>
           <Col span={24}>
             <Card>
               <Form
-                onValuesChange={debounce(submitSearch, 500)}
-                initialValues={{ term: '', country: 'USA' }}
+                onValuesChange={debounce(handleParamChange, 500)}
+                initialValues={{ name: '', country: 'US' }}
               >
                 <Form.Item>
                   <Form.Item
                     label="River Name"
-                    name="term"
+                    name="name"
                     style={{
                       display: 'inline-block',
                       width: 'calc(50% - 8px)',
@@ -129,21 +127,15 @@ const Rivers = () => {
                       width: 'calc(50% - 8px)',
                     }}
                   >
-                    <Select value="USA">
-                      <Select.Option value="USA">USA</Select.Option>
-                      <Select.Option value="CAN">Canada</Select.Option>
-                      <Select.Option value="MEX">Mexico</Select.Option>
-                      <Select.Option value="CHL">Chile</Select.Option>
-                      <Select.Option value="NZL">New Zealand</Select.Option>
+                    <Select>
+                      {props.activeCountries.map((c) => (
+                        <Select.Option value={c.code}>{c.name}</Select.Option>
+                      ))}
                     </Select>
                   </Form.Item>
                 </Form.Item>
               </Form>
-              <Table
-                columns={columns}
-                dataSource={searchResults.length ? searchResults : rivers}
-                loading={loading}
-              />
+              <Table columns={columns} dataSource={rivers} loading={loading} />
             </Card>
           </Col>
         </Row>
@@ -153,3 +145,35 @@ const Rivers = () => {
 }
 
 export default Rivers
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  /**
+   * this could become problematic when a user adds a reach
+   * to a new country and does not appear in options after creation.
+   *
+   * Perhaps just cache countries and reach countries responses in redis,
+   * then when someone makes a new record, reset redis vals.
+   *
+   */
+  const countriesList: ICountry[] = await fetch(
+    process.env.API_BASE_URL + '/countries'
+  ).then((res) => res.json())
+  const activeCountries: string[] = await fetch(
+    process.env.API_BASE_URL + '/reaches/countries'
+  )
+    .then((res) => res.json())
+    .then((result) => {
+      return result
+        .map((val: { DISTINCT: string }) => val['DISTINCT'])
+        .filter((c: string) => c !== null)
+    })
+
+  return {
+    props: {
+      countriesList,
+      activeCountries: countriesList.filter((c) =>
+        activeCountries.includes(c.code)
+      ),
+    },
+  }
+}
