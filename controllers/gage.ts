@@ -12,7 +12,7 @@ export const getGage = async (id: string | number) => {
 export const getGageReadings = async (
   gageId: string | number
 ): Promise<IGageReading[]> => {
-  return http.get(`/gages/readings/${gageId}`).then((res) => res.data)
+  return http.get(`/gage-readings/${gageId}`).then((res) => res.data)
 }
 
 export const searchGages = async (term: string) => {

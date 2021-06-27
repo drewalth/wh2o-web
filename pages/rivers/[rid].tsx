@@ -68,9 +68,6 @@ const RiverDetail = (props: RiverDetailProps) => {
           onBack={() => props.router.push('/rivers')}
           extra={[
             props.id && <Bookmark key={'bookmark'} riverId={props.id} />,
-            <Button icon={<FacebookOutlined />}>
-              <></>
-            </Button>,
             <Button title="download" icon={<DownloadOutlined />}>
               <></>
             </Button>,
@@ -125,7 +122,9 @@ const RiverDetail = (props: RiverDetailProps) => {
                 <Typography.Paragraph>{river.description}</Typography.Paragraph>
               </>
             )}
-            {activeTab === '2' && <Flow gages={river.gages || []} />}
+            {activeTab === '2' && (
+              <Flow gages={river.gages || []} riverId={props.id} />
+            )}
             {activeTab === '3' && (
               <Features riverId={props.id} features={river.features} />
             )}

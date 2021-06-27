@@ -11,6 +11,17 @@ export interface IGageReading {
   reading: string
   createdAt: Date
   id: number
+  value: number
+  metric: string
+  difference?: number
+  temperatureCelcius?: number
+  temperatureFahrenheit: number
+}
+
+export interface ReachGages {
+  reachId: number
+  gageId: number
+  primary: boolean
 }
 
 export interface IGage {
@@ -29,7 +40,7 @@ export interface IGage {
   readings?: IGageReading[]
   flowRanges?: IFlowRange[]
   users: IUser[]
-  gageId?: number // side effect of setUserGages...
+  ReachGages?: ReachGages
 }
 
 export const GageModel: IGage = {

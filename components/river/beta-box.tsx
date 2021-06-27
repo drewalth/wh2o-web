@@ -1,18 +1,10 @@
-import {
-  Card,
-  Descriptions,
-  Form,
-  Modal,
-  Input,
-  Statistic,
-  Row,
-  Col,
-  Divider,
-} from 'antd'
+import { Form, Modal, Input, Statistic, Row, Col, Divider, message } from 'antd'
 import { useState, useEffect } from 'react'
 import moment from 'moment'
 import { IRiver } from 'interfaces'
 import { updateRiver } from 'controllers'
+import { useAppDispatch } from 'store'
+import { fetchRiver } from 'store/slices/river.slice'
 
 interface BetaBoxProps {
   river: IRiver
@@ -25,16 +17,34 @@ export const BetaBox = (props: BetaBoxProps) => {
   const [formRiver, setFormRiver] = useState<IRiver>()
   const [modalVisible, setModalVisible] = useState(false)
   const [updateLoading, setUpdateLoading] = useState(false)
+  const dispatch = useAppDispatch()
+
+  const getPrimaryGage = () => {
+    if (!river.gages || !river.gages.length) {
+      return 'N/A'
+    } else if (river.gages.length) {
+      const primaryGage = river.gages.find(
+        (g) => g.ReachGages && g.ReachGages.primary
+      )
+
+      if (primaryGage) {
+        return primaryGage.name
+      }
+
+      return river.gages[0].name
+    }
+  }
 
   const handleUpdate = async () => {
     try {
       setUpdateLoading(true)
       if (!formRiver) return
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      const result = await updateRiver(river.id, formRiver)
-      console.log(result)
+      await updateRiver(river.id, formRiver)
+      dispatch(fetchRiver(river.id))
+      message.success('Reach updated')
     } catch (e) {
       console.log('e', e)
+      message.error('Failed to update reach')
     } finally {
       setUpdateLoading(false)
     }
@@ -63,16 +73,16 @@ export const BetaBox = (props: BetaBoxProps) => {
               <Statistic title="Class" value={river.class} />
             </Col>
             <Col span={6}>
-              <Statistic title="Length" value={river.length} />
+              <Statistic title="Length" value={river.length || 'N/A'} />
             </Col>
             <Col span={6}>
               <Statistic title="Quality" value={4.5} />
             </Col>
             <Col span={6} style={{ marginTop: 24 }}>
-              <Statistic title="Avg Gradient" value={255} />
+              <Statistic title="Avg Gradient" value={river.averageGradient || 'N/A'} />
             </Col>
             <Col span={18} style={{ marginTop: 24 }}>
-              <Statistic title="Gage" value={'SOME SUPER LONG GAGE NAME'} />
+              <Statistic title="Gage" value={getPrimaryGage()} />
             </Col>
           </>
         )}

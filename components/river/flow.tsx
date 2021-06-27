@@ -1,13 +1,16 @@
-import { Modal, Form, Button, message, AutoComplete } from 'antd'
-import { IGage } from 'interfaces'
+import { Modal, Form, Button, message, AutoComplete, Select, Table } from 'antd'
+import { IGage, IGageReading } from 'interfaces'
 import { useAppSelector } from '../../store'
 import { selectUserIsPublisher } from '../../store/slices/user.slice'
-import { useState } from 'react'
-import { searchGages } from '../../controllers'
+import { useEffect, useState } from 'react'
+import { addGage, searchGages, getGageReadings } from 'controllers'
 import debounce from 'lodash.debounce'
+import { FlowChartV2 } from '../flow-chart/flow-chart-v2'
+import moment from 'moment'
 
 interface FlowProps {
   gages: IGage[]
+  riverId: number
 }
 
 interface SearchOptions {
@@ -16,10 +19,51 @@ interface SearchOptions {
 }
 
 export const Flow = (props: FlowProps) => {
+  const { riverId } = props
   const userIsPublisher = useAppSelector(selectUserIsPublisher)
   const [modalVisible, setModalVisible] = useState(false)
   const [form, setForm] = useState(0)
   const [options, setOptions] = useState<SearchOptions[]>()
+  const [gages, setGages] = useState<IGage[]>([...props.gages])
+  const [activeGage, setActiveGage] = useState(props.gages[0]?.id)
+  const [readings, setReadings] = useState<number[]>([])
+  const [labels, setLabels] = useState<string[]>([])
+  const [activeMetric, setActiveMetric] = useState('CFS')
+  const [availableMetrics, setAvailableMetrics] = useState<string[]>([])
+
+  const loadReadings = async () => {
+    try {
+      if (!activeGage) return
+      const result = await getGageReadings(activeGage)
+
+      const metrics = new Set(result.map((r) => r.metric))
+      // @ts-ignore
+      setAvailableMetrics([...metrics])
+
+      setLabels(
+        result
+          .filter((val: IGageReading) => val.metric === activeMetric)
+          .map((r) => moment(r.createdAt).format('LLL'))
+      )
+
+      const test = result
+          .filter((val: IGageReading) => val.metric === activeMetric)
+          .map((r) => r.value)
+
+      console.log('test', test)
+
+      setReadings(
+          test
+      )
+    } catch (e) {
+      console.log('e', e)
+      message.error('Failed to load gage readings')
+    }
+  }
+
+  useEffect(() => {
+    loadReadings()
+  }, [activeGage])
 
   const handleCancel = () => {
     // clear form?
@@ -27,7 +71,19 @@ export const Flow = (props: FlowProps) => {
   }
 
   const handleOk = async () => {
-    console.log('add')
+    try {
+      const result = await addGage({
+        gageId: form,
+        reachId: riverId,
+        primary: !gages.length,
+      })
+      setGages([...gages, result])
+      setModalVisible(false)
+      message.success('Gage Added')
+    } catch (e) {
+      console.log('e', e)
+      message.error('Failed to Add Gage')
+    }
   }
 
   const onSearch = async (searchText: string) => {
@@ -54,6 +110,19 @@ export const Flow = (props: FlowProps) => {
           marginBottom: 24,
         }}
       >
+        {activeGage && (
+          <Select value={activeGage} onSelect={(evt) => setActiveGage(evt)}>
+            {gages.length &&
+              gages.map((gage, index) => (
+                <>
+                  {/* @ts-ignore */}
+                  <Select.Option key={index} value={gage.id}>
+                    {gage.name}
+                  </Select.Option>
+                </>
+              ))}
+          </Select>
+        )}
         <Button
           type="primary"
           disabled={!userIsPublisher}
@@ -61,6 +130,12 @@ export const Flow = (props: FlowProps) => {
         >
           Add Gage
         </Button>
+      </div>
+      <div>
+        {readings && labels && (
+          <FlowChartV2 readings={readings} labels={labels} flowRanges={[]} />
+        )}
+        <div>{JSON.stringify(readings)}</div>
       </div>
       <Modal visible={modalVisible} onCancel={handleCancel} onOk={handleOk}>
         <Form initialValues={{ term: '' }}>
@@ -70,7 +145,7 @@ export const Flow = (props: FlowProps) => {
               style={{ width: 300 }}
               onSelect={onSelect}
               onSearch={debounce(onSearch, 500)}
-              placeholder="River name..."
+              placeholder="Gage name..."
             />
           </Form.Item>
         </Form>

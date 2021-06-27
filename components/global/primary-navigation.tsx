@@ -1,17 +1,16 @@
 import { Layout, Menu, Select, Tag, Typography } from 'antd'
 import Link from 'next/link'
-import { useAppDispatch, useAppSelector } from '../../store'
+import { useAppDispatch, useAppSelector } from 'store'
 import {
   selectUserData,
   setUser,
   setUserError,
   setUserLoading,
-} from '../../store/slices/user.slice'
-import { authRefresh } from '../../controllers'
+} from 'store/slices/user.slice'
+import { authRefresh } from 'controllers'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
-import { GetServerSideProps } from 'next'
 
 const PrimaryNavigation = () => {
   const dispatch = useAppDispatch()
@@ -35,8 +34,6 @@ const PrimaryNavigation = () => {
 
   useEffect(() => {
     refreshUser()
-
-    console.log(t)
   }, [])
 
   const changeLocale = async (locale: string) => {
