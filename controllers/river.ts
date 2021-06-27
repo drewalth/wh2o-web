@@ -1,8 +1,8 @@
 import { http } from 'lib'
-import { IGage, IRiver, IRiversMedia } from 'interfaces'
+import { IGage, IRiver, IRiversMedia, ReachSearchParams } from 'interfaces'
 
-export const getRivers = async () => {
-  return http.get('/reaches').then((res) => res.data)
+export const getRivers = async (params: ReachSearchParams) => {
+  return http.get('/reaches', { params }).then((res) => res.data)
 }
 
 export const getRiver = async (id: number | string) => {

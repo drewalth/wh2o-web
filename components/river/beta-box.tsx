@@ -79,7 +79,10 @@ export const BetaBox = (props: BetaBoxProps) => {
               <Statistic title="Quality" value={4.5} />
             </Col>
             <Col span={6} style={{ marginTop: 24 }}>
-              <Statistic title="Avg Gradient" value={river.averageGradient || 'N/A'} />
+              <Statistic
+                title="Avg Gradient"
+                value={river.averageGradient || 'N/A'}
+              />
             </Col>
             <Col span={18} style={{ marginTop: 24 }}>
               <Statistic title="Gage" value={getPrimaryGage()} />

@@ -47,14 +47,12 @@ export const Flow = (props: FlowProps) => {
       )
 
       const test = result
-          .filter((val: IGageReading) => val.metric === activeMetric)
-          .map((r) => r.value)
+        .filter((val: IGageReading) => val.metric === activeMetric)
+        .map((r) => r.value)
 
       console.log('test', test)
 
-      setReadings(
-          test
-      )
+      setReadings(test)
     } catch (e) {
       console.log('e', e)
       message.error('Failed to load gage readings')
