@@ -43,3 +43,7 @@ export const removeGage = async (gageId: number, reachId: number) => {
     .delete(`/reach-gages/${reachId}/${gageId}`)
     .then((res) => res.data)
 }
+
+export const createReach = async (payload: any): Promise<IRiver> => {
+  return http.post('/reaches', payload).then((res) => res.data)
+}
