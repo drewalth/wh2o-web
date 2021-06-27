@@ -1,5 +1,5 @@
 import { http } from 'lib'
-import { IRiver, IRiversMedia } from '../interfaces'
+import { IGage, IRiver, IRiversMedia } from 'interfaces'
 
 export const getRivers = async () => {
   return http.get('/reaches').then((res) => res.data)
@@ -22,4 +22,24 @@ export const createRiversMedia = async (payload: IRiversMedia) => {
 
 export const searchRiver = async (term: string): Promise<IRiver[]> => {
   return http.get(`/reaches/search?term=${term}`).then((res) => res.data)
+}
+
+export const addGage = async ({
+  reachId,
+  gageId,
+  primary,
+}: {
+  reachId: number
+  gageId: number
+  primary: boolean
+}): Promise<IGage> => {
+  return http
+    .post('/reach-gages', { reachId, gageId, primary })
+    .then((res) => res.data)
+}
+
+export const removeGage = async (gageId: number, reachId: number) => {
+  return http
+    .delete(`/reach-gages/${reachId}/${gageId}`)
+    .then((res) => res.data)
 }

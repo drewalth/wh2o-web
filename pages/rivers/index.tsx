@@ -10,6 +10,7 @@ import {
   Form,
   Input,
   message,
+  Select,
 } from 'antd'
 import moment from 'moment'
 import Link from 'next/link'
@@ -21,8 +22,7 @@ import {
 } from 'store/slices/rivers.slice'
 import debounce from 'lodash.debounce'
 import { searchRiver } from 'controllers'
-import { IRiver } from '../../interfaces'
-import { fetchReach } from '../../store/slices/river.slice'
+import { IRiver } from 'interfaces'
 
 const columns = [
   {
@@ -108,10 +108,35 @@ const Rivers = () => {
             <Card>
               <Form
                 onValuesChange={debounce(submitSearch, 500)}
-                initialValues={{ term: '' }}
+                initialValues={{ term: '', country: 'USA' }}
               >
-                <Form.Item name="term">
-                  <Input placeholder="Search" />
+                <Form.Item>
+                  <Form.Item
+                    label="River Name"
+                    name="term"
+                    style={{
+                      display: 'inline-block',
+                      width: 'calc(50% - 8px)',
+                    }}
+                  >
+                    <Input placeholder="Search" />
+                  </Form.Item>
+                  <Form.Item
+                    label="Country"
+                    name="country"
+                    style={{
+                      display: 'inline-block',
+                      width: 'calc(50% - 8px)',
+                    }}
+                  >
+                    <Select value="USA">
+                      <Select.Option value="USA">USA</Select.Option>
+                      <Select.Option value="CAN">Canada</Select.Option>
+                      <Select.Option value="MEX">Mexico</Select.Option>
+                      <Select.Option value="CHL">Chile</Select.Option>
+                      <Select.Option value="NZL">New Zealand</Select.Option>
+                    </Select>
+                  </Form.Item>
                 </Form.Item>
               </Form>
               <Table
