@@ -5,11 +5,13 @@ import {
   Card,
   Layout,
   PageHeader,
+  Modal,
   Table,
   Button,
   Form,
   Input,
   Select,
+  message,
 } from 'antd'
 import moment from 'moment'
 import Link from 'next/link'
@@ -23,6 +25,17 @@ import debounce from 'lodash.debounce'
 import { ICountry, IRiver, ReachSearchParams } from 'interfaces'
 import { GetStaticProps } from 'next'
 import { selectUserIsPublisher } from 'store/slices/user.slice'
+import { createReach } from 'controllers'
+import { useRouter } from 'next/router'
+
+const ReachFormDefaults = {
+  country: 'US',
+  name: '',
+  section: '',
+  class: 'none',
+  description: '',
+  length: 0,
+}
 
 const columns = [
   {
@@ -71,10 +84,14 @@ interface RiversProps {
 }
 
 const Rivers = (props: RiversProps) => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const rivers = useAppSelector(selectRiversData)
   const loading = useAppSelector(selectRiversLoading)
   const userIsPublisher = useAppSelector(selectUserIsPublisher)
+  const [modalVisible, setModalVisible] = useState(false)
+  const [saveLoading, setSaveLoading] = useState(false)
+  const [reachForm, setReachForm] = useState({ ...ReachFormDefaults })
   const [params, setParams] = useState<ReachSearchParams>({
     name: '',
     country: 'US',
@@ -84,9 +101,33 @@ const Rivers = (props: RiversProps) => {
     setParams(Object.assign({}, params, evt))
   }
 
+  const handleFormChange = (evt: any) => {
+    setReachForm(Object.assign({}, reachForm, evt))
+  }
+
   useEffect(() => {
     dispatch(fetchRivers(params))
   }, [params])
+
+  const handleCancel = () => {
+    setReachForm({ ...ReachFormDefaults })
+    setModalVisible(false)
+  }
+
+  const handlOk = async () => {
+    try {
+      setSaveLoading(true)
+      const result = await createReach(reachForm)
+      message.success('Reach created.')
+      setModalVisible(false)
+      await router.push(`/rivers/${result.id}`)
+    } catch (e) {
+      console.log('e', e)
+      message.error('Failed to create reach')
+    } finally {
+      setSaveLoading(false)
+    }
+  }
 
   return (
     <>
@@ -94,7 +135,11 @@ const Rivers = (props: RiversProps) => {
         title="Rivers"
         extra={
           userIsPublisher && (
-            <Button key="1" type="primary">
+            <Button
+              key="1"
+              type="primary"
+              onClick={() => setModalVisible(true)}
+            >
               Create River
             </Button>
           )
@@ -140,6 +185,38 @@ const Rivers = (props: RiversProps) => {
           </Col>
         </Row>
       </Layout.Content>
+      <Modal
+        visible={modalVisible}
+        onCancel={handleCancel}
+        onOk={handlOk}
+        destroyOnClose={true}
+        confirmLoading={saveLoading}
+      >
+        <Form initialValues={reachForm} onValuesChange={handleFormChange}>
+          <Form.Item label="Country" name="country">
+            <Select>
+              {props.countriesList.map((c) => (
+                <Select.Option value={c.code}>{c.name}</Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item label="Name" name="name">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Section" name="section">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Class" name="class">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Length" name="length">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Description" name="description">
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   )
 }
