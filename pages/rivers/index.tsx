@@ -234,7 +234,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
    */
   const countriesList: ICountry[] = await fetch(
     process.env.API_BASE_URL + '/countries'
-  ).then((res) => res.json())
+  )
+    .then((res) => res.json())
+    .catch((e) => {
+      console.log(e)
+    })
+
   const activeCountries: string[] = await fetch(
     process.env.API_BASE_URL + '/reaches/countries'
   )
@@ -243,6 +248,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
       return result
         .map((val: { DISTINCT: string }) => val['DISTINCT'])
         .filter((c: string) => c !== null)
+    })
+    .catch((e) => {
+      console.log(e)
     })
 
   return {
