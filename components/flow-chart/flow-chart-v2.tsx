@@ -16,9 +16,9 @@ export const FlowChartV2 = (props: FlowChartV2Props) => {
 
   useEffect(() => {
     if (chartRef && chartRef.current && labels.length && readings.length) {
-      // @ts-ignore
       setChart(
         renderChart(
+          // @ts-ignore
           chartRef.current.getContext('2d'),
           labels,
           readings,
