@@ -1,4 +1,15 @@
-import {Form, Modal, Input, Statistic, Row, Col, Divider, message, Typography, Button} from 'antd'
+import {
+  Form,
+  Modal,
+  Input,
+  Statistic,
+  Row,
+  Col,
+  Divider,
+  message,
+  Typography,
+  Button,
+} from 'antd'
 import { useState, useEffect } from 'react'
 import moment from 'moment'
 import { IRiver } from 'interfaces'
@@ -50,14 +61,12 @@ export const BetaBox = (props: BetaBoxProps) => {
     }
   }
 
-  const renderRiverDescription = (description:string | undefined) => {
-    if(!description) {
+  const renderRiverDescription = (description: string | undefined) => {
+    if (!description) {
       return (
-          <>
-            <Button type='primary'>
-              Add Description
-            </Button>
-          </>
+        <>
+          <Button type="primary">Add Description</Button>
+        </>
       )
     } else {
       return <Typography.Paragraph>{description}</Typography.Paragraph>
@@ -107,16 +116,16 @@ export const BetaBox = (props: BetaBoxProps) => {
       <Divider />
       {renderRiverDescription(river.description)}
       <Modal
-          visible={modalVisible}
-          onCancel={() => setModalVisible(false)}
-          onOk={handleUpdate}
-          confirmLoading={updateLoading}
+        visible={modalVisible}
+        onCancel={() => setModalVisible(false)}
+        onOk={handleUpdate}
+        confirmLoading={updateLoading}
       >
         <Form
-            initialValues={river}
-            onValuesChange={(val) => {
-              setFormRiver(Object.assign(formRiver, val))
-            }}
+          initialValues={river}
+          onValuesChange={(val) => {
+            setFormRiver(Object.assign(formRiver, val))
+          }}
         >
           <Form.Item label="Class" name="class">
             <Input />

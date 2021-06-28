@@ -16,9 +16,15 @@ export const FlowChartV2 = (props: FlowChartV2Props) => {
 
   useEffect(() => {
     if (chartRef && chartRef.current && labels.length && readings.length) {
-
       // @ts-ignore
-      setChart(renderChart(chartRef.current.getContext('2d'), labels, readings, flowRanges))
+      setChart(
+        renderChart(
+          chartRef.current.getContext('2d'),
+          labels,
+          readings,
+          flowRanges
+        )
+      )
     }
 
     return function cleanUp() {
