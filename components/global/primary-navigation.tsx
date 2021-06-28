@@ -1,5 +1,6 @@
-import { Layout, Menu, Select, Tag, Typography } from 'antd'
+import { Layout, Menu, Select, Typography } from 'antd'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useAppDispatch, useAppSelector } from 'store'
 import {
   selectUserData,
@@ -53,16 +54,16 @@ const PrimaryNavigation = () => {
     >
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <Link href="/">
-          <Typography.Title
-            level={3}
-            style={{ color: '#fff', marginBottom: 0 }}
-          >
-            wh2o
-          </Typography.Title>
+          <>
+            <Image src="/img/wh2o-logo.svg" height={38} width={67} />
+            <Typography.Title
+              level={3}
+              style={{ color: '#fff', marginBottom: 0, marginLeft: 12 }}
+            >
+              wh2o
+            </Typography.Title>
+          </>
         </Link>
-        <div style={{ marginLeft: 8 }}>
-          <Tag color="blue">Alpha</Tag>
-        </div>
       </div>
       <Menu theme="dark" mode="horizontal">
         <Menu.Item key="1">

@@ -1,4 +1,4 @@
-import { Row, Col, Typography, Button } from 'antd'
+import { Row, Col, Typography, Button, Tag } from 'antd'
 import Link from 'next/link'
 export default function Home() {
   return (
@@ -30,6 +30,7 @@ export default function Home() {
         <Col span={24} md={16} lg={14} style={{ paddingLeft: 24 }}>
           <Row style={{ marginBottom: 24 }}>
             <Col span={24} md={16} lg={12}>
+              <Tag color="blue">Alpha</Tag>
               <Typography.Title
                 style={{ color: '#fff', fontSize: '96px', lineHeight: 0.5 }}
               >
