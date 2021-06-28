@@ -52,17 +52,17 @@ const PrimaryNavigation = () => {
         justifyContent: 'space-between',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
         <Link href="/">
-          <>
-            <Image src="/img/wh2o-logo.svg" height={38} width={67} />
-            <Typography.Title
-              level={3}
-              style={{ color: '#fff', marginBottom: 0, marginLeft: 12 }}
-            >
-              wh2o
-            </Typography.Title>
-          </>
+          <Image src="/img/wh2o-logo.svg" height={38} width={67} />
+        </Link>
+        <Link href="/">
+          <Typography.Title
+            level={3}
+            style={{ color: '#fff', marginBottom: 0, marginLeft: 12 }}
+          >
+            wh2o
+          </Typography.Title>
         </Link>
       </div>
       <Menu theme="dark" mode="horizontal">
