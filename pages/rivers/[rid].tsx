@@ -19,9 +19,7 @@ import {
   AreaChartOutlined,
   EnvironmentOutlined,
   CompassOutlined,
-  GithubOutlined,
   DownloadOutlined,
-  FacebookOutlined,
   NotificationOutlined,
   UserOutlined,
 } from '@ant-design/icons'
@@ -33,6 +31,7 @@ import {
   selectRiverError,
   selectRiverLoading,
 } from 'store/slices/river.slice'
+import {selectUserIsPublisher} from "../../store/slices/user.slice";
 
 interface RiverDetailProps {
   id: number
@@ -56,7 +55,6 @@ const RiverDetail = (props: RiverDetailProps) => {
   }, [id])
 
   return (
-    <>
       <Layout.Content style={{ padding: '0 50px' }}>
         <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>Rivers</Breadcrumb.Item>
@@ -119,7 +117,6 @@ const RiverDetail = (props: RiverDetailProps) => {
                 <RiverMap mapboxToken={props.mapboxToken} />
                 <div style={{ marginBottom: 20 }} />
                 <BetaBox river={river} loading={loading} error={error} />
-                <Typography.Paragraph>{river.description}</Typography.Paragraph>
               </>
             )}
             {activeTab === '2' && (
@@ -146,12 +143,6 @@ const RiverDetail = (props: RiverDetailProps) => {
           </Layout.Content>
         </Layout>
       </Layout.Content>
-      <Layout.Footer style={{ textAlign: 'center' }}>
-        <Button href="https://github.com/drewalth/wh2o" target="_blank">
-          <GithubOutlined />
-        </Button>
-      </Layout.Footer>
-    </>
   )
 }
 

@@ -10,7 +10,7 @@ interface FlowChartV2Props {
 }
 
 export const FlowChartV2 = (props: FlowChartV2Props) => {
-  const { readings, labels } = props
+  const { readings, labels, flowRanges } = props
   const chartRef = useRef(null)
   const [chart, setChart] = useState<Chart>()
 
@@ -18,7 +18,7 @@ export const FlowChartV2 = (props: FlowChartV2Props) => {
     if (chartRef && chartRef.current && labels.length && readings.length) {
 
       // @ts-ignore
-      setChart(renderChart(chartRef.current.getContext('2d'), labels, readings))
+      setChart(renderChart(chartRef.current.getContext('2d'), labels, readings, flowRanges))
     }
 
     return function cleanUp() {

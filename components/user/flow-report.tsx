@@ -5,7 +5,7 @@ import { selectGagesData, fetchGages } from 'store/slices/gages.slice'
 import { useEffect, useState } from 'react'
 import { fetchUser, selectUserData } from '../../store/slices/user.slice'
 import { removeBookmarkGage, userBookmarkGage } from 'controllers'
-import { FlowChart } from '../flow-chart/flow-chart'
+import {FlowChartV2} from "../flow-chart/flow-chart-v2";
 
 interface FlowReportProps {
   gages: IGage[]
@@ -105,10 +105,17 @@ export const FlowReport = (props: FlowReportProps) => {
       <Row gutter={24}>
         <Col span={24} lg={24} xl={18} style={columnStyle}>
           {userGages && userGages.length ? (
-            <FlowChart
-              gageId={userGages[0].id}
-              handleDelete={handleDelete}
-            />
+            <Card extra={
+              <>
+              <Button danger={true}>Delete</Button>
+              </>
+            }>
+              <FlowChartV2
+                  readings={[]}
+                  labels={[]}
+                  flowRanges={[]}
+              />
+            </Card>
           ) : (
             <div style={placeholderBlockStyle}>
               <Button type="primary" onClick={showModal}>
