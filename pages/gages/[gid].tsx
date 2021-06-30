@@ -4,6 +4,7 @@ import { GetServerSideProps } from 'next'
 import { Card, Col, Layout, PageHeader, Row } from 'antd'
 import { IGage, GageModel } from '../../interfaces'
 import { useRouter } from 'next/router'
+import PrimaryNavigation from '../../components/global/primary-navigation'
 
 interface GageDetailProps {
   id: string
@@ -38,27 +39,37 @@ const GageDetail = (props: GageDetailProps) => {
 
   return (
     <>
-      <PageHeader
-        title={gage.name}
-        onBack={() => router.push('/gages')}
-        extra={
-          [
-            // <Button key="1" type="primary">
-            //   Bookmark
-            // </Button>
-          ]
-        }
-      />
-      <Layout.Content style={{ padding: '0 24px' }}>
-        <Row gutter={24}>
-          <Col span={12}>
-            <Card>yo</Card>
-          </Col>
-          <Col span={12}>
-            <Card>Flow chart</Card>
-          </Col>
-        </Row>
-      </Layout.Content>
+      <Layout>
+        <PrimaryNavigation />
+        <Layout.Content
+          style={{
+            minHeight: 'calc(100vh - 64px)',
+            padding: '0 24px',
+          }}
+        >
+          <PageHeader
+            title={gage.name}
+            onBack={() => router.push('/gages')}
+            extra={
+              [
+                // <Button key="1" type="primary">
+                //   Bookmark
+                // </Button>
+              ]
+            }
+          />
+          <Layout.Content style={{ padding: '0 24px' }}>
+            <Row gutter={24}>
+              <Col span={12}>
+                <Card>yo</Card>
+              </Col>
+              <Col span={12}>
+                <Card>Flow chart</Card>
+              </Col>
+            </Row>
+          </Layout.Content>
+        </Layout.Content>
+      </Layout>
     </>
   )
 }

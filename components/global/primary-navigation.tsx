@@ -12,6 +12,7 @@ import { authRefresh } from 'controllers'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const PrimaryNavigation = () => {
   const dispatch = useAppDispatch()
@@ -37,7 +38,7 @@ const PrimaryNavigation = () => {
     refreshUser()
   }, [])
 
-  const changeLocale = async (locale: string) => {
+  const changeLocale = async (locale = 'en-US') => {
     if (i18n && i18n.changeLanguage) {
       await i18n.changeLanguage(locale)
       router.locale = locale
@@ -67,15 +68,15 @@ const PrimaryNavigation = () => {
       </div>
       <Menu theme="dark" mode="horizontal">
         <Menu.Item key="1">
-          <Link href="/rivers">Rivers</Link>
+          <Link href="/rivers">{t('common.rivers')}</Link>
         </Menu.Item>
         <Menu.Item key="2">
-          <Link href="/gages">Gages</Link>
+          <Link href="/gages">{t('common.gages')}</Link>
         </Menu.Item>
         <Menu.Item key="3">
           {!user.email ? (
             <Link key="login" href="/auth/login">
-              Sign In
+              {t('usermenu.signin')}
             </Link>
           ) : (
             <Link key="dashboard" href={`/user/${user.id}`}>
@@ -83,14 +84,15 @@ const PrimaryNavigation = () => {
             </Link>
           )}
         </Menu.Item>
-        {/* set default to user default */}
-        <Select defaultValue={locale} onChange={(evt) => changeLocale(evt)}>
-          <Select.Option value="en">En</Select.Option>
-          <Select.Option value="es">Es</Select.Option>
-          <Select.Option value="fr">Fr</Select.Option>
-          <Select.Option value="de">De</Select.Option>
-          <Select.Option value="pt">Pt</Select.Option>
-        </Select>
+        <Menu.Item>
+          <Select defaultValue={locale} onChange={(evt) => changeLocale(evt)}>
+            <Select.Option value="en">En</Select.Option>
+            <Select.Option value="es">Es</Select.Option>
+            <Select.Option value="fr">Fr</Select.Option>
+            <Select.Option value="de">De</Select.Option>
+            <Select.Option value="pt">Pt</Select.Option>
+          </Select>
+        </Menu.Item>
       </Menu>
     </Layout.Header>
   )
