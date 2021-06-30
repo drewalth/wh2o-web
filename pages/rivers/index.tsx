@@ -173,7 +173,7 @@ const Rivers = (props: RiversProps) => {
                     }}
                   >
                     <Select>
-                      {props.activeCountries.map((c) => (
+                      {props.activeCountries && props.activeCountries.map((c) => (
                         <Select.Option value={c.code}>{c.name}</Select.Option>
                       ))}
                     </Select>
@@ -195,7 +195,7 @@ const Rivers = (props: RiversProps) => {
         <Form initialValues={reachForm} onValuesChange={handleFormChange}>
           <Form.Item label="Country" name="country">
             <Select>
-              {props.countriesList.map((c) => (
+              {props.countriesList && props.countriesList.map((c) => (
                 <Select.Option value={c.code}>{c.name}</Select.Option>
               ))}
             </Select>
@@ -233,7 +233,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
    *
    */
   const countriesList: ICountry[] = await fetch(
-    process.env.API_BASE_URL + '/countries'
+    process.env.apiBaseUrl + '/countries'
   )
     .then((res) => res.json())
     .catch((e) => {
@@ -241,7 +241,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     })
 
   const activeCountries: string[] = await fetch(
-    process.env.API_BASE_URL + '/reaches/countries'
+    process.env.apiBaseUrl + '/reaches/countries'
   )
     .then((res) => res.json())
     .then((result) => {
@@ -256,7 +256,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       countriesList,
-      activeCountries: countriesList.filter((c) =>
+      activeCountries: countriesList?.filter((c) =>
         activeCountries.includes(c.code)
       ),
     },
