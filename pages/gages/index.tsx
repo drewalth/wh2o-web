@@ -9,8 +9,8 @@ import {
   selectGagesLoading,
 } from 'store/slices/gages.slice'
 import PrimaryNavigation from '../../components/global/primary-navigation'
-import {GetServerSideProps, GetServerSidePropsContext} from "next";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const columns = [
   {
@@ -97,7 +97,7 @@ const Gages = () => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (
-    context: GetServerSidePropsContext
+  context: GetServerSidePropsContext
 ) => {
   return {
     props: {
