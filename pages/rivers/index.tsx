@@ -173,9 +173,10 @@ const Rivers = (props: RiversProps) => {
                     }}
                   >
                     <Select>
-                      {props.activeCountries && props.activeCountries.map((c) => (
-                        <Select.Option value={c.code}>{c.name}</Select.Option>
-                      ))}
+                      {props.activeCountries &&
+                        props.activeCountries.map((c) => (
+                          <Select.Option value={c.code}>{c.name}</Select.Option>
+                        ))}
                     </Select>
                   </Form.Item>
                 </Form.Item>
@@ -195,9 +196,10 @@ const Rivers = (props: RiversProps) => {
         <Form initialValues={reachForm} onValuesChange={handleFormChange}>
           <Form.Item label="Country" name="country">
             <Select>
-              {props.countriesList && props.countriesList.map((c) => (
-                <Select.Option value={c.code}>{c.name}</Select.Option>
-              ))}
+              {props.countriesList &&
+                props.countriesList.map((c) => (
+                  <Select.Option value={c.code}>{c.name}</Select.Option>
+                ))}
             </Select>
           </Form.Item>
           <Form.Item label="Name" name="name">
