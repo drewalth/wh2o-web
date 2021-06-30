@@ -6,7 +6,6 @@ import { store } from '../store'
 import { appWithTranslation } from 'next-i18next'
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
-
   return (
     <Provider store={store}>
       <Component {...pageProps} />
