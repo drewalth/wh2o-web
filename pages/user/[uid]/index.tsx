@@ -15,6 +15,9 @@ import {
   resetUser,
 } from 'store/slices/user.slice'
 import { useRouter } from 'next/router'
+import PrimaryNavigation from '../../../components/global/primary-navigation'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const index = () => {
   const [activeTab, setActiveTab] = useState('1')
@@ -31,6 +34,7 @@ const index = () => {
 
   return (
     <>
+      <PrimaryNavigation />
       <PageHeader
         title="Account"
         subTitle={`${user.firstName} ${user.lastName}`}
@@ -86,6 +90,16 @@ const index = () => {
       </Layout>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(context.locale as string)),
+    },
+  }
 }
 
 export default index

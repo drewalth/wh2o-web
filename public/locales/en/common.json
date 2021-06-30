@@ -1,5 +1,7 @@
 {
   "common": {
+    "gages": "Gages",
+    "rivers": "Rivers",
     "flow": "Flow",
     "dashboard": "Dashboard",
     "subscribers": "Subscribers",

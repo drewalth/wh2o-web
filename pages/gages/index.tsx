@@ -8,6 +8,9 @@ import {
   fetchGages,
   selectGagesLoading,
 } from 'store/slices/gages.slice'
+import PrimaryNavigation from '../../components/global/primary-navigation'
+import {GetServerSideProps, GetServerSidePropsContext} from "next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 const columns = [
   {
@@ -58,29 +61,49 @@ const Gages = () => {
 
   return (
     <>
-      <PageHeader
-        title="Gages"
-        extra={[
-          <Button key="1" type="primary">
-            Create Gage
-          </Button>,
-        ]}
-      />
-      <Layout.Content style={{ padding: '0 24px' }}>
-        <Row>
-          <Col span={24}>
-            <Card>
-              <Table
-                columns={columns}
-                dataSource={gages}
-                loading={gagesLoading}
-              />
-            </Card>
-          </Col>
-        </Row>
-      </Layout.Content>
+      <Layout>
+        <PrimaryNavigation />
+        <Layout.Content
+          style={{
+            minHeight: 'calc(100vh - 64px)',
+            padding: '0 24px',
+          }}
+        >
+          <PageHeader
+            title="Gages"
+            extra={[
+              <Button key="1" type="primary">
+                Create Gage
+              </Button>,
+            ]}
+          />
+          <Layout.Content style={{ padding: '0 24px' }}>
+            <Row>
+              <Col span={24}>
+                <Card>
+                  <Table
+                    columns={columns}
+                    dataSource={gages}
+                    loading={gagesLoading}
+                  />
+                </Card>
+              </Col>
+            </Row>
+          </Layout.Content>
+        </Layout.Content>
+      </Layout>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (
+    context: GetServerSidePropsContext
+) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(context.locale as string)),
+    },
+  }
 }
 
 export default Gages
