@@ -12,6 +12,7 @@ import {
   Input,
   Select,
   message,
+  Typography,
 } from 'antd'
 import moment from 'moment'
 import Link from 'next/link'
@@ -42,11 +43,17 @@ const columns = [
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
-  },
-  {
-    title: 'Section',
-    dataIndex: 'section',
-    key: 'section',
+    render: (name: string, val: IRiver) => (
+      <>
+        <Typography.Title
+          level={5}
+          style={{ fontSize: '0.875rem', lineHeight: 1 }}
+        >
+          {name}
+        </Typography.Title>
+        <Typography.Text>{val.section}</Typography.Text>
+      </>
+    ),
   },
   {
     title: 'Class',
@@ -134,15 +141,14 @@ const Rivers = (props: RiversProps) => {
       <PageHeader
         title="Rivers"
         extra={
-          userIsPublisher && (
-            <Button
-              key="1"
-              type="primary"
-              onClick={() => setModalVisible(true)}
-            >
-              Create River
-            </Button>
-          )
+          <Button
+            disabled={!userIsPublisher}
+            key="1"
+            type="primary"
+            onClick={() => setModalVisible(true)}
+          >
+            Create River
+          </Button>
         }
       />
       <Layout.Content style={{ padding: '0 24px' }}>
@@ -159,7 +165,8 @@ const Rivers = (props: RiversProps) => {
                     name="name"
                     style={{
                       display: 'inline-block',
-                      width: 'calc(50% - 8px)',
+                      marginRight: 16,
+                      width: 'calc(20% - 8px)',
                     }}
                   >
                     <Input placeholder="Search" />
@@ -169,7 +176,7 @@ const Rivers = (props: RiversProps) => {
                     name="country"
                     style={{
                       display: 'inline-block',
-                      width: 'calc(50% - 8px)',
+                      width: 'calc(20% - 8px)',
                     }}
                   >
                     <Select>

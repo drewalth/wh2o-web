@@ -31,7 +31,7 @@ const PrimaryNavigation = () => {
     refreshUser()
     dispatch(setWidth(window.innerWidth))
     window.addEventListener('resize', () =>
-        dispatch(setWidth(window.innerWidth))
+      dispatch(setWidth(window.innerWidth))
     )
   }, [])
 
