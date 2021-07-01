@@ -1,9 +1,12 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Button, Card, Col, Form, Input, Row } from 'antd'
+import { Button, Card, Col, Form, Input, Layout, Row } from 'antd'
 import { authLogin } from '../../controllers'
 import { useAppDispatch } from '../../store'
 import { setUser, setUserLoading } from '../../store/slices/user.slice'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import PrimaryNavigation from '../../components/global/primary-navigation'
 
 const layout = {
   labelCol: { span: 8 },
@@ -40,45 +43,62 @@ const Login = () => {
   }
 
   return (
-    <Row justify="center" style={{ paddingTop: 24 }}>
-      <Col span={24} md={8}>
-        <Card title="Login">
-          <Form
-            {...layout}
-            name="basic"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-          >
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[{ required: true, message: 'Please input your email!' }]}
-            >
-              <Input />
-            </Form.Item>
+    <Layout>
+      <PrimaryNavigation />
+      <Layout.Content>
+        <Row justify="center" style={{ paddingTop: 24 }}>
+          <Col span={24} md={8}>
+            <Card title="Login">
+              <Form
+                {...layout}
+                name="basic"
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+              >
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  rules={[
+                    { required: true, message: 'Please input your email!' },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
 
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[
-                { required: true, message: 'Please input your password!' },
-              ]}
-            >
-              <Input.Password />
-            </Form.Item>
-            <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-          </Form>
-        </Card>
-        <Button>
-          <Link href="/auth/register">Register</Link>
-        </Button>
-      </Col>
-    </Row>
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[
+                    { required: true, message: 'Please input your password!' },
+                  ]}
+                >
+                  <Input.Password />
+                </Form.Item>
+                <Form.Item {...tailLayout}>
+                  <Button type="primary" htmlType="submit">
+                    Submit
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Card>
+            <Button>
+              <Link href="/auth/register">Register</Link>
+            </Button>
+          </Col>
+        </Row>
+      </Layout.Content>
+    </Layout>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(context.locale as string)),
+    },
+  }
 }
 
 export default Login
