@@ -1,8 +1,5 @@
 import { Row, Col, Typography, Button, Tag } from 'antd'
 import Link from 'next/link'
-import PrimaryNavigation from '../components/global/primary-navigation'
-import { GetServerSideProps, GetServerSidePropsContext } from 'next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 export default function Home() {
   return (
     <>
@@ -98,14 +95,4 @@ export default function Home() {
       </div>
     </>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  return {
-    props: {
-      ...(await serverSideTranslations(context.locale as string)),
-    },
-  }
 }

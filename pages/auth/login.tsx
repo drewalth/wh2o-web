@@ -4,8 +4,6 @@ import { Button, Card, Col, Form, Input, Layout, Row } from 'antd'
 import { authLogin } from '../../controllers'
 import { useAppDispatch } from '../../store'
 import { setUser, setUserLoading } from '../../store/slices/user.slice'
-import { GetServerSideProps, GetServerSidePropsContext } from 'next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import PrimaryNavigation from '../../components/global/primary-navigation'
 
 const layout = {
@@ -89,16 +87,6 @@ const Login = () => {
       </Layout.Content>
     </Layout>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  return {
-    props: {
-      ...(await serverSideTranslations(context.locale as string)),
-    },
-  }
 }
 
 export default Login
