@@ -3,6 +3,8 @@ import { authRegister } from 'controllers'
 import { useRouter } from 'next/router'
 import { setUser, setUserLoading } from 'store/slices/user.slice'
 import { useAppDispatch } from 'store'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const layout = {
   labelCol: { span: 8 },
@@ -84,6 +86,16 @@ const Register = () => {
       </Col>
     </Row>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(context.locale as string)),
+    },
+  }
 }
 
 export default Register

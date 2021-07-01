@@ -54,16 +54,22 @@ const PrimaryNavigation = () => {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+        <div style={{ height: 38 }}>
+          <Link href="/">
+            <a>
+              <Image src="/img/wh2o-logo.svg" height={38} width={67} />
+            </a>
+          </Link>
+        </div>
         <Link href="/">
-          <Image src="/img/wh2o-logo.svg" height={38} width={67} />
-        </Link>
-        <Link href="/">
-          <Typography.Title
-            level={3}
-            style={{ color: '#fff', marginBottom: 0, marginLeft: 12 }}
-          >
-            wh2o
-          </Typography.Title>
+          <a>
+            <Typography.Title
+              level={3}
+              style={{ color: '#fff', marginBottom: 0, marginLeft: 12 }}
+            >
+              wh2o
+            </Typography.Title>
+          </a>
         </Link>
       </div>
       <Menu theme="dark" mode="horizontal">
@@ -84,7 +90,7 @@ const PrimaryNavigation = () => {
             </Link>
           )}
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key="4">
           <Select defaultValue={locale} onChange={(evt) => changeLocale(evt)}>
             <Select.Option value="en">En</Select.Option>
             <Select.Option value="es">Es</Select.Option>
