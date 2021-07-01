@@ -1,10 +1,9 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Button, Card, Col, Form, Input, Layout, Row } from 'antd'
+import { Button, Card, Col, Form, Input, Row } from 'antd'
 import { authLogin } from '../../controllers'
 import { useAppDispatch } from '../../store'
 import { setUser, setUserLoading } from '../../store/slices/user.slice'
-import PrimaryNavigation from '../../components/global/primary-navigation'
 
 const layout = {
   labelCol: { span: 8 },
@@ -41,9 +40,7 @@ const Login = () => {
   }
 
   return (
-    <Layout>
-      <PrimaryNavigation />
-      <Layout.Content>
+
         <Row justify="center" style={{ paddingTop: 24 }}>
           <Col span={24} md={8}>
             <Card title="Login">
@@ -80,12 +77,14 @@ const Login = () => {
               </Form>
             </Card>
             <Button>
-              <Link href="/auth/register">Register</Link>
+              <Link href="/auth/register">
+                <a>
+                  Register
+                </a>
+              </Link>
             </Button>
           </Col>
         </Row>
-      </Layout.Content>
-    </Layout>
   )
 }
 
