@@ -1,4 +1,4 @@
-import { Layout, Menu, Select, Typography } from 'antd'
+import { Layout, Menu, Typography } from 'antd'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useAppDispatch, useAppSelector } from 'store'
@@ -10,9 +10,6 @@ import {
 } from 'store/slices/user.slice'
 import { authRefresh } from 'controllers'
 import { useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { useTranslation } from 'next-i18next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const PrimaryNavigation = () => {
   const dispatch = useAppDispatch()
@@ -64,24 +61,18 @@ const PrimaryNavigation = () => {
       <Menu theme="dark" mode="horizontal">
         <Menu.Item key="1">
           <Link href="/rivers">
-            <a>
-              Rivers
-            </a>
+            <a>Rivers</a>
           </Link>
         </Menu.Item>
         <Menu.Item key="2">
           <Link href="/gages">
-            <a>
-              Gages
-            </a>
+            <a>Gages</a>
           </Link>
         </Menu.Item>
         <Menu.Item key="3">
           {!user.email ? (
             <Link key="login" href="/auth/login">
-              <a>
-                Sign In
-              </a>
+              <a>Sign In</a>
             </Link>
           ) : (
             <Link key="dashboard" href={`/user/${user.id}`}>
