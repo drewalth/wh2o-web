@@ -7,11 +7,11 @@ import { selectUserIsPublisher } from '../../store/slices/user.slice'
 
 interface FeaturesProps {
   features: IFeature[]
-  riverId: number | string
+  reachId: number | string
 }
 
 export const Features = (props: FeaturesProps) => {
-  let { riverId } = props
+  let { reachId } = props
   const [saveLoading, setSaveLoading] = useState(false)
   const [saveError, setSaveError] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
@@ -46,7 +46,7 @@ export const Features = (props: FeaturesProps) => {
   const handleSave = async () => {
     try {
       setSaveLoading(true)
-      const result = await createFeature(Object.assign({}, form, { riverId }))
+      const result = await createFeature(Object.assign({}, form, { reachId }))
       setFeatures([...features, result])
       setModalVisible(false)
       message.success(`Feature created`)

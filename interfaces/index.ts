@@ -202,7 +202,7 @@ export interface IFeature {
   name: string
   description: string
   distance: number
-  riverId: number
+  reachId: number
   class: ClassRating
   latitude: number | null
   longitude: number | null
@@ -225,7 +225,7 @@ export const FeatureModel: IFeature = {
   name: '',
   description: '',
   distance: 0,
-  riverId: 0,
+  reachId: 0,
   class: ClassRating.none,
   latitude: 0,
   longitude: 0,
