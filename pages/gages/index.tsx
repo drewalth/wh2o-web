@@ -61,28 +61,27 @@ const Gages = () => {
 
   return (
     <>
-
-          <PageHeader
-            title="Gages"
-            extra={[
-              <Button key="1" type="primary">
-                Create Gage
-              </Button>,
-            ]}
-          />
-          <Layout.Content style={{ padding: '0 24px' }}>
-            <Row>
-              <Col span={24}>
-                <Card>
-                  <Table
-                    columns={columns}
-                    dataSource={gages}
-                    loading={gagesLoading}
-                  />
-                </Card>
-              </Col>
-            </Row>
-          </Layout.Content>
+      <PageHeader
+        title="Gages"
+        extra={[
+          <Button key="1" type="primary">
+            Create Gage
+          </Button>,
+        ]}
+      />
+      <Layout.Content style={{ padding: '0 24px' }}>
+        <Row>
+          <Col span={24}>
+            <Card>
+              <Table
+                columns={columns}
+                dataSource={gages}
+                loading={gagesLoading}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </Layout.Content>
     </>
   )
 }

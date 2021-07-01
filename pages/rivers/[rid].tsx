@@ -95,7 +95,7 @@ const RiverDetail = (props: RiverDetailProps) => {
                   Flow
                 </Menu.Item>
                 <Menu.Item icon={<EnvironmentOutlined />} key="3">
-                 Features
+                  Features
                 </Menu.Item>
                 <Menu.Item icon={<CameraOutlined />} key="4">
                   Media
@@ -104,7 +104,7 @@ const RiverDetail = (props: RiverDetailProps) => {
                   Map
                 </Menu.Item>
                 <Menu.Item icon={<NotificationOutlined />} key="6">
-                 Board
+                  Board
                 </Menu.Item>
                 <Menu.Item icon={<UserOutlined />} key="7">
                   Subscribers

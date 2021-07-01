@@ -133,100 +133,94 @@ const Rivers = (props: RiversProps) => {
 
   return (
     <>
-        <PageHeader
-          title="Rivers"
-          extra={
-            userIsPublisher && (
-              <Button
-                key="1"
-                type="primary"
-                onClick={() => setModalVisible(true)}
+      <PageHeader
+        title="Rivers"
+        extra={
+          userIsPublisher && (
+            <Button
+              key="1"
+              type="primary"
+              onClick={() => setModalVisible(true)}
+            >
+              Create River
+            </Button>
+          )
+        }
+      />
+      <Layout.Content style={{ padding: '0 24px' }}>
+        <Row>
+          <Col span={24}>
+            <Card>
+              <Form
+                onValuesChange={debounce(handleParamChange, 500)}
+                initialValues={{ name: '', country: 'US' }}
               >
-                Create River
-              </Button>
-            )
-          }
-        />
-        <Layout.Content style={{ padding: '0 24px' }}>
-          <Row>
-            <Col span={24}>
-              <Card>
-                <Form
-                  onValuesChange={debounce(handleParamChange, 500)}
-                  initialValues={{ name: '', country: 'US' }}
-                >
-                  <Form.Item>
-                    <Form.Item
-                      label="River Name"
-                      name="name"
-                      style={{
-                        display: 'inline-block',
-                        width: 'calc(50% - 8px)',
-                      }}
-                    >
-                      <Input placeholder="Search" />
-                    </Form.Item>
-                    <Form.Item
-                      label="Country"
-                      name="country"
-                      style={{
-                        display: 'inline-block',
-                        width: 'calc(50% - 8px)',
-                      }}
-                    >
-                      <Select>
-                        {props.activeCountries &&
-                          props.activeCountries.map((c) => (
-                            <Select.Option value={c.code}>
-                              {c.name}
-                            </Select.Option>
-                          ))}
-                      </Select>
-                    </Form.Item>
+                <Form.Item>
+                  <Form.Item
+                    label="River Name"
+                    name="name"
+                    style={{
+                      display: 'inline-block',
+                      width: 'calc(50% - 8px)',
+                    }}
+                  >
+                    <Input placeholder="Search" />
                   </Form.Item>
-                </Form>
-                <Table
-                  columns={columns}
-                  dataSource={rivers}
-                  loading={loading}
-                />
-              </Card>
-            </Col>
-          </Row>
-        </Layout.Content>
-        <Modal
-          visible={modalVisible}
-          onCancel={handleCancel}
-          onOk={handlOk}
-          destroyOnClose={true}
-          confirmLoading={saveLoading}
-        >
-          <Form initialValues={reachForm} onValuesChange={handleFormChange}>
-            <Form.Item label="Country" name="country">
-              <Select>
-                {props.countriesList &&
-                  props.countriesList.map((c) => (
-                    <Select.Option value={c.code}>{c.name}</Select.Option>
-                  ))}
-              </Select>
-            </Form.Item>
-            <Form.Item label="Name" name="name">
-              <Input />
-            </Form.Item>
-            <Form.Item label="Section" name="section">
-              <Input />
-            </Form.Item>
-            <Form.Item label="Class" name="class">
-              <Input />
-            </Form.Item>
-            <Form.Item label="Length" name="length">
-              <Input />
-            </Form.Item>
-            <Form.Item label="Description" name="description">
-              <Input />
-            </Form.Item>
-          </Form>
-        </Modal>
+                  <Form.Item
+                    label="Country"
+                    name="country"
+                    style={{
+                      display: 'inline-block',
+                      width: 'calc(50% - 8px)',
+                    }}
+                  >
+                    <Select>
+                      {props.activeCountries &&
+                        props.activeCountries.map((c) => (
+                          <Select.Option value={c.code}>{c.name}</Select.Option>
+                        ))}
+                    </Select>
+                  </Form.Item>
+                </Form.Item>
+              </Form>
+              <Table columns={columns} dataSource={rivers} loading={loading} />
+            </Card>
+          </Col>
+        </Row>
+      </Layout.Content>
+      <Modal
+        visible={modalVisible}
+        onCancel={handleCancel}
+        onOk={handlOk}
+        destroyOnClose={true}
+        confirmLoading={saveLoading}
+      >
+        <Form initialValues={reachForm} onValuesChange={handleFormChange}>
+          <Form.Item label="Country" name="country">
+            <Select>
+              {props.countriesList &&
+                props.countriesList.map((c) => (
+                  <Select.Option value={c.code}>{c.name}</Select.Option>
+                ))}
+            </Select>
+          </Form.Item>
+          <Form.Item label="Name" name="name">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Section" name="section">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Class" name="class">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Length" name="length">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Description" name="description">
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   )
 }
@@ -267,7 +261,7 @@ export const getServerSideProps: GetStaticProps = async (context) => {
     props: {
       countriesList,
       activeCountries: countriesList?.filter((c) =>
-          activeCountries.includes(c.code)
+        activeCountries.includes(c.code)
       ),
     },
   }

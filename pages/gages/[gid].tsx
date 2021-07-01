@@ -38,28 +38,27 @@ const GageDetail = (props: GageDetailProps) => {
 
   return (
     <>
-
-          <PageHeader
-            title={gage.name}
-            onBack={() => router.push('/gages')}
-            extra={
-              [
-                // <Button key="1" type="primary">
-                //   Bookmark
-                // </Button>
-              ]
-            }
-          />
-          <Layout.Content style={{ padding: '0 24px' }}>
-            <Row gutter={24}>
-              <Col span={12}>
-                <Card>yo</Card>
-              </Col>
-              <Col span={12}>
-                <Card>Flow chart</Card>
-              </Col>
-            </Row>
-          </Layout.Content>
+      <PageHeader
+        title={gage.name}
+        onBack={() => router.push('/gages')}
+        extra={
+          [
+            // <Button key="1" type="primary">
+            //   Bookmark
+            // </Button>
+          ]
+        }
+      />
+      <Layout.Content style={{ padding: '0 24px' }}>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Card>yo</Card>
+          </Col>
+          <Col span={12}>
+            <Card>Flow chart</Card>
+          </Col>
+        </Row>
+      </Layout.Content>
     </>
   )
 }
