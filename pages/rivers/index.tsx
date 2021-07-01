@@ -225,7 +225,7 @@ const Rivers = (props: RiversProps) => {
 
 export default Rivers
 
-export const getServerSideProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
   /**
    * this could become problematic when a user adds a reach
    * to a new country and does not appear in options after creation.
