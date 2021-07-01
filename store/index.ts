@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-// ...
 import userReducer from './slices/user.slice'
 import gagesReducer from './slices/gages.slice'
 import riversReducer from './slices/rivers.slice'
 import riverReducer from './slices/river.slice'
+import appReducer from './slices/app.slice'
 
 export * from './hooks'
 
@@ -13,6 +13,7 @@ export const store = configureStore({
     gages: gagesReducer,
     user: userReducer,
     river: riverReducer,
+    app: appReducer,
   },
 })
 

@@ -5,24 +5,32 @@ import { Provider } from 'react-redux'
 import { store } from '../store'
 import PrimaryNavigation from '../components/global/primary-navigation'
 import { Layout } from 'antd'
-import { useRouter } from 'next/router'
+import { SecondaryNavigation } from '../components/global/secondary-navigation'
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
-  const router = useRouter()
+  const { Content, Footer } = Layout
   return (
     <Provider store={store}>
       <Layout>
-        <PrimaryNavigation />
-        <Layout.Content
+        <SecondaryNavigation />
+        <Layout
           style={{
-            minHeight: 'calc(100vh - 64px)',
-            maxHeight: 'calc(100vh - 64px)',
+            minHeight: '100vh',
+            maxHeight: '100vh',
             overflowY: 'scroll',
-            padding: router.route === '/' ? '0' : '0 24px',
           }}
         >
-          <Component {...pageProps} />
-        </Layout.Content>
+          <PrimaryNavigation />
+          <Content style={{ margin: '0 16px' }}>
+            <div
+              className="site-layout-background"
+              style={{ padding: 24, minHeight: 360 }}
+            >
+              <Component {...pageProps} />
+            </div>
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>@wh2o</Footer>
+        </Layout>
       </Layout>
     </Provider>
   )
