@@ -120,7 +120,7 @@ const RiverDetail = (props: RiverDetailProps) => {
               <Flow gages={river.gages || []} riverId={props.id} />
             )}
             {activeTab === '3' && (
-              <Features riverId={props.id} features={river.features} />
+              <Features reachId={props.id} features={river.features} />
             )}
             {activeTab === '4' && (
               <Gallery
