@@ -6,7 +6,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 export default function Home() {
   return (
     <>
-      <PrimaryNavigation />
       <div
         className="hero"
         style={{

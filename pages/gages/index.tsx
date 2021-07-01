@@ -61,14 +61,7 @@ const Gages = () => {
 
   return (
     <>
-      <Layout>
-        <PrimaryNavigation />
-        <Layout.Content
-          style={{
-            minHeight: 'calc(100vh - 64px)',
-            padding: '0 24px',
-          }}
-        >
+
           <PageHeader
             title="Gages"
             extra={[
@@ -90,8 +83,6 @@ const Gages = () => {
               </Col>
             </Row>
           </Layout.Content>
-        </Layout.Content>
-      </Layout>
     </>
   )
 }

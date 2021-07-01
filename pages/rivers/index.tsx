@@ -132,16 +132,7 @@ const Rivers = (props: RiversProps) => {
   }
 
   return (
-    <Layout>
-      <PrimaryNavigation />
-      <Layout.Content
-        style={{
-          minHeight: 'calc(100vh - 64px)',
-          maxHeight: 'calc(100vh - 64px)',
-          overflowY: 'scroll',
-          padding: '0 24px',
-        }}
-      >
+    <>
         <PageHeader
           title="Rivers"
           extra={
@@ -236,8 +227,7 @@ const Rivers = (props: RiversProps) => {
             </Form.Item>
           </Form>
         </Modal>
-      </Layout.Content>
-    </Layout>
+    </>
   )
 }
 
@@ -277,9 +267,8 @@ export const getServerSideProps: GetStaticProps = async (context) => {
     props: {
       countriesList,
       activeCountries: countriesList?.filter((c) =>
-        activeCountries.includes(c.code)
+          activeCountries.includes(c.code)
       ),
-      ...(await serverSideTranslations(context.locale as string)),
     },
   }
 }
