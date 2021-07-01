@@ -21,13 +21,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           }}
         >
           <PrimaryNavigation />
-          <Content style={{ margin: '0 16px' }}>
-            <div
-              className="site-layout-background"
-              style={{ padding: 24, minHeight: 360 }}
-            >
-              <Component {...pageProps} />
-            </div>
+          <Content>
+            <Component {...pageProps} />
           </Content>
           <Footer style={{ textAlign: 'center' }}>@wh2o</Footer>
         </Layout>
