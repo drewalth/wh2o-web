@@ -27,8 +27,6 @@ import { GetStaticProps } from 'next'
 import { selectUserIsPublisher } from 'store/slices/user.slice'
 import { createReach } from 'controllers'
 import { useRouter } from 'next/router'
-import PrimaryNavigation from '../../components/global/primary-navigation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const ReachFormDefaults = {
   country: 'US',

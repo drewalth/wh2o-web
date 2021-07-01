@@ -8,9 +8,6 @@ import {
   fetchGages,
   selectGagesLoading,
 } from 'store/slices/gages.slice'
-import PrimaryNavigation from '../../components/global/primary-navigation'
-import { GetServerSideProps, GetServerSidePropsContext } from 'next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const columns = [
   {
@@ -84,16 +81,6 @@ const Gages = () => {
       </Layout.Content>
     </>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  return {
-    props: {
-      ...(await serverSideTranslations(context.locale as string)),
-    },
-  }
 }
 
 export default Gages

@@ -90,14 +90,4 @@ const index = () => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  return {
-    props: {
-      ...(await serverSideTranslations(context.locale as string)),
-    },
-  }
-}
-
 export default index
