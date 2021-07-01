@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
-import { useTranslation } from 'next-i18next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Breadcrumb, Button, Layout, PageHeader, Typography, Menu } from 'antd'
 import {
   BetaBox,
@@ -44,7 +42,6 @@ interface RiverDetailProps {
 
 const RiverDetail = (props: RiverDetailProps) => {
   const { id } = props
-  const { t } = useTranslation('common')
   const [activeTab, setActiveTab] = useState('1')
   const dispatch = useAppDispatch()
   const river = useAppSelector(selectRiverData)
@@ -92,25 +89,25 @@ const RiverDetail = (props: RiverDetailProps) => {
                 onSelect={({ key }) => setActiveTab(key)}
               >
                 <Menu.Item icon={<DashboardOutlined />} key="1">
-                  {t('menu.dashboard')}
+                  Dashboard
                 </Menu.Item>
                 <Menu.Item icon={<AreaChartOutlined />} key="2">
-                  {t('common.flow')}
+                  Flow
                 </Menu.Item>
                 <Menu.Item icon={<EnvironmentOutlined />} key="3">
-                  {t('common.features')}
+                 Features
                 </Menu.Item>
                 <Menu.Item icon={<CameraOutlined />} key="4">
-                  {t('common.media')}
+                  Media
                 </Menu.Item>
                 <Menu.Item icon={<CompassOutlined />} key="5">
-                  {t('common.map')}
+                  Map
                 </Menu.Item>
                 <Menu.Item icon={<NotificationOutlined />} key="6">
-                  {t('common.board')}
+                 Board
                 </Menu.Item>
                 <Menu.Item icon={<UserOutlined />} key="7">
-                  {t('common.subscribers')}
+                  Subscribers
                 </Menu.Item>
               </Menu>
             </Layout.Sider>
@@ -168,7 +165,6 @@ export const getServerSideProps: GetServerSideProps = async (
       apiUrl: process.env.API_BASE_URL || '',
       awsS3RootPath: process.env.AWS_S3_BASE_URL,
       mapboxToken: process.env.MAPBOX_ACCESS_TOKEN || '',
-      ...(await serverSideTranslations(context.locale as string)),
     },
   }
 }

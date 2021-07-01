@@ -16,11 +16,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const PrimaryNavigation = () => {
   const dispatch = useAppDispatch()
-  const { t } = useTranslation('common')
   const user = useAppSelector(selectUserData)
-  const router = useRouter()
-  const { locale } = router
-  const { i18n } = useTranslation()
   const refreshUser = async () => {
     try {
       dispatch(setUserLoading(true))
@@ -37,13 +33,6 @@ const PrimaryNavigation = () => {
   useEffect(() => {
     refreshUser()
   }, [])
-
-  const changeLocale = async (locale = 'en-US') => {
-    if (i18n && i18n.changeLanguage) {
-      await i18n.changeLanguage(locale)
-      router.locale = locale
-    }
-  }
 
   return (
     <Layout.Header
@@ -74,30 +63,31 @@ const PrimaryNavigation = () => {
       </div>
       <Menu theme="dark" mode="horizontal">
         <Menu.Item key="1">
-          <Link href="/rivers">{t('common.rivers')}</Link>
+          <Link href="/rivers">
+            <a>
+              Rivers
+            </a>
+          </Link>
         </Menu.Item>
         <Menu.Item key="2">
-          <Link href="/gages">{t('common.gages')}</Link>
+          <Link href="/gages">
+            <a>
+              Gages
+            </a>
+          </Link>
         </Menu.Item>
         <Menu.Item key="3">
           {!user.email ? (
             <Link key="login" href="/auth/login">
-              {t('usermenu.signin')}
+              <a>
+                Sign In
+              </a>
             </Link>
           ) : (
             <Link key="dashboard" href={`/user/${user.id}`}>
-              Dashboard
+              <a>Dashboard</a>
             </Link>
           )}
-        </Menu.Item>
-        <Menu.Item key="4">
-          <Select defaultValue={locale} onChange={(evt) => changeLocale(evt)}>
-            <Select.Option value="en">En</Select.Option>
-            <Select.Option value="es">Es</Select.Option>
-            <Select.Option value="fr">Fr</Select.Option>
-            <Select.Option value="de">De</Select.Option>
-            <Select.Option value="pt">Pt</Select.Option>
-          </Select>
         </Menu.Item>
       </Menu>
     </Layout.Header>

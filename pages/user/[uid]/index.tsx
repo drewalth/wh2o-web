@@ -17,7 +17,6 @@ import {
 import { useRouter } from 'next/router'
 import PrimaryNavigation from '../../../components/global/primary-navigation'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const index = () => {
   const [activeTab, setActiveTab] = useState('1')
@@ -34,7 +33,6 @@ const index = () => {
 
   return (
     <>
-      <PrimaryNavigation />
       <PageHeader
         title="Account"
         subTitle={`${user.firstName} ${user.lastName}`}
