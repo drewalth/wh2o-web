@@ -16,6 +16,7 @@ import { IRiver } from 'interfaces'
 import { updateRiver } from 'controllers'
 import { useAppDispatch } from 'store'
 import { fetchRiver } from 'store/slices/river.slice'
+import {ContentEditor} from "../content-editor";
 
 interface BetaBoxProps {
   river: IRiver
@@ -61,17 +62,6 @@ export const BetaBox = (props: BetaBoxProps) => {
     }
   }
 
-  const renderRiverDescription = (description: string | undefined) => {
-    if (!description) {
-      return (
-        <>
-          <Button type="primary">Add Description</Button>
-        </>
-      )
-    } else {
-      return <Typography.Paragraph>{description}</Typography.Paragraph>
-    }
-  }
 
   useEffect(() => {
     setFormRiver({ ...river })
@@ -114,7 +104,7 @@ export const BetaBox = (props: BetaBoxProps) => {
         )}
       </Row>
       <Divider />
-      {renderRiverDescription(river.description)}
+      <ContentEditor content={river.description || ''} />
       <Modal
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}

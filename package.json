@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
+    "@tiptap/react": "*",
+    "@tiptap/starter-kit": "*",
     "antd": "^4.16.1",
     "axios": "^0.21.1",
     "chart.js": "^3.3.2",
