@@ -63,7 +63,7 @@ const RiverDetail = (props: RiverDetailProps) => {
           onBack={() => props.router.push('/rivers')}
           extra={[
             props.id && <Bookmark key={'bookmark'} riverId={props.id} />,
-            <Button title="download" icon={<DownloadOutlined />}>
+            <Button disabled title="download" icon={<DownloadOutlined />}>
               <></>
             </Button>,
           ]}

@@ -8,10 +8,14 @@ import {
   setUserLoading,
 } from 'store/slices/user.slice'
 import { authRefresh } from 'controllers'
-import { useEffect } from 'react'
-import { selectAppWindowWidth, setWidth } from '../../store/slices/app.slice'
+import { createElement, useEffect } from 'react'
+import { selectAppWindowWidth, setWidth } from 'store/slices/app.slice'
+import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
+import { NavigationState } from 'pages/_app'
 
-const PrimaryNavigation = () => {
+interface PrimaryNavProps extends NavigationState {}
+
+const PrimaryNavigation = (props: PrimaryNavProps) => {
   const dispatch = useAppDispatch()
   const user = useAppSelector(selectUserData)
   const windowWidth = useAppSelector(selectAppWindowWidth)
@@ -39,6 +43,9 @@ const PrimaryNavigation = () => {
     <>
       <Layout.Header
         style={{
+          position: 'fixed',
+          width: '100%',
+          zIndex: 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -65,7 +72,7 @@ const PrimaryNavigation = () => {
             </a>
           </Link>
         </div>
-        {windowWidth > 768 && (
+        {windowWidth > 768 ? (
           <Menu theme="dark" mode="horizontal">
             <Menu.Item key="1">
               <Link href="/rivers">
@@ -89,6 +96,23 @@ const PrimaryNavigation = () => {
               )}
             </Menu.Item>
           </Menu>
+        ) : (
+          <div
+            onClick={() => props.setSidebarCollapsed(!props.sidebarCollapsed)}
+          >
+            <Typography.Link style={{ color: '#fff', marginRight: 8 }}>
+              Menu
+            </Typography.Link>
+            {createElement(
+              props.sidebarCollapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+              {
+                className: 'trigger',
+                style: {
+                  color: '#fff',
+                },
+              }
+            )}
+          </div>
         )}
       </Layout.Header>
     </>

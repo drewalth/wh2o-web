@@ -2,12 +2,12 @@ import { Layout, Menu } from 'antd'
 import Link from 'next/link'
 import { useAppSelector } from 'store'
 import { selectUserData } from 'store/slices/user.slice'
-import { useState } from 'react'
-import { selectAppWindowWidth } from '../../store/slices/app.slice'
+import { selectAppWindowWidth } from 'store/slices/app.slice'
+import { NavigationState } from '../../pages/_app'
+interface SecondaryNavigationProps extends NavigationState {}
 
-export const SecondaryNavigation = () => {
+export const SecondaryNavigation = (props: SecondaryNavigationProps) => {
   const user = useAppSelector(selectUserData)
-  const [sidebarCollapsed, setSideBarCollapsed] = useState(true)
   const windowWidth = useAppSelector(selectAppWindowWidth)
 
   if (windowWidth > 768) {
@@ -16,15 +16,9 @@ export const SecondaryNavigation = () => {
 
   return (
     <Layout.Sider
-      collapsed={sidebarCollapsed}
-      collapsible
+      trigger={null}
+      collapsed={props.sidebarCollapsed}
       collapsedWidth="0"
-      onBreakpoint={(broken) => {
-        console.log(broken)
-      }}
-      onCollapse={(collapsed) => {
-        setSideBarCollapsed(collapsed)
-      }}
     >
       <Menu theme="dark" mode="inline" style={{ paddingTop: 60 }}>
         <Menu.Item key="1">

@@ -6,13 +6,24 @@ import { store } from '../store'
 import PrimaryNavigation from '../components/global/primary-navigation'
 import { Layout } from 'antd'
 import { SecondaryNavigation } from '../components/global/secondary-navigation'
+import { useState } from 'react'
+
+export interface NavigationState {
+  setSidebarCollapsed: Function
+  sidebarCollapsed: boolean
+}
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
-  const { Content, Footer } = Layout
+  const { Content } = Layout
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true)
+  const navState = {
+    sidebarCollapsed,
+    setSidebarCollapsed,
+  }
+
   return (
     <Provider store={store}>
       <Layout>
-        <SecondaryNavigation />
         <Layout
           style={{
             minHeight: '100vh',
@@ -20,12 +31,12 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
             overflowY: 'scroll',
           }}
         >
-          <PrimaryNavigation />
-          <Content>
+          <PrimaryNavigation {...navState} />
+          <Content style={{ maxHeight: '100%', paddingTop: 64 }}>
             <Component {...pageProps} />
           </Content>
-          <Footer style={{ textAlign: 'center' }}>@wh2o</Footer>
         </Layout>
+        <SecondaryNavigation {...navState} />
       </Layout>
     </Provider>
   )
