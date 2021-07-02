@@ -13,7 +13,7 @@ export const updateRiver = async (
   id: number | string,
   payload: IRiver
 ): Promise<IRiver> => {
-  return http.put(`/reaches/${id}`, payload).then((res) => res.data)
+  return http.patch(`/reaches/${id}`, payload).then((res) => res.data)
 }
 
 export const createRiversMedia = async (payload: IRiversMedia) => {

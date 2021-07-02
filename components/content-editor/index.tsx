@@ -1,141 +1,149 @@
-import { useEditor, EditorContent } from '@tiptap/react'
+import { useEditor, EditorContent, Editor } from '@tiptap/react'
+import sanitizeHtml from 'sanitize-html'
 import StarterKit from '@tiptap/starter-kit'
+import { Button } from 'antd'
+import debounce from 'lodash.debounce'
+import {
+  BoldOutlined,
+  ItalicOutlined,
+  RedoOutlined,
+  StrikethroughOutlined,
+  UndoOutlined,
+} from '@ant-design/icons'
 
 interface ContentEditorProps {
-    content:string
+  content: string
+  updateFunction: Function
+  entityId: number
+  disabled: boolean
 }
 
-const MenuBar = ({ editor }) => {
-    if (!editor) {
-        return null
-    }
-
-    return (
-        <>
-            <button
-                onClick={() => editor.chain().focus().toggleBold().run()}
-                className={editor.isActive('bold') ? 'is-active' : ''}
-            >
-                bold
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleItalic().run()}
-                className={editor.isActive('italic') ? 'is-active' : ''}
-            >
-                italic
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleStrike().run()}
-                className={editor.isActive('strike') ? 'is-active' : ''}
-            >
-                strike
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleCode().run()}
-                className={editor.isActive('code') ? 'is-active' : ''}
-            >
-                code
-            </button>
-            <button onClick={() => editor.chain().focus().unsetAllMarks().run()}>
-                clear marks
-            </button>
-            <button onClick={() => editor.chain().focus().clearNodes().run()}>
-                clear nodes
-            </button>
-            <button
-                onClick={() => editor.chain().focus().setParagraph().run()}
-                className={editor.isActive('paragraph') ? 'is-active' : ''}
-            >
-                paragraph
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
-            >
-                h1
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
-            >
-                h2
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-                className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
-            >
-                h3
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-                className={editor.isActive('heading', { level: 4 }) ? 'is-active' : ''}
-            >
-                h4
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-                className={editor.isActive('heading', { level: 5 }) ? 'is-active' : ''}
-            >
-                h5
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-                className={editor.isActive('heading', { level: 6 }) ? 'is-active' : ''}
-            >
-                h6
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleBulletList().run()}
-                className={editor.isActive('bulletList') ? 'is-active' : ''}
-            >
-                bullet list
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                className={editor.isActive('orderedList') ? 'is-active' : ''}
-            >
-                ordered list
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-                className={editor.isActive('codeBlock') ? 'is-active' : ''}
-            >
-                code block
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleBlockquote().run()}
-                className={editor.isActive('blockquote') ? 'is-active' : ''}
-            >
-                blockquote
-            </button>
-            <button onClick={() => editor.chain().focus().setHorizontalRule().run()}>
-                horizontal rule
-            </button>
-            <button onClick={() => editor.chain().focus().setHardBreak().run()}>
-                hard break
-            </button>
-            <button onClick={() => editor.chain().focus().undo().run()}>
-                undo
-            </button>
-            <button onClick={() => editor.chain().focus().redo().run()}>
-                redo
-            </button>
-        </>
-    )
+const sanitize = (html: string) => {
+  return sanitizeHtml(html, {
+    allowedTags: ['p', 'em', 'i', 'h1', 'h2', 'h3', 'strong', 'a', 'div'],
+    allowedAttributes: {
+      a: ['href'],
+    },
+    allowedIframeHostnames: ['www.youtube.com', 'www.vimeo.com'],
+  })
 }
 
-export const ContentEditor = (props:ContentEditorProps) => {
-    const editor = useEditor({
-        extensions: [
-            StarterKit,
-        ],
-        content: props.content,
-    })
+// just for display when disabled
+const DisabledMenuBar = () => {
+  return (
+    <>
+      <Button disabled>clear</Button>
+      <Button icon={<BoldOutlined />} disabled />
+      <Button icon={<ItalicOutlined />} disabled />
+      <Button icon={<StrikethroughOutlined />} disabled />
+      <Button disabled>paragraph</Button>
+      <Button disabled>h1</Button>
+      <Button disabled>h2</Button>
+      <Button disabled>h3</Button>
+      <Button disabled>horizontal rule</Button>
+      <Button disabled icon={<UndoOutlined />} />
+      <Button disabled icon={<RedoOutlined />} />
+    </>
+  )
+}
 
-    return (
+const MenuBar = ({ editor }: { editor: Editor }) => {
+  return (
+    <>
+      <Button onClick={() => editor.chain().focus().unsetAllMarks().run()}>
+        clear
+      </Button>
+      <Button
+        icon={<BoldOutlined />}
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        type={editor.isActive('bold') ? 'primary' : 'default'}
+      />
+      <Button
+        icon={<ItalicOutlined />}
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        type={editor.isActive('italic') ? 'primary' : 'default'}
+      />
+      <Button
+        icon={<StrikethroughOutlined />}
+        onClick={() => editor.chain().focus().toggleStrike().run()}
+        type={editor.isActive('strike') ? 'primary' : 'default'}
+      />
+      <Button
+        onClick={() => editor.chain().focus().setParagraph().run()}
+        type={editor.isActive('paragraph') ? 'primary' : 'default'}
+      >
+        paragraph
+      </Button>
+      <Button
+        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+        type={editor.isActive('heading', { level: 1 }) ? 'primary' : 'default'}
+      >
+        h1
+      </Button>
+      <Button
+        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        type={editor.isActive('heading', { level: 2 }) ? 'primary' : 'default'}
+      >
+        h2
+      </Button>
+      <Button
+        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        type={editor.isActive('heading', { level: 3 }) ? 'primary' : 'default'}
+      >
+        h3
+      </Button>
+      <Button onClick={() => editor.chain().focus().setHorizontalRule().run()}>
+        horizontal rule
+      </Button>
+      <Button
+        icon={<UndoOutlined />}
+        onClick={() => editor.chain().focus().undo().run()}
+      />
+      <Button
+        icon={<RedoOutlined />}
+        onClick={() => editor.chain().focus().redo().run()}
+      />
+    </>
+  )
+}
+
+export const ContentEditor = (props: ContentEditorProps) => {
+  // @ts-ignore
+  const handleChange = debounce((html) => props.updateFunction(html), 1500, {
+    maxWait: 6000,
+  })
+
+  const editor = useEditor({
+    extensions: [StarterKit],
+    editable: true,
+    injectCSS: false,
+    content: props.content || `<span>hello</span>`,
+    onUpdate: ({ editor }) => {
+      handleChange(sanitize(editor.getHTML()))
+    },
+  })
+
+  return (
+    <>
+      {!!editor && (
         <>
-        <MenuBar editor={editor} />
-            <EditorContent editor={editor} />
+          {props.disabled ? (
+            <>
+              <DisabledMenuBar />
+              <div dangerouslySetInnerHTML={{ __html: props.content }} />
+            </>
+          ) : (
+            <>
+              <MenuBar editor={editor} />
+              <EditorContent
+                disabled={props.disabled}
+                editor={editor}
+                style={{ marginTop: 24 }}
+              />
+            </>
+          )}
         </>
-    )
+      )}
+    </>
+  )
 }

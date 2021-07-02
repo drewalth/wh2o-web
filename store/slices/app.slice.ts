@@ -15,7 +15,6 @@ export const appSlice = createSlice({
   reducers: {
     setWidth: (state, action) => {
       state.windowWidth = action.payload
-      console.log(action.payload)
     },
   },
 })
