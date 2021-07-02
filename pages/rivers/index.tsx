@@ -78,9 +78,9 @@ const columns = [
   {
     dataIndex: 'id',
     key: 'id',
-    render: (gageId: number) => (
+    render: (riverId: number) => (
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Link href={`/rivers/${gageId}`}>
+        <Link href={`/rivers/${riverId}`}>
           <a>
             <Button size="small" style={{ paddingTop: 1 }}>
               <ArrowRightOutlined />

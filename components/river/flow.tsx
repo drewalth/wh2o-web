@@ -1,4 +1,13 @@
-import { Modal, Form, Button, message, AutoComplete, Select, Table } from 'antd'
+import {
+  Modal,
+  Form,
+  Button,
+  message,
+  AutoComplete,
+  Select,
+  Table,
+  Empty,
+} from 'antd'
 import { IGage, IGageReading } from 'interfaces'
 import { useAppSelector } from '../../store'
 import { selectUserIsPublisher } from '../../store/slices/user.slice'
@@ -103,22 +112,22 @@ export const Flow = (props: FlowProps) => {
     <>
       <div
         style={{
+          height: 24,
           display: 'flex',
           justifyContent: 'flex-end',
           marginBottom: 24,
         }}
       >
-        {activeGage && (
+        {!!activeGage && (
           <Select value={activeGage} onSelect={(evt) => setActiveGage(evt)}>
-            {gages.length &&
-              gages.map((gage, index) => (
-                <>
-                  {/* @ts-ignore */}
-                  <Select.Option key={index} value={gage.id}>
-                    {gage.name}
-                  </Select.Option>
-                </>
-              ))}
+            {gages.map((gage, index) => (
+              <>
+                {/* @ts-ignore */}
+                <Select.Option key={index} value={gage.id}>
+                  {gage.name}
+                </Select.Option>
+              </>
+            ))}
           </Select>
         )}
         <Button
@@ -130,10 +139,13 @@ export const Flow = (props: FlowProps) => {
         </Button>
       </div>
       <div>
-        {readings && labels && (
-          <FlowChartV2 readings={readings} labels={labels} flowRanges={[]} />
+        {!!gages.length && (
+          <>
+            <FlowChartV2 readings={readings} labels={labels} flowRanges={[]} />
+            <div>{JSON.stringify(readings)}</div>
+          </>
         )}
-        <div>{JSON.stringify(readings)}</div>
+        {!gages.length && <Empty description="No gages" />}
       </div>
       <Modal visible={modalVisible} onCancel={handleCancel} onOk={handleOk}>
         <Form initialValues={{ term: '' }}>
