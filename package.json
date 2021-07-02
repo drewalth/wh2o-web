@@ -10,7 +10,7 @@
     "update:types": "schemats generate -c postgres://wh2o:wh2o@localhost:35432/ -o ./interfaces/index.ts"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^1.5.1",
+    "@reduxjs/toolkit": "^1.6.0",
     "@tiptap/react": "*",
     "@tiptap/starter-kit": "*",
     "antd": "^4.16.1",
