@@ -10,6 +10,7 @@ import {
   StrikethroughOutlined,
   UndoOutlined,
 } from '@ant-design/icons'
+import { useEffect, useState } from 'react'
 
 interface ContentEditorProps {
   content: string
@@ -108,20 +109,26 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
 }
 
 export const ContentEditor = (props: ContentEditorProps) => {
+  const { entityId } = props
   // @ts-ignore
   const handleChange = debounce((html) => props.updateFunction(html), 1500, {
     maxWait: 6000,
   })
 
-  const editor = useEditor({
-    extensions: [StarterKit],
-    editable: true,
-    injectCSS: false,
-    content: props.content || `<span>hello</span>`,
-    onUpdate: ({ editor }) => {
-      handleChange(sanitize(editor.getHTML()))
+  const editor = useEditor(
+    {
+      extensions: [StarterKit],
+      editable: true,
+      injectCSS: false,
+      content:
+        props.content ||
+        `<h3>No Description</h3><br><span>Log In to add one.</span>`,
+      onUpdate: ({ editor }) => {
+        handleChange(sanitize(editor.getHTML()))
+      },
     },
-  })
+    [entityId]
+  )
 
   return (
     <>
