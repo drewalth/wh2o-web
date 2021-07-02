@@ -11,14 +11,12 @@ export const userBookmarkGage = async (
   primary = false
 ) => {
   return http
-    .post('users/add-gage', { userId, gageId, primary })
+    .post('user-gages', { userId, gageId, primary })
     .then((res) => res.data)
 }
 
 export const removeBookmarkGage = async (userId: number, gageId: number) => {
-  return http
-    .delete(`users/remove-gage/${userId}/${gageId}`)
-    .then((res) => res.data)
+  return http.delete(`user-gages/${userId}/${gageId}`).then((res) => res.data)
 }
 
 export const userBookmarkRiver = async (

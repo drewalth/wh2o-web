@@ -47,9 +47,9 @@ const index = () => {
             }}
           >
             <Menu.Item key="1">Dasboard</Menu.Item>
+            <Menu.Item key="4">Gages</Menu.Item>
             <Menu.Item key="2">Rivers</Menu.Item>
             <Menu.Item key="3">Media</Menu.Item>
-            <Menu.Item key="4">Gages</Menu.Item>
             <Menu.Item key="8">Notifications</Menu.Item>
             <Menu.Item key="5">Settings</Menu.Item>
             <Menu.Divider key="6" />
