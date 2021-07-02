@@ -1,4 +1,5 @@
 import { IMedia } from 'interfaces'
+import { Card, Empty } from 'antd'
 
 interface MediaProps {
   userId: number
@@ -7,5 +8,9 @@ interface MediaProps {
 
 export const Media = (props: MediaProps) => {
   const { media } = props
-  return <div>{JSON.stringify(media)}</div>
+  return (
+    <Card>
+      <Empty description="No media" />
+    </Card>
+  )
 }

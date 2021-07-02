@@ -6,6 +6,7 @@ import {
   Settings,
   Media,
   Notifications,
+  UserGages,
 } from 'components/user'
 import FlowRangeEditor from 'components/flow-range-editor/flow-range-editor'
 import { useAppSelector, useAppDispatch } from 'store'
@@ -15,8 +16,6 @@ import {
   resetUser,
 } from 'store/slices/user.slice'
 import { useRouter } from 'next/router'
-import PrimaryNavigation from '../../../components/global/primary-navigation'
-import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 
 const index = () => {
   const [activeTab, setActiveTab] = useState('1')
@@ -37,7 +36,7 @@ const index = () => {
         title="Account"
         subTitle={`${user.firstName} ${user.lastName}`}
       />
-      <Layout style={{ minHeight: '40vh' }}>
+      <Layout style={{ minHeight: '40vh', padding: '0 24px' }}>
         <Layout.Sider>
           <Menu
             mode="inline"
@@ -65,7 +64,7 @@ const index = () => {
           </Layout.Content>
         )}
         {user && !userLoading && (
-          <Layout.Content style={{ padding: '24px' }}>
+          <Layout.Content style={{ paddingLeft: '24px' }}>
             {activeTab === '1' && <FlowReport gages={user.gages} />}
             {activeTab === '2' && user.id && (
               <Rivers userId={user.id} reaches={user.reaches} />
@@ -75,12 +74,7 @@ const index = () => {
             )}
             {activeTab === '8' && user.id && <Notifications userId={user.id} />}
             {activeTab === '4' && user.id && (
-              <FlowRangeEditor
-                userId={user.id}
-                entity="USER"
-                // @ts-ignore
-                gages={user.gages}
-              />
+              <UserGages userId={user.id} gages={user.gages} />
             )}
             {activeTab === '5' && user.id && <Settings user={user} />}
           </Layout.Content>
