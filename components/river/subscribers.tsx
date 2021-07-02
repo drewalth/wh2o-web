@@ -1,18 +1,21 @@
 import { IUser } from '../../interfaces'
-import { Result } from 'antd'
+import { Empty, Tag } from 'antd'
 
 interface SubscribersProps {
   subscribers: IUser[]
 }
 
 export const Subscribers = (props: SubscribersProps) => {
+  const { subscribers } = props
   return (
     <>
-      <Result
-        status="500"
-        title="500"
-        subTitle="Sorry, something went wrong."
-      />
+      {subscribers.length ? (
+        subscribers.map((sub) => (
+          <Tag color="magenta">{`${sub.firstName} ${sub.lastName}`}</Tag>
+        ))
+      ) : (
+        <Empty description="No subscribers" />
+      )}
     </>
   )
 }
