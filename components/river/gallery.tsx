@@ -223,7 +223,7 @@ export const Gallery = (props: GalleryProps) => {
               </Card>
             ))}
       </div>
-      {(!props.sources.length && !imagePaths.length) && (
+      {!props.sources.length && !imagePaths.length && (
         <Empty description="No media" />
       )}
     </>

@@ -1,22 +1,12 @@
-import {
-  Form,
-  Modal,
-  Input,
-  Statistic,
-  Row,
-  Col,
-  Divider,
-  message,
-  Typography,
-  Button,
-} from 'antd'
+import { Form, Modal, Input, Statistic, Row, Col, Divider, message } from 'antd'
 import { useState, useEffect } from 'react'
 import moment from 'moment'
 import { IRiver } from 'interfaces'
 import { updateRiver } from 'controllers'
-import { useAppDispatch } from 'store'
+import { useAppDispatch, useAppSelector } from 'store'
 import { fetchRiver } from 'store/slices/river.slice'
-import {ContentEditor} from "../content-editor";
+import { ContentEditor } from '../content-editor'
+import { selectUserIsPublisher } from '../../store/slices/user.slice'
 
 interface BetaBoxProps {
   river: IRiver
@@ -30,6 +20,7 @@ export const BetaBox = (props: BetaBoxProps) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [updateLoading, setUpdateLoading] = useState(false)
   const dispatch = useAppDispatch()
+  const userIsPublisher = useAppSelector(selectUserIsPublisher)
 
   const getPrimaryGage = () => {
     if (!river.gages || !river.gages.length) {
@@ -62,6 +53,22 @@ export const BetaBox = (props: BetaBoxProps) => {
     }
   }
 
+  const updateDescription = (description: string) => {
+    // need to use updateReachDto
+    // @ts-ignore
+    updateRiver(river.id, {
+      description,
+      id: river.id,
+    })
+      .then(() => {
+        message.success('Content updated')
+        console.log('success')
+      })
+      .catch((e) => {
+        message.error('Content failed to update')
+        console.log('e', e)
+      })
+  }
 
   useEffect(() => {
     setFormRiver({ ...river })
@@ -104,7 +111,12 @@ export const BetaBox = (props: BetaBoxProps) => {
         )}
       </Row>
       <Divider />
-      <ContentEditor content={river.description || ''} />
+      <ContentEditor
+        disabled={!userIsPublisher}
+        entityId={river.id}
+        updateFunction={updateDescription}
+        content={river.description || ''}
+      />
       <Modal
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}
