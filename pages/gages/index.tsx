@@ -37,7 +37,7 @@ const columns = [
     key: 'id',
     render: (gageId: number) => (
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button>
+        <Button disabled>
           <Link href={`/gages/${gageId}`}>view</Link>
         </Button>
       </div>
@@ -61,7 +61,7 @@ const Gages = () => {
       <PageHeader
         title="Gages"
         extra={[
-          <Button key="1" type="primary">
+          <Button key="1" type="primary" disabled>
             Create Gage
           </Button>,
         ]}

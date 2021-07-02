@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { ArrowRightOutlined } from '@ant-design/icons'
 import {
   Row,
   Col,
@@ -46,12 +47,13 @@ const columns = [
     render: (name: string, val: IRiver) => (
       <>
         <Typography.Title
+          key={name}
           level={5}
           style={{ fontSize: '0.875rem', lineHeight: 1 }}
         >
           {name}
         </Typography.Title>
-        <Typography.Text>{val.section}</Typography.Text>
+        <Typography.Text key={val.section}>{val.section}</Typography.Text>
       </>
     ),
   },
@@ -77,9 +79,13 @@ const columns = [
     key: 'id',
     render: (gageId: number) => (
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button>
-          <Link href={`/rivers/${gageId}`}>view</Link>
-        </Button>
+        <Link href={`/rivers/${gageId}`}>
+          <a>
+            <Button size="small" style={{ paddingTop: 1 }}>
+              <ArrowRightOutlined />
+            </Button>
+          </a>
+        </Link>
       </div>
     ),
   },
@@ -180,6 +186,7 @@ const Rivers = (props: RiversProps) => {
                     }}
                   >
                     <Select>
+                      <Select.Option value="">--</Select.Option>
                       {props.activeCountries &&
                         props.activeCountries.map((c) => (
                           <Select.Option value={c.code}>{c.name}</Select.Option>
