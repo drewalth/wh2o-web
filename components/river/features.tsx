@@ -1,6 +1,6 @@
 import { IFeature, FeatureModel } from 'interfaces'
 import { useState } from 'react'
-import { Card, Modal, Form, Input, Button, Switch, message } from 'antd'
+import { Card, Modal, Form, Input, Button, Switch, message, Empty } from 'antd'
 import { createFeature, updateFeature, deleteFeature } from 'controllers'
 import { useAppSelector } from '../../store'
 import { selectUserIsPublisher } from '../../store/slices/user.slice'
@@ -145,6 +145,8 @@ export const Features = (props: FeaturesProps) => {
             <Card.Meta description={feat.description}></Card.Meta>
           </Card>
         ))}
+
+      {!features.length && <Empty description="No features" />}
     </>
   )
 }

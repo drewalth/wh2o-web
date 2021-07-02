@@ -1,4 +1,5 @@
 import { IUser } from '../../interfaces'
+import { Result } from 'antd'
 
 interface SubscribersProps {
   subscribers: IUser[]
@@ -7,8 +8,11 @@ interface SubscribersProps {
 export const Subscribers = (props: SubscribersProps) => {
   return (
     <>
-      <h1>Subscribers</h1>
-      <div>{JSON.stringify(props.subscribers)}</div>
+      <Result
+        status="500"
+        title="500"
+        subTitle="Sorry, something went wrong."
+      />
     </>
   )
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { IPost, PostModel } from 'interfaces'
 import { createPost, deletePost } from 'controllers'
-import { Modal, Form, Input, message, Button, Spin, Select } from 'antd'
+import { Modal, Form, Input, message, Button, Spin, Select, Empty } from 'antd'
 import { useAppSelector } from 'store'
 import { selectUserData, selectUserIsPublisher } from 'store/slices/user.slice'
 
@@ -89,10 +89,10 @@ export const Board = (props: BoardProps) => {
       </div>
       {posts.map((post, index) => (
         <div key={index}>
-          <div> {JSON.stringify(post)} </div>
           <Button onClick={() => handleDeletePost(post.id)}>Delete</Button>
         </div>
       ))}
+      {!posts.length && <Empty description="No posts" />}
       <Modal
         destroyOnClose={true}
         confirmLoading={state.saveLoading}

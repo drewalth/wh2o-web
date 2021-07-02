@@ -1,4 +1,14 @@
-import { Upload, message, Button, Card, Modal, Form, Input, Select } from 'antd'
+import {
+  Upload,
+  message,
+  Button,
+  Card,
+  Modal,
+  Form,
+  Input,
+  Select,
+  Empty,
+} from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import { IMedia, MediaModel } from 'interfaces'
@@ -213,6 +223,9 @@ export const Gallery = (props: GalleryProps) => {
               </Card>
             ))}
       </div>
+      {(!props.sources.length && !imagePaths.length) && (
+        <Empty description="No media" />
+      )}
     </>
   )
 }
