@@ -10,7 +10,6 @@ import {
   StrikethroughOutlined,
   UndoOutlined,
 } from '@ant-design/icons'
-import { useEffect, useState } from 'react'
 
 interface ContentEditorProps {
   content: string
