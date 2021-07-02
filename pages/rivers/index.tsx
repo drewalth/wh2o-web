@@ -29,6 +29,7 @@ import { GetStaticProps } from 'next'
 import { selectUserIsPublisher } from 'store/slices/user.slice'
 import { createReach } from 'controllers'
 import { useRouter } from 'next/router'
+import { selectAppWindowWidth } from '../../store/slices/app.slice'
 
 const ReachFormDefaults = {
   country: 'US',
@@ -99,6 +100,7 @@ interface RiversProps {
 const Rivers = (props: RiversProps) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
+  const windowWidth = useAppSelector(selectAppWindowWidth)
   const rivers = useAppSelector(selectRiversData)
   const loading = useAppSelector(selectRiversLoading)
   const userIsPublisher = useAppSelector(selectUserIsPublisher)
@@ -142,6 +144,22 @@ const Rivers = (props: RiversProps) => {
     }
   }
 
+  const getFormInputWidth = () => {
+    if (windowWidth > 768) {
+      return {
+        display: 'inline-block',
+        marginRight: 16,
+        width: 'calc(20% - 8px)',
+      }
+    } else {
+      return {
+        display: 'inline-block',
+        marginRight: 16,
+        width: 'calc(46% - 8px)',
+      }
+    }
+  }
+
   return (
     <>
       <PageHeader
@@ -169,21 +187,14 @@ const Rivers = (props: RiversProps) => {
                   <Form.Item
                     label="River Name"
                     name="name"
-                    style={{
-                      display: 'inline-block',
-                      marginRight: 16,
-                      width: 'calc(20% - 8px)',
-                    }}
+                    style={getFormInputWidth()}
                   >
                     <Input placeholder="Search" />
                   </Form.Item>
                   <Form.Item
                     label="Country"
                     name="country"
-                    style={{
-                      display: 'inline-block',
-                      width: 'calc(20% - 8px)',
-                    }}
+                    style={getFormInputWidth()}
                   >
                     <Select>
                       <Select.Option value="">--</Select.Option>
@@ -195,7 +206,13 @@ const Rivers = (props: RiversProps) => {
                   </Form.Item>
                 </Form.Item>
               </Form>
-              <Table columns={columns} dataSource={rivers} loading={loading} />
+              <div style={{ maxWidth: '100%', overflowX: 'scroll' }}>
+                <Table
+                  columns={columns}
+                  dataSource={rivers}
+                  loading={loading}
+                />
+              </div>
             </Card>
           </Col>
         </Row>
