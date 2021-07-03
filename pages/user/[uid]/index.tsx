@@ -1,13 +1,6 @@
 import { useState } from 'react'
 import { PageHeader, Layout, Spin, Menu } from 'antd'
-import {
-  FlowReport,
-  Rivers,
-  Settings,
-  Media,
-  Notifications,
-  UserGages,
-} from 'components/user'
+import { Rivers, Settings, Media, UserGages, UserPosts } from 'components/user'
 import { useAppSelector, useAppDispatch } from 'store'
 import {
   selectUserData,
@@ -45,12 +38,10 @@ const index = () => {
               setActiveTab(key)
             }}
           >
-            <Menu.Item key="1">Dasboard</Menu.Item>
-            <Menu.Item key="4">Gages</Menu.Item>
+            <Menu.Item key="1">Gages</Menu.Item>
             <Menu.Item key="2">Rivers</Menu.Item>
-            <Menu.Item key="3">Media</Menu.Item>
-            <Menu.Item key="8">Notifications</Menu.Item>
-            <Menu.Item key="5">Settings</Menu.Item>
+            <Menu.Item key="4">Logs</Menu.Item>
+            <Menu.Item key="5">Account</Menu.Item>
             <Menu.Divider key="6" />
             <Menu.Item key="7" onClick={handleLogout}>
               Logout
@@ -64,16 +55,17 @@ const index = () => {
         )}
         {user && !userLoading && (
           <Layout.Content style={{ paddingLeft: '24px' }}>
-            {activeTab === '1' && <FlowReport gages={user.gages} />}
+            {activeTab === '1' && user.id && (
+              <UserGages userId={user.id} gages={user.gages || []} />
+            )}
             {activeTab === '2' && user.id && (
-              <Rivers userId={user.id} reaches={user.reaches} />
+              <Rivers userId={user.id} reaches={user.reaches || []} />
             )}
             {activeTab === '3' && user.id && (
-              <Media userId={user.id} media={user.media} />
+              <Media userId={user.id} media={user.media || []} />
             )}
-            {activeTab === '8' && user.id && <Notifications userId={user.id} />}
             {activeTab === '4' && user.id && (
-              <UserGages userId={user.id} gages={user.gages} />
+              <UserPosts userId={user.id} posts={user.posts || []} />
             )}
             {activeTab === '5' && user.id && <Settings user={user} />}
           </Layout.Content>

@@ -144,7 +144,7 @@ const RiverDetail = (props: RiverDetailProps) => {
                   <RiverMap mapboxToken={props.mapboxToken} />
                 )}
                 {activeTab === '6' && (
-                  <Board riverId={props.id} posts={river.posts || []} />
+                  <Board reachId={props.id} posts={river.posts || []} />
                 )}
                 {activeTab === '7' && (
                   <Subscribers subscribers={river.users || []} />

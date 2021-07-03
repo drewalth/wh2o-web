@@ -26,7 +26,6 @@ const Register = () => {
       })
 
       if (result && result.id) {
-        // localStorage.setItem('wh2o-auth-token', result.access_token)
         dispatch(setUser(result))
         dispatch(setUserLoading(false))
         await router.push(`/user/${result.id}`)
@@ -69,7 +68,11 @@ const Register = () => {
               label="Password"
               name="password"
               rules={[
-                { required: true, message: 'Please input your password!' },
+                {
+                  required: true,
+                  message: 'Please input a valid password',
+                  pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/,
+                },
               ]}
             >
               <Input.Password />

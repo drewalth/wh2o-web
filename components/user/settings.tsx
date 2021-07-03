@@ -51,23 +51,25 @@ export const Settings = (props: SettingsProps) => {
     <>
       <Row>
         <Col span={24}>
-          <Card
-            actions={[
-              <></>,
-              <></>,
-              <Button danger onClick={() => setModalVisible(true)}>
-                Delete Account
-              </Button>,
-            ]}
-            extra={<span>Edit</span>}
-          >
-            {JSON.stringify(user)}
+          <Card>
+            <Typography.Title level={5} editable>
+              {user.email}
+            </Typography.Title>
+            <Button
+              style={{ marginTop: 24 }}
+              danger
+              onClick={() => setModalVisible(true)}
+            >
+              Delete Account
+            </Button>
           </Card>
         </Col>
       </Row>
       <Modal
+        onCancel={() => setModalVisible(false)}
         onOk={handleSubmit}
         visible={modalVisible}
+        confirmLoading={deleteLoading}
         destroyOnClose
         okButtonProps={{ disabled: confirmInput !== user.email }}
       >

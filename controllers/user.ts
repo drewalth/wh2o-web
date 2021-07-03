@@ -38,16 +38,26 @@ export const removeBookmarkRiver = async (
     .then((res) => res.data)
 }
 
-export const getUserRivers = async (
-  userId: string | number
-): Promise<IRiver[]> => {
-  return http.get(`/users/reaches/${userId}`).then((res) => res.data)
-}
-
 export const createUserGageNotify = async (data: { userId: number }) => {
   return new Promise((resolve) => setTimeout(resolve, 2000))
 }
 
 export const deleteUser = async (userId: string | number) => {
   return http.delete(`/users/${userId}`).then((res) => res.data)
+}
+
+export const verifyUser = async (id: number, token: string) => {
+  return http.post('/users/verify', { id, token }).then((res) => res.data)
+}
+
+export const forgotPassword = async (payload: { email: string }) => {
+  return http.post('/users/forgot', payload).then((res) => res.data)
+}
+
+export const resetPassword = async (payload: {
+  id: number
+  newPassword: string
+  token: string
+}) => {
+  return http.post('/users/reset', payload).then((res) => res.data)
 }

@@ -1,17 +1,10 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Button, Card, Col, Form, Input, Row } from 'antd'
+import { Button, Card, Checkbox, Col, Form, Input, message, Row } from 'antd'
+import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { authLogin } from '../../controllers'
 import { useAppDispatch } from '../../store'
 import { setUser, setUserLoading } from '../../store/slices/user.slice'
-
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
-}
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
-}
 
 const Login = () => {
   const router = useRouter()
@@ -30,13 +23,10 @@ const Login = () => {
       }
     } catch (e) {
       console.log('e', e)
+      message.error('Login failed...')
     } finally {
       dispatch(setUserLoading(false))
     }
-  }
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
   }
 
   return (
@@ -44,40 +34,62 @@ const Login = () => {
       <Col span={24} md={8}>
         <Card title="Login">
           <Form
-            {...layout}
-            name="basic"
+            name="normal_login"
+            className="login-form"
+            initialValues={{ remember: true }}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
           >
             <Form.Item
-              label="Email"
               name="email"
-              rules={[{ required: true, message: 'Please input your email!' }]}
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Password"
-              name="password"
               rules={[
-                { required: true, message: 'Please input your password!' },
+                {
+                  required: true,
+                  message: 'Please input a valid email',
+                  pattern: /(.+)@(.+){2,}\.(.+){2,}/,
+                },
               ]}
             >
-              <Input.Password />
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                placeholder="Email"
+              />
             </Form.Item>
-            <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit">
-                Submit
+            <Form.Item
+              name="password"
+              rules={[
+                { required: true, message: 'Please input your Password!' },
+              ]}
+            >
+              <Input
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                type="password"
+                placeholder="Password"
+              />
+            </Form.Item>
+            <Form.Item>
+              <Form.Item name="remember" valuePropName="checked" noStyle>
+                <Checkbox>Remember me</Checkbox>
+              </Form.Item>
+
+              <Link href="/auth/forgot">
+                <a style={{ float: 'right' }} href="">
+                  Forgot password
+                </a>
+              </Link>
+            </Form.Item>
+
+            <Form.Item style={{ marginBottom: 0 }}>
+              <Button type="primary" htmlType="submit" block>
+                Log in
               </Button>
             </Form.Item>
           </Form>
         </Card>
-        <Button>
+        <div style={{ marginTop: 24, width: '100%', textAlign: 'center' }}>
           <Link href="/auth/register">
-            <a>Register</a>
+            <Button>Sign Up</Button>
           </Link>
-        </Button>
+        </div>
       </Col>
     </Row>
   )

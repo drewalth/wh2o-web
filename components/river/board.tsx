@@ -6,7 +6,7 @@ import { useAppSelector } from 'store'
 import { selectUserData, selectUserIsPublisher } from 'store/slices/user.slice'
 
 interface BoardProps {
-  riverId: number
+  reachId: number
   posts: IPost[]
 }
 
@@ -18,13 +18,13 @@ interface BoardState {
 }
 
 export const Board = (props: BoardProps) => {
-  const { riverId, posts: data } = props
+  const { reachId, posts: data } = props
   const userIsPublisher = useAppSelector(selectUserIsPublisher)
   const user = useAppSelector(selectUserData)
   const [form, setForm] = useState<IPost>({
     ...PostModel,
-    riverId,
-    authorId: user.id || 0,
+    reachId,
+    userId: user.id || 0,
   })
   const [state, setState] = useState<BoardState>({
     loading: false,

@@ -46,19 +46,21 @@ export const RiverMap = (props: MapProps) => {
     setMap(map)
   }, [mapboxToken, map])
 
-  if (!mapboxToken) {
-    return (
-      <>
-        {/* @ts-ignore */}
-        <div style={emptyStyle}>
-          <Typography.Text style={{ color: '#fff' }}>
-            Mapping Temporarily Unavailable
-          </Typography.Text>
-        </div>
-      </>
-    )
-  }
-
   // @ts-ignore
-  return <div id="map" style={mapStyle} />
+  // return <div id="map" style={mapStyle} />
+
+  return (
+    <>
+      {!mapboxToken && (
+        <>
+          {/* @ts-ignore */}
+          <div style={emptyStyle}>
+            <Typography.Text style={{ color: '#fff' }}>
+              Mapping Temporarily Unavailable
+            </Typography.Text>
+          </div>
+        </>
+      )}
+    </>
+  )
 }

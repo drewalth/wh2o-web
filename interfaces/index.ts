@@ -140,6 +140,7 @@ export interface IUser {
   password?: string
   email: string
   gages: IGage[]
+  posts: IPost[]
   reaches: IRiver[]
   createdAt?: Date
   updatedAt?: Date
@@ -162,6 +163,7 @@ export const UserModel: IUser = {
   gages: [],
   reaches: [],
   media: [],
+  posts: [],
   role: user_role.USER,
 }
 
@@ -253,8 +255,9 @@ export enum postType {
 
 export interface IPost {
   id: number
-  authorId: number
-  riverId: number
+  userId: number
+  reachId: number
+  private: boolean
   content: string
   createdAt: Date
   updatedAt?: Date
@@ -264,8 +267,9 @@ export interface IPost {
 
 export const PostModel: IPost = {
   id: 0,
-  authorId: 0,
-  riverId: 0,
+  userId: 0,
+  reachId: 0,
+  private: true,
   content: '',
   createdAt: new Date(),
   postType: postType.INFO,
