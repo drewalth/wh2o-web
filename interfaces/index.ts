@@ -132,6 +132,7 @@ export enum user_role {
 }
 
 export interface IUser {
+  verified: boolean
   media: IMedia[]
   role: user_role
   id?: number
@@ -164,6 +165,7 @@ export const UserModel: IUser = {
   reaches: [],
   media: [],
   posts: [],
+  verified: false,
   role: user_role.USER,
 }
 
@@ -263,6 +265,7 @@ export interface IPost {
   updatedAt?: Date
   postType: postType
   title: string
+  subtitle: string
 }
 
 export const PostModel: IPost = {
@@ -274,6 +277,7 @@ export const PostModel: IPost = {
   createdAt: new Date(),
   postType: postType.INFO,
   title: '',
+  subtitle: '',
 }
 
 export interface UserRiver {

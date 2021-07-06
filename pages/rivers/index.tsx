@@ -164,6 +164,7 @@ const Rivers = (props: RiversProps) => {
     <>
       <PageHeader
         title="Rivers"
+        onBack={() => router.push('/')}
         extra={
           <Button
             disabled={!userIsPublisher}

@@ -5,6 +5,10 @@ export const createPost = async (data: IPost): Promise<IPost> => {
   return http.post('/posts', data).then((res) => res.data)
 }
 
+export const updatePost = async (post: IPost) => {
+  return http.patch(`/posts/${post.id}`, post).then((res) => res.data)
+}
+
 export const getRiverPosts = async (
   riverId: string | number
 ): Promise<IPost[]> => {
