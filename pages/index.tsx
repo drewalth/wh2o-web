@@ -51,12 +51,19 @@ export default function Home() {
             </Row>
             <Row gutter={24}>
               <Col span={24}>
-                <Button style={{ marginRight: 16 }}>
-                  <Link href="/rivers">View Rivers</Link>
-                </Button>
-                <Button>
-                  <Link href="/gages">View Gages</Link>
-                </Button>
+                <Link href="/rivers">
+                  <Button
+                    style={{ marginRight: 16, color: '#fff' }}
+                    type="ghost"
+                  >
+                    View Rivers
+                  </Button>
+                </Link>
+                <Link href="/gages">
+                  <Button style={{ color: '#fff' }} type="ghost">
+                    View Gages
+                  </Button>
+                </Link>
               </Col>
             </Row>
           </Col>

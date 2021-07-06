@@ -8,6 +8,7 @@ import {
   fetchGages,
   selectGagesLoading,
 } from 'store/slices/gages.slice'
+import { useRouter } from 'next/router'
 
 const columns = [
   {
@@ -49,6 +50,7 @@ const Gages = () => {
   const dispatch = useAppDispatch()
   const gages = useAppSelector(selectGagesData)
   const gagesLoading = useAppSelector(selectGagesLoading)
+  const router = useRouter()
 
   useEffect(() => {
     if (!gages.length) {
@@ -60,6 +62,7 @@ const Gages = () => {
     <>
       <PageHeader
         title="Gages"
+        onBack={() => router.push('/')}
         extra={[
           <Button key="1" type="primary" disabled>
             Create Gage

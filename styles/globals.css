@@ -18,3 +18,7 @@ a {
 .ProseMirror {
   min-height: 250px;
 }
+
+.ProseMirror:focus {
+  outline: none;
+}

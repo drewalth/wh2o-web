@@ -40,7 +40,7 @@ const index = () => {
           >
             <Menu.Item key="1">Gages</Menu.Item>
             <Menu.Item key="2">Rivers</Menu.Item>
-            <Menu.Item key="4">Logs</Menu.Item>
+            <Menu.Item key="4">Posts</Menu.Item>
             <Menu.Item key="5">Account</Menu.Item>
             <Menu.Divider key="6" />
             <Menu.Item key="7" onClick={handleLogout}>

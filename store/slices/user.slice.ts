@@ -52,9 +52,10 @@ export const { setUser, resetUser, setUserLoading, setUserError } =
 
 export const selectUserData = (state: RootState) => state.user.data
 export const selectUserIsPublisher = (state: RootState) =>
-  state.user.data.role === 'ADMIN' ||
-  state.user.data.role === 'SUPERADMIN' ||
-  state.user.data.role === 'EDITOR'
+  state.user.data.verified &&
+  (state.user.data.role === 'ADMIN' ||
+    state.user.data.role === 'SUPERADMIN' ||
+    state.user.data.role === 'EDITOR')
 export const selectUserLoading = (state: RootState) => state.user.loading
 export const selectUserError = (state: RootState) => state.user.error
 
