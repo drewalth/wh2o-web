@@ -1,17 +1,19 @@
-import { Layout, Menu, Typography } from 'antd'
+import {Layout, Menu, Tooltip, Typography} from 'antd'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useAppDispatch, useAppSelector } from 'store'
+import {FrownTwoTone} from '@ant-design/icons'
 import {
   selectUserData,
   setUser,
   setUserLoading,
 } from 'store/slices/user.slice'
 import { authRefresh } from 'controllers'
-import { createElement, useEffect } from 'react'
-import { selectAppWindowWidth, setWidth } from 'store/slices/app.slice'
+import {createElement, useEffect, useState} from 'react'
+import { selectAppWindowWidth, setWidth} from 'store/slices/app.slice'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { NavigationState } from 'pages/_app'
+import {ping} from "controllers";
 
 interface PrimaryNavProps extends NavigationState {}
 
@@ -19,6 +21,16 @@ const PrimaryNavigation = (props: PrimaryNavProps) => {
   const dispatch = useAppDispatch()
   const user = useAppSelector(selectUserData)
   const windowWidth = useAppSelector(selectAppWindowWidth)
+  const [apiConnected, setApiConnected] = useState(true)
+
+  const getApiStatus = async () => {
+    try {
+      await ping()
+      await setApiConnected(true)
+    } catch (e) {
+      await setApiConnected(false)
+    }
+  }
 
   const refreshUser = async () => {
     try {
@@ -30,6 +42,10 @@ const PrimaryNavigation = (props: PrimaryNavProps) => {
       dispatch(setUserLoading(false))
     }
   }
+
+  useEffect(() => {
+    getApiStatus()
+  }, [apiConnected])
 
   useEffect(() => {
     refreshUser()
@@ -71,6 +87,12 @@ const PrimaryNavigation = (props: PrimaryNavProps) => {
               </Typography.Title>
             </a>
           </Link>
+          {!apiConnected && (
+              <div>
+                <Tooltip placement="bottom" title="API Disconnected">
+                  <FrownTwoTone  twoToneColor="#E74C3C" style={{fontSize: 24, marginLeft: 16}} /> </Tooltip>
+              </div>
+          )}
         </div>
         {windowWidth > 768 ? (
           <Menu theme="dark" mode="horizontal">
