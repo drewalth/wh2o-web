@@ -14,6 +14,7 @@ import { selectAppWindowWidth, setWidth} from 'store/slices/app.slice'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { NavigationState } from 'pages/_app'
 import {ping} from "controllers";
+import debounce from "lodash.debounce";
 
 interface PrimaryNavProps extends NavigationState {}
 
@@ -50,9 +51,7 @@ const PrimaryNavigation = (props: PrimaryNavProps) => {
   useEffect(() => {
     refreshUser()
     dispatch(setWidth(window.innerWidth))
-    window.addEventListener('resize', () =>
-      dispatch(setWidth(window.innerWidth))
-    )
+    window.addEventListener('resize', debounce(() => dispatch(setWidth(window.innerWidth)), 250))
   }, [])
 
   return (
