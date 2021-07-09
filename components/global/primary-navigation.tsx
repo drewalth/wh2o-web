@@ -1,20 +1,20 @@
-import {Layout, Menu, Tooltip, Typography} from 'antd'
+import { Layout, Menu, Tooltip, Typography } from 'antd'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useAppDispatch, useAppSelector } from 'store'
-import {FrownTwoTone} from '@ant-design/icons'
+import { FrownTwoTone } from '@ant-design/icons'
 import {
   selectUserData,
   setUser,
   setUserLoading,
 } from 'store/slices/user.slice'
 import { authRefresh } from 'controllers'
-import {createElement, useEffect, useState} from 'react'
-import { selectAppWindowWidth, setWidth} from 'store/slices/app.slice'
+import { createElement, useEffect, useState } from 'react'
+import { selectAppWindowWidth, setWidth } from 'store/slices/app.slice'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { NavigationState } from 'pages/_app'
-import {ping} from "controllers";
-import debounce from "lodash.debounce";
+import { ping } from 'controllers'
+import debounce from 'lodash.debounce'
 
 interface PrimaryNavProps extends NavigationState {}
 
@@ -51,7 +51,10 @@ const PrimaryNavigation = (props: PrimaryNavProps) => {
   useEffect(() => {
     refreshUser()
     dispatch(setWidth(window.innerWidth))
-    window.addEventListener('resize', debounce(() => dispatch(setWidth(window.innerWidth)), 250))
+    window.addEventListener(
+      'resize',
+      debounce(() => dispatch(setWidth(window.innerWidth)), 250)
+    )
   }, [])
 
   return (
@@ -87,10 +90,14 @@ const PrimaryNavigation = (props: PrimaryNavProps) => {
             </a>
           </Link>
           {!apiConnected && (
-              <div>
-                <Tooltip placement="bottom" title="API Disconnected">
-                  <FrownTwoTone  twoToneColor="#E74C3C" style={{fontSize: 24, marginLeft: 16}} /> </Tooltip>
-              </div>
+            <div>
+              <Tooltip placement="bottom" title="API Disconnected">
+                <FrownTwoTone
+                  twoToneColor="#E74C3C"
+                  style={{ fontSize: 24, marginLeft: 16 }}
+                />{' '}
+              </Tooltip>
+            </div>
           )}
         </div>
         {windowWidth > 768 ? (

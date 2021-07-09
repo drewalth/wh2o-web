@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { RootState } from '../index'
-import { IRiver, ReachSearchParams } from '../../interfaces'
+import { River, ReachSearchParams } from '../../interfaces'
 import { getRivers } from '../../controllers'
 
 interface RiverState {
-  data: IRiver[]
+  data: River[]
   loading: boolean
   error: boolean
 }

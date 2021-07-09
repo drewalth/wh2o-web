@@ -1,7 +1,7 @@
 import { Form, Modal, Input, Statistic, Row, Col, Divider, message } from 'antd'
 import { useState, useEffect } from 'react'
 import moment from 'moment'
-import { IRiver } from 'interfaces'
+import { River } from 'interfaces'
 import { updateRiver } from 'controllers'
 import { useAppDispatch, useAppSelector } from 'store'
 import { fetchRiver } from 'store/slices/river.slice'
@@ -9,14 +9,14 @@ import { ContentEditor } from '../content-editor'
 import { selectUserIsPublisher } from '../../store/slices/user.slice'
 
 interface BetaBoxProps {
-  river: IRiver
+  river: River
   loading: boolean
   error: boolean
 }
 
 export const BetaBox = (props: BetaBoxProps) => {
   const { river, loading } = props
-  const [formRiver, setFormRiver] = useState<IRiver>()
+  const [formRiver, setFormRiver] = useState<River>()
   const [modalVisible, setModalVisible] = useState(false)
   const [updateLoading, setUpdateLoading] = useState(false)
   const dispatch = useAppDispatch()

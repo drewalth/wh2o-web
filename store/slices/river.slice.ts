@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { RootState } from '../index'
-import { IRiver, RiverModel } from 'interfaces'
+import { River, RiverModel } from 'interfaces'
 import { getRiver } from 'controllers'
 
 interface RiverState {
-  data: IRiver
+  data: River | null
   loading: boolean
   error: boolean
 }
@@ -33,7 +33,7 @@ export const riverSlice = createSlice({
       state.data = { ...action.payload }
     },
     resetData: (state) => {
-      state.data = { ...RiverModel }
+      state.data = null
     },
     setError: (state, action) => {
       state.error = action.payload

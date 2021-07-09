@@ -1,26 +1,26 @@
 import { http } from 'lib'
-import { IGage, IRiver, IRiversMedia, ReachSearchParams } from 'interfaces'
+import { Gage, River, RiversMedia, ReachSearchParams } from 'interfaces'
 
-export const getRivers = async (params: ReachSearchParams) => {
+export const getRivers = async (params: ReachSearchParams):Promise<River[]> => {
   return http.get('/reaches', { params }).then((res) => res.data)
 }
 
-export const getRiver = async (id: number | string) => {
+export const getRiver = async (id: number | string):Promise<River> => {
   return http.get(`/reaches/${id}`).then((res) => res.data)
 }
 
 export const updateRiver = async (
   id: number | string,
-  payload: IRiver
-): Promise<IRiver> => {
+  payload: River
+): Promise<River> => {
   return http.patch(`/reaches/${id}`, payload).then((res) => res.data)
 }
 
-export const createRiversMedia = async (payload: IRiversMedia) => {
+export const createRiversMedia = async (payload: RiversMedia) => {
   return http.post(`/reaches-media`, payload).then((res) => res.data)
 }
 
-export const searchRiver = async (term: string): Promise<IRiver[]> => {
+export const searchRiver = async (term: string): Promise<River[]> => {
   return http.get(`/reaches/search?term=${term}`).then((res) => res.data)
 }
 
@@ -32,7 +32,7 @@ export const addGage = async ({
   reachId: number
   gageId: number
   primary: boolean
-}): Promise<IGage> => {
+}): Promise<Gage> => {
   return http
     .post('/reach-gages', { reachId, gageId, primary })
     .then((res) => res.data)
@@ -44,6 +44,6 @@ export const removeGage = async (gageId: number, reachId: number) => {
     .then((res) => res.data)
 }
 
-export const createReach = async (payload: any): Promise<IRiver> => {
+export const createReach = async (payload: any): Promise<River> => {
   return http.post('/reaches', payload).then((res) => res.data)
 }

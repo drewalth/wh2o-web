@@ -4,6 +4,7 @@ import { userBookmarkRiver, removeBookmarkRiver } from 'controllers'
 import { useAppSelector } from 'store'
 import { selectUserData } from 'store/slices/user.slice'
 import { useEffect, useState } from 'react'
+import {River} from "../../interfaces";
 
 interface BookMarkProps {
   riverId: number
@@ -15,7 +16,7 @@ export const Bookmark = (props: BookMarkProps) => {
   const [bookmarked, setBookmarked] = useState(false)
 
   useEffect(() => {
-    const data = user.reaches?.map((reach) => reach.id).includes(props.riverId)
+    const data = user.reaches?.map((reach:River) => reach.id).includes(props.riverId)
     setBookmarked(data)
     setButtonText(data ? 'Remove Bookmark' : 'Bookmark')
   }, [user])

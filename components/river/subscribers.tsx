@@ -1,8 +1,8 @@
-import { IUser } from '../../interfaces'
+import { User } from '../../interfaces'
 import { Empty, Tag } from 'antd'
 
 interface SubscribersProps {
-  subscribers: IUser[]
+  subscribers: User[]
 }
 
 export const Subscribers = (props: SubscribersProps) => {

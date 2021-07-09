@@ -1,12 +1,12 @@
-import { IMedia } from 'interfaces'
+import { Media } from 'interfaces'
 import { Card, Empty } from 'antd'
 
-interface MediaProps {
+interface UserMediaProps {
   userId: number
-  media: IMedia[]
+  media: Media[]
 }
 
-export const Media = (props: MediaProps) => {
+export const UserMedia = (props: UserMediaProps) => {
   const { media } = props
   return (
     <Card>

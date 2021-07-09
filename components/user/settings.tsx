@@ -1,4 +1,4 @@
-import { IUser } from 'interfaces'
+import {User, UserModel} from 'interfaces'
 import {
   Row,
   Col,
@@ -17,7 +17,7 @@ import { deleteUser } from 'controllers'
 import { useRouter } from 'next/router'
 
 interface SettingsProps {
-  user: IUser
+  user: User
 }
 
 export const Settings = (props: SettingsProps) => {
@@ -38,7 +38,7 @@ export const Settings = (props: SettingsProps) => {
         setModalVisible(false)
         message.success('Account Deleted.')
         localStorage.removeItem('wh2o-auth-token')
-        dispatch(resetUser())
+        dispatch(resetUser(UserModel))
         await router.push('/')
       }
     } catch (e) {

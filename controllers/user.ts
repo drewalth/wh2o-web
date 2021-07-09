@@ -1,5 +1,4 @@
 import { http } from 'lib'
-import { IRiver } from 'interfaces'
 
 export const getUser = (id: number | string) => {
   return http.get(`/users/id/${id}`).then((res) => res.data)

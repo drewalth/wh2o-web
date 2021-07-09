@@ -16,7 +16,7 @@ import {
   Form,
   AutoComplete,
 } from 'antd'
-import { IRiver } from 'interfaces'
+import { River } from 'interfaces'
 import moment from 'moment'
 import Link from 'next/link'
 import { useAppSelector } from 'store'
@@ -24,14 +24,14 @@ import { selectRiversData } from 'store/slices/rivers.slice'
 
 interface RiversProps {
   userId: number
-  reaches: IRiver[]
+  reaches: River[]
 }
 
 export const Rivers = (props: RiversProps) => {
   const { userId, reaches } = props
   const [loading, setLoading] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
-  const [rivers, setRivers] = useState<IRiver[]>(reaches)
+  const [rivers, setRivers] = useState<River[]>(reaches)
   const [bookmarkForm, setBookmarkForm] = useState(0)
   const cachedRivers = useAppSelector(selectRiversData)
   const [options, setOptions] = useState<{ label: string; value: number }[]>(
@@ -88,7 +88,7 @@ export const Rivers = (props: RiversProps) => {
       title: 'Updated',
       dataIndex: 'updatedAt',
       key: 'updatedAt',
-      render: (updatedAt: Date, val: IRiver) => (
+      render: (updatedAt: Date, val: River) => (
         <span>
           {!updatedAt
             ? moment(val.createdAt).format('LL')

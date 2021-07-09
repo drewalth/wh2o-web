@@ -1,11 +1,11 @@
 import { http } from 'lib'
-import { IUser, IUserLogin, IUserLoginResponse } from '../interfaces'
+import { User, UserLogin, UserLoginResponse } from '../interfaces'
 
-export const authRegister = (data: IUser): Promise<IUser> => {
+export const authRegister = (data: User): Promise<User> => {
   return http.post(`/users`, data).then((res) => res.data)
 }
 
-export const authLogin = (data: IUserLogin): Promise<IUserLoginResponse> => {
+export const authLogin = (data: UserLogin): Promise<UserLoginResponse> => {
   return http.post('/auth/login', data).then((res) => res.data)
 }
 

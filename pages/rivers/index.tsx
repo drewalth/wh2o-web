@@ -24,7 +24,7 @@ import {
   fetchRivers,
 } from 'store/slices/rivers.slice'
 import debounce from 'lodash.debounce'
-import { ICountry, IRiver, ReachSearchParams } from 'interfaces'
+import { Country, River, ReachSearchParams } from 'interfaces'
 import { GetStaticProps } from 'next'
 import { selectUserIsPublisher } from 'store/slices/user.slice'
 import { createReach } from 'controllers'
@@ -45,7 +45,7 @@ const columns = [
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
-    render: (name: string, val: IRiver) => (
+    render: (name: string, val: River) => (
       <>
         <Typography.Title
           key={name}
@@ -67,7 +67,7 @@ const columns = [
     title: 'Updated',
     dataIndex: 'updatedAt',
     key: 'updatedAt',
-    render: (updatedAt: Date, val: IRiver) => (
+    render: (updatedAt: Date, val: River) => (
       <span>
         {!updatedAt
           ? moment(val.createdAt).format('LL')
@@ -93,8 +93,8 @@ const columns = [
 ]
 
 interface RiversProps {
-  countriesList: ICountry[]
-  activeCountries: ICountry[]
+  countriesList: Country[]
+  activeCountries: Country[]
 }
 
 const Rivers = (props: RiversProps) => {
@@ -266,7 +266,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
    * then when someone makes a new record, reset redis vals.
    *
    */
-  const countriesList: ICountry[] = await fetch(
+  const countriesList: Country[] = await fetch(
     process.env.apiBaseUrl + '/countries'
   )
     .then((res) => res.json())

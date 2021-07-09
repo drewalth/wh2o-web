@@ -1,17 +1,15 @@
 import { useEditor, EditorContent, Editor } from '@tiptap/react'
 import sanitizeHtml from 'sanitize-html'
 import StarterKit from '@tiptap/starter-kit'
-import { Button, Divider, Spin } from 'antd'
+import { Button, Divider } from 'antd'
 import debounce from 'lodash.debounce'
 import {
   BoldOutlined,
-  CheckCircleTwoTone,
   ItalicOutlined,
   RedoOutlined,
   StrikethroughOutlined,
   UndoOutlined,
 } from '@ant-design/icons'
-import { createElement, useState } from 'react'
 
 interface ContentEditorProps {
   content: string

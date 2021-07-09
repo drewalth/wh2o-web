@@ -5,10 +5,9 @@ import {
   message,
   AutoComplete,
   Select,
-  Table,
   Empty,
 } from 'antd'
-import { IGage, IGageReading } from 'interfaces'
+import { Gage, GageReading } from 'interfaces'
 import { useAppSelector } from '../../store'
 import { selectUserIsPublisher } from '../../store/slices/user.slice'
 import { useEffect, useState } from 'react'
@@ -18,7 +17,7 @@ import { FlowChartV2 } from '../flow-chart/flow-chart-v2'
 import moment from 'moment'
 
 interface FlowProps {
-  gages: IGage[]
+  gages: Gage[]
   riverId: number
 }
 
@@ -33,7 +32,7 @@ export const Flow = (props: FlowProps) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [form, setForm] = useState(0)
   const [options, setOptions] = useState<SearchOptions[]>()
-  const [gages, setGages] = useState<IGage[]>([...props.gages])
+  const [gages, setGages] = useState<Gage[]>([...props.gages])
   const [activeGage, setActiveGage] = useState(props.gages[0]?.id)
   const [readings, setReadings] = useState<number[]>([])
   const [labels, setLabels] = useState<string[]>([])
@@ -51,12 +50,12 @@ export const Flow = (props: FlowProps) => {
 
       setLabels(
         result
-          .filter((val: IGageReading) => val.metric === activeMetric)
+          .filter((val: GageReading) => val.metric === activeMetric)
           .map((r) => moment(r.createdAt).format('LLL'))
       )
 
       const test = result
-        .filter((val: IGageReading) => val.metric === activeMetric)
+        .filter((val: GageReading) => val.metric === activeMetric)
         .map((r) => r.value)
 
       console.log('test', test)
@@ -97,7 +96,7 @@ export const Flow = (props: FlowProps) => {
     try {
       const results = await searchGages(searchText)
       setOptions(
-        results.map((val: IGage) => ({ label: val.name, value: val.id }))
+        results.map((val: Gage) => ({ label: val.name, value: val.id }))
       )
     } catch (e) {
       message.error('Failed to search...')

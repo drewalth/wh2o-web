@@ -11,7 +11,7 @@ import {
 } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { useState } from 'react'
-import { IMedia, MediaModel } from 'interfaces'
+import { Media, MediaModel } from 'interfaces'
 import { createMedia, deleteMedia, deletePendingMedia } from 'controllers'
 import { useAppSelector } from 'store'
 import { selectUserData, selectUserIsPublisher } from 'store/slices/user.slice'
@@ -19,17 +19,17 @@ import { selectUserData, selectUserIsPublisher } from 'store/slices/user.slice'
 interface GalleryProps {
   apiUrl: string
   awsS3RootPath: string
-  sources: IMedia[]
+  sources: Media[]
   id: number
 }
 
 export const Gallery = (props: GalleryProps) => {
-  const [imagePaths, setImagePaths] = useState<IMedia[]>([])
+  const [imagePaths, setImagePaths] = useState<Media[]>([])
   const [pendingFileName, setPendingFileName] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
   const [saveLoading, setSaveLoading] = useState(false)
   const [saveError, setSaveError] = useState(false)
-  const [form, setForm] = useState<IMedia>({ ...MediaModel })
+  const [form, setForm] = useState<Media>({ ...MediaModel })
   const userIsPublisher = useAppSelector(selectUserIsPublisher)
   const user = useAppSelector(selectUserData)
 
@@ -174,7 +174,7 @@ export const Gallery = (props: GalleryProps) => {
         {props.sources &&
           [...props.sources, ...imagePaths]
             .filter(
-              ({ entityType }: IMedia) =>
+              ({ entityType }: Media) =>
                 // @ts-ignore
                 !['vimeo', 'youtube'].includes(entityType)
             )
@@ -196,7 +196,7 @@ export const Gallery = (props: GalleryProps) => {
           [...props.sources, ...imagePaths]
             // @ts-ignore
             .filter(({ entityType }) => entityType === 'vimeo')
-            .map((vid: IMedia, i) => (
+            .map((vid: Media, i) => (
               <Card
                 extra={
                   <Button onClick={() => handleDelete(vid.id)}>Delete</Button>
