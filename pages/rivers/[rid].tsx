@@ -52,6 +52,13 @@ const RiverDetail = (props: RiverDetailProps) => {
     dispatch(fetchRiver(id))
   }, [id])
 
+  if(!river) {
+    return (
+        <>
+        </>
+    )
+  }
+
   return (
     <>
       <Layout.Content style={{ padding: '0 50px' }}>

@@ -43,7 +43,7 @@ const Creator = () => {
 
   const handleCreatePost = async (title: string) => {
     try {
-      if (!user.id) return
+      if (!user.id || form.reachId === 1) return
 
       const payload = form
 
@@ -53,7 +53,6 @@ const Creator = () => {
         ...payload,
         title,
         userId: user.id,
-        reachId: 1,
       })
 
       await setForm({ ...result })

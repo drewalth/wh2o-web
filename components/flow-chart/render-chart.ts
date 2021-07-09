@@ -1,13 +1,13 @@
 import moment from 'moment'
 import Chart from 'chart.js/auto'
 import { flowChartBackground } from './flow-chart-background'
-import { IFlowRange } from 'interfaces'
+import { FlowRange } from 'interfaces'
 
 export const renderChart = (
   ctx: React.MutableRefObject<undefined>,
   labels: string[] = [],
   data: number[] = [],
-  flowRanges?: IFlowRange[]
+  flowRanges?: FlowRange[]
 ) => {
   if (!ctx || !data.length) return
 

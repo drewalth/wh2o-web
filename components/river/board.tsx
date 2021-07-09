@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IPost, PostModel } from 'interfaces'
+import { Post, PostModel } from 'interfaces'
 import { createPost, deletePost } from 'controllers'
 import { Modal, Form, Input, message, Button, Spin, Select, Empty } from 'antd'
 import { useAppSelector } from 'store'
@@ -7,7 +7,7 @@ import { selectUserData, selectUserIsPublisher } from 'store/slices/user.slice'
 
 interface BoardProps {
   reachId: number
-  posts: IPost[]
+  posts: Post[]
 }
 
 interface BoardState {
@@ -21,7 +21,7 @@ export const Board = (props: BoardProps) => {
   const { reachId, posts: data } = props
   const userIsPublisher = useAppSelector(selectUserIsPublisher)
   const user = useAppSelector(selectUserData)
-  const [form, setForm] = useState<IPost>({
+  const [form, setForm] = useState<Post>({
     ...PostModel,
     reachId,
     userId: user.id || 0,
@@ -33,7 +33,7 @@ export const Board = (props: BoardProps) => {
     modalVisible: false,
   })
 
-  const [posts, setPosts] = useState<IPost[]>([...data])
+  const [posts, setPosts] = useState<Post[]>([...data])
 
   const handleCancel = () => {
     setState({ ...state, modalVisible: false })

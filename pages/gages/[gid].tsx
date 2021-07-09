@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { getGage } from 'controllers'
 import { GetServerSideProps } from 'next'
 import { Card, Col, Layout, PageHeader, Row } from 'antd'
-import { IGage, GageModel } from '../../interfaces'
+import { Gage, GageModel } from '../../interfaces'
 import { useRouter } from 'next/router'
 
 interface GageDetailProps {
@@ -15,7 +15,7 @@ const GageDetail = (props: GageDetailProps) => {
   const { id } = props
 
   const [loading, setLoading] = useState(false)
-  const [gage, setGage] = useState<IGage>(GageModel)
+  const [gage, setGage] = useState<Gage>(GageModel)
   const [error, setError] = useState(false)
 
   const load = async () => {

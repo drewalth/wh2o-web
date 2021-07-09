@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { RootState } from '../index'
-import { IUser, UserModel } from '../../interfaces'
+import { User, UserModel } from '../../interfaces'
 import { getUser } from 'controllers'
 
 interface UserState {
-  data: IUser
+  data: User
   loading: boolean
   error: boolean
 }
@@ -32,8 +32,8 @@ export const userSlice = createSlice({
     setUser: (state, action) => {
       state.data = { ...action.payload }
     },
-    resetUser: (state) => {
-      state.data = { ...UserModel }
+    resetUser: (state, action) => {
+      state.data = { ...action.payload }
     },
     setUserError: (state, action) => {
       state.error = action.payload

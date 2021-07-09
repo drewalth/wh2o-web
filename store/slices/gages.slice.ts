@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { RootState } from '../index'
-import { IGage } from 'interfaces'
+import { Gage } from 'interfaces'
 import { getGages } from 'controllers'
 
 interface GageState {
-  data: IGage[]
+  data: Gage[]
   loading: boolean
   error: boolean
 }

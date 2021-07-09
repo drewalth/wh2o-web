@@ -1,4 +1,4 @@
-import { IGage, IUser } from 'interfaces'
+import { Gage, User } from 'interfaces'
 import { Row, Col, Button, Modal, AutoComplete, Form, Card } from 'antd'
 import { useAppDispatch, useAppSelector } from 'store'
 import { selectGagesData, fetchGages } from 'store/slices/gages.slice'
@@ -8,20 +8,20 @@ import { removeBookmarkGage, userBookmarkGage } from 'controllers'
 import { FlowChartV2 } from '../flow-chart/flow-chart-v2'
 
 interface FlowReportProps {
-  gages: IGage[]
+  gages: Gage[]
 }
 
 export const FlowReport = (props: FlowReportProps) => {
   const dispatch = useAppDispatch()
   const userGages = props.gages
-  const gages: IGage[] = useAppSelector(selectGagesData)
+  const gages: Gage[] = useAppSelector(selectGagesData)
   const [visible, setVisible] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
   const [options, setOptions] = useState<{ value: string }[]>(
     gages.map((gage) => ({ value: gage.name }))
   )
   const [formGageBookmark, setFormGageBookMark] = useState(0)
-  const user = useAppSelector<IUser>(selectUserData)
+  const user = useAppSelector<User>(selectUserData)
 
   const onSearch = (searchText: string) => {
     const searchPayload = !searchText

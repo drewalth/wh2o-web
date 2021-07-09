@@ -1,11 +1,8 @@
-import { GageModel, IGage, IGageReading } from 'interfaces'
+import { GageModel, Gage, GageReading } from 'interfaces'
 import { getGage } from 'controllers'
 import { useEffect, useRef, useState } from 'react'
-import Chart from 'chart.js/auto'
-import moment from 'moment'
 import { Card, Button } from 'antd'
 import Link from 'next/link'
-import { flowChartBackground } from './flow-chart-background'
 
 interface FlowChartProps {
   gageId: number | undefined
@@ -21,10 +18,10 @@ interface FlowChartProps {
 export const FlowChart = (props: FlowChartProps) => {
   const chartRef = useRef<HTMLCanvasElement>()
   const { gageId } = props
-  const [readings, setReadings] = useState<IGageReading[]>([])
+  const [readings, setReadings] = useState<GageReading[]>([])
   const [flowRanges, setFlowRanges] = useState([])
   const [chartLoaded, setChartLoaded] = useState(false)
-  const [gage, setGage] = useState<IGage>({ ...GageModel })
+  const [gage, setGage] = useState<Gage>({ ...GageModel })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [windowWidth, setWindowWidth] = useState(0)
@@ -42,9 +39,12 @@ export const FlowChart = (props: FlowChartProps) => {
     try {
       setLoading(true)
       const result = await getGage(gageId)
+      const ranges = result && result.flowRanges ? [...result.flowRanges] : []
       setGage(result)
-      setReadings([...result.gage_readings_gage_readings_gageIdTogages])
-      setFlowRanges(result.flow_ranges_flow_ranges_gageIdTogages)
+      // @ts-ignore
+      setReadings(result.readings)
+      // @ts-ignore
+      setFlowRanges(ranges)
     } catch (e) {
       console.log('e', e)
       setError(true)

@@ -1,6 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PageHeader, Layout, Spin, Menu } from 'antd'
-import { Rivers, Settings, Media, UserGages, UserPosts } from 'components/user'
+import {
+  Rivers,
+  Settings,
+  UserMedia,
+  UserGages,
+  UserPosts,
+  Notifications,
+} from 'components/user'
 import { useAppSelector, useAppDispatch } from 'store'
 import {
   selectUserData,
@@ -8,6 +15,7 @@ import {
   resetUser,
 } from 'store/slices/user.slice'
 import { useRouter } from 'next/router'
+import {UserModel} from "interfaces";
 
 const index = () => {
   const [activeTab, setActiveTab] = useState('1')
@@ -18,9 +26,15 @@ const index = () => {
 
   const handleLogout = async () => {
     localStorage.removeItem('wh2o-auth-token')
-    dispatch(resetUser())
+    dispatch(resetUser(UserModel))
     await router.push('/')
   }
+
+  useEffect(() => {
+    if (!user && !userLoading) {
+      router.replace('/')
+    }
+  }, [])
 
   return (
     <>
@@ -41,6 +55,7 @@ const index = () => {
             <Menu.Item key="1">Gages</Menu.Item>
             <Menu.Item key="2">Rivers</Menu.Item>
             <Menu.Item key="4">Posts</Menu.Item>
+            <Menu.Item key="8">Notifications</Menu.Item>
             <Menu.Item key="5">Account</Menu.Item>
             <Menu.Divider key="6" />
             <Menu.Item key="7" onClick={handleLogout}>
@@ -62,12 +77,19 @@ const index = () => {
               <Rivers userId={user.id} reaches={user.reaches || []} />
             )}
             {activeTab === '3' && user.id && (
-              <Media userId={user.id} media={user.media || []} />
+              <UserMedia userId={user.id} media={user.media || []} />
             )}
             {activeTab === '4' && user.id && (
               <UserPosts userId={user.id} posts={user.posts || []} />
             )}
             {activeTab === '5' && user.id && <Settings user={user} />}
+            {activeTab === '8' && user.id && (
+              <Notifications
+                userId={user.id}
+                notifications={user.notifications || []}
+                userGages={user.gages || []}
+              />
+            )}
           </Layout.Content>
         )}
       </Layout>

@@ -1,4 +1,4 @@
-import { IFeature, FeatureModel } from 'interfaces'
+import { Feature, FeatureModel } from 'interfaces'
 import { useState } from 'react'
 import { Card, Modal, Form, Input, Button, Switch, message, Empty } from 'antd'
 import { createFeature, updateFeature, deleteFeature } from 'controllers'
@@ -6,7 +6,7 @@ import { useAppSelector } from '../../store'
 import { selectUserIsPublisher } from '../../store/slices/user.slice'
 
 interface FeaturesProps {
-  features: IFeature[]
+  features: Feature[]
   reachId: number | string
 }
 
@@ -15,8 +15,8 @@ export const Features = (props: FeaturesProps) => {
   const [saveLoading, setSaveLoading] = useState(false)
   const [saveError, setSaveError] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
-  const [form, setForm] = useState<IFeature>({ ...FeatureModel })
-  const [features, setFeatures] = useState<IFeature[]>([...props.features])
+  const [form, setForm] = useState<Feature>({ ...FeatureModel })
+  const [features, setFeatures] = useState<Feature[]>([...props.features])
   const userIsPublisher = useAppSelector(selectUserIsPublisher)
 
   const handleSubmit = async () => {
@@ -64,12 +64,12 @@ export const Features = (props: FeaturesProps) => {
     setModalVisible(false)
   }
 
-  const handleInitiateEdit = (feature: IFeature) => {
+  const handleInitiateEdit = (feature: Feature) => {
     setForm(feature)
     setModalVisible(true)
   }
 
-  const handleDelete = async (feature: IFeature) => {
+  const handleDelete = async (feature: Feature) => {
     try {
       if (feature && feature.id) {
         const result = await deleteFeature(feature.id)

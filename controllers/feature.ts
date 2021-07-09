@@ -1,11 +1,11 @@
 import { http } from 'lib'
-import { IFeature } from '../interfaces'
+import { Feature } from '../interfaces'
 
-export const createFeature = async (data: IFeature) => {
+export const createFeature = async (data: Feature) => {
   return http.post('/features', data).then((res) => res.data)
 }
 
-export const updateFeature = async (data: IFeature) => {
+export const updateFeature = async (data: Feature) => {
   return http.patch(`/features/${data.id}`, data).then((res) => res.data)
 }
 

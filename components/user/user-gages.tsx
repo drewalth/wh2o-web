@@ -1,4 +1,4 @@
-import { IGage } from 'interfaces'
+import { Gage } from 'interfaces'
 import { AutoComplete, Button, Card, Form, message, Modal, Table } from 'antd'
 import moment from 'moment'
 import Link from 'next/link'
@@ -8,7 +8,7 @@ import { fetchGages, selectGagesData } from 'store/slices/gages.slice'
 import { removeBookmarkGage, searchGages, userBookmarkGage } from 'controllers'
 
 interface UserGagesProps {
-  gages: IGage[]
+  gages: Gage[]
   userId: number
 }
 
@@ -21,7 +21,7 @@ export const UserGages = (props: UserGagesProps) => {
   const [formBookmarkGage, setFormBookmarkGage] = useState(0)
   const [options, setOptions] = useState<{ label: string; value: number }[]>([])
   const [deletedGages, setDeletedGages] = useState<number[]>([])
-  const [recentlyAdded, setRecentlyAdded] = useState<IGage[]>([])
+  const [recentlyAdded, setRecentlyAdded] = useState<Gage[]>([])
 
   const handleDelete = async (gageId: number) => {
     try {
@@ -108,7 +108,7 @@ export const UserGages = (props: UserGagesProps) => {
     try {
       const results = await searchGages(searchText)
       setOptions(
-        results.map((val: IGage) => ({ label: val.name, value: val.id }))
+        results.map((val: Gage) => ({ label: val.name, value: val.id }))
       )
     } catch (e) {
       message.error('Failed to search...')

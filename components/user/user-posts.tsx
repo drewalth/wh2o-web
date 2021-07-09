@@ -1,5 +1,14 @@
-import { IGage, IPost } from '../../interfaces'
-import { AutoComplete, Button, Card, Form, message, Modal, Table } from 'antd'
+import { Gage, Post } from '../../interfaces'
+import {
+  AutoComplete,
+  Button,
+  Card,
+  Form,
+  message,
+  Modal,
+  Table,
+  Tag,
+} from 'antd'
 import { useAppDispatch, useAppSelector } from '../../store'
 import { fetchGages, selectGagesData } from '../../store/slices/gages.slice'
 import { useEffect, useState } from 'react'
@@ -14,7 +23,7 @@ import { useRouter } from 'next/router'
 
 interface UserPostsProps {
   userId: number
-  posts: IPost[]
+  posts: Post[]
 }
 
 export const UserPosts = (props: UserPostsProps) => {
@@ -26,7 +35,7 @@ export const UserPosts = (props: UserPostsProps) => {
   const [formBookmarkGage, setFormBookmarkGage] = useState(0)
   const [options, setOptions] = useState<{ label: string; value: number }[]>([])
   const [deletedGages, setDeletedGages] = useState<number[]>([])
-  const [recentlyAdded, setRecentlyAdded] = useState<IGage[]>([])
+  const [recentlyAdded, setRecentlyAdded] = useState<Gage[]>([])
 
   const router = useRouter()
 
@@ -43,20 +52,37 @@ export const UserPosts = (props: UserPostsProps) => {
 
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-
-    {
-      title: 'Source',
-      dataIndex: 'source',
-      key: 'source',
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
     },
     {
-      title: 'Latest Reading',
-      dataIndex: 'latestReading',
-      key: 'latestReading',
+      dataIndex: 'published',
+      key: 'published',
+      render: (published: boolean, val: Post) => (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}
+        >
+          {!val.private && (
+            <div>
+              <Tag color="blue">Public</Tag>
+            </div>
+          )}
+          {val.published ? (
+            <div>
+              <Tag color="green">Published</Tag>
+            </div>
+          ) : (
+            <div>
+              <Tag color="yellow">Draft</Tag>
+            </div>
+          )}
+        </div>
+      ),
     },
     {
       title: 'Updated',
@@ -69,17 +95,23 @@ export const UserPosts = (props: UserPostsProps) => {
     {
       dataIndex: 'id',
       key: 'id',
-      render: (gageId: number) => (
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      render: (postId: number, val: Post) => (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}
+        >
           <Button
             danger
-            onClick={() => handleDelete(gageId)}
+            onClick={() => handleDelete(postId)}
             style={{ marginRight: 8 }}
           >
             Delete
           </Button>
-          <Button disabled>
-            <Link href={`/gages/${gageId}`}>view</Link>
+          <Button>
+            <Link href={`/posts/${postId}`}>view</Link>
           </Button>
         </div>
       ),
@@ -115,7 +147,7 @@ export const UserPosts = (props: UserPostsProps) => {
     try {
       const results = await searchGages(searchText)
       setOptions(
-        results.map((val: IGage) => ({ label: val.name, value: val.id }))
+        results.map((val: Gage) => ({ label: val.name, value: val.id }))
       )
     } catch (e) {
       message.error('Failed to search...')
@@ -130,6 +162,8 @@ export const UserPosts = (props: UserPostsProps) => {
   }
 
   useEffect(() => {
+    console.log(props.posts)
+
     if (!cachedGages.length) {
       dispatch(fetchGages())
       onSearch('')
@@ -152,7 +186,7 @@ export const UserPosts = (props: UserPostsProps) => {
         </div>
         <Table
           columns={columns}
-          dataSource={[...props.posts, ...recentlyAdded].filter(
+          dataSource={[...props.posts].filter(
             (g) => g.id && !deletedGages.includes(g.id)
           )}
         />

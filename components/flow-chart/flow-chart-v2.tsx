@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { renderChart } from './render-chart'
-import { IFlowRange } from 'interfaces'
+import { FlowRange } from 'interfaces'
 import { Chart } from 'chart.js'
 
 interface FlowChartV2Props {
   readings: number[]
   labels: string[]
-  flowRanges?: IFlowRange[]
+  flowRanges?: FlowRange[]
 }
 
 export const FlowChartV2 = (props: FlowChartV2Props) => {

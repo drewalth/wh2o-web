@@ -2,9 +2,13 @@ language: node_js
 node_js:
   - '14.16.0'
 stages:
+  - install
   - build
 jobs:
   include:
+    - state: install
+      script:
+        -
     - stage: build
       script:
         - npm run build

@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { Row, Col, Card, Modal, Button, Form, Input, AutoComplete } from 'antd'
-import { GageNotify, GageNotifyModel, IGage, IUser } from 'interfaces'
+import { Notification, Gage, User } from 'interfaces'
 import { connect } from 'react-redux'
 import { RootState } from 'store'
 import { createUserGageNotify } from 'controllers'
@@ -8,12 +8,12 @@ import { createUserGageNotify } from 'controllers'
 interface FlowRangeEditorProps {
   userId: number
   entity: string // USER or GAGE
-  user: IUser
-  gages: IGage[]
+  user: User
+  gages: Gage[]
 }
 
-interface FlowRangeEditorState extends GageNotify {
-  form: GageNotify
+interface FlowRangeEditorState extends Notification {
+  form: any
   modalVisible: boolean
 }
 
@@ -28,10 +28,16 @@ class FlowRangeEditor extends Component<
 > {
   constructor(props: FlowRangeEditorProps) {
     super(props)
+    // @ts-ignore
     this.state = {
-      ...GageNotifyModel,
-      form: { ...GageNotifyModel },
-      modalVisible: false,
+      active: false,
+      count: 0,
+      gageDisabled: false,
+      gageId: 0,
+      primary: false,
+      userId: 0,
+      form: {},
+      modalVisible: false
     }
   }
 
