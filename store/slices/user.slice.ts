@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { RootState } from '../index'
-import { User, UserModel } from '../../interfaces'
+import { User } from '../../interfaces'
 import { getUser } from 'controllers'
 
 interface UserState {
@@ -10,7 +10,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  data: { ...UserModel },
+  data: {} as User,
   loading: false,
   error: false,
 }

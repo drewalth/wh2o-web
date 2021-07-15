@@ -27,6 +27,7 @@ export interface CreateNotificationDto {
   metric: ReadingMetric
   channel: NotificationChannel
   interval: NotificationInterval
+  alertTime: Date
   name?: string
   userId: number
   gageId: number
@@ -45,6 +46,7 @@ export interface Notification {
   createdAt: Date
   updatedAt: Date
   deletedAt: Date
+  alertTime: Date
   name?: string
   userId: number
   gages: Gage[]

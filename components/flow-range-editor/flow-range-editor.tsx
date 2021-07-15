@@ -33,7 +33,6 @@ class FlowRangeEditor extends Component<
       active: false,
       count: 0,
       gageDisabled: false,
-      gageId: 0,
       primary: false,
       userId: 0,
       form: {},

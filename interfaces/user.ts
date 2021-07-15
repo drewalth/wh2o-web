@@ -17,28 +17,39 @@ export interface UserLoginResponse {
   user: User
 }
 
-export const UserModel: User = {
+export const UserModel: CreateUserDto = {
   firstName: '',
   lastName: '',
   email: '',
-  gages: [],
-  reaches: [],
-  media: [],
-  notifications: [],
-  posts: [],
-  verified: false,
-  role: user_role.USER,
+  timezone: 'America/Denver',
+  password: '',
+}
+
+export interface CreateUserDto {
+  firstName?: string
+  lastName?: string
+  password: string
+  email: string
+  timezone: string
+}
+
+export interface UpdateUserDto {
+  firstName?: string
+  lastName?: string
+  email: string
+  timezone: string
 }
 
 export interface User {
   verified: boolean
   media: Media[]
   role: user_role
-  id?: number
+  id: number
   firstName?: string
   lastName?: string
   password?: string
   email: string
+  timezone: string
   gages: Gage[]
   posts: Post[]
   reaches: River[]
