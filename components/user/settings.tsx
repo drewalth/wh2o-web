@@ -1,4 +1,4 @@
-import { User, UserModel } from 'interfaces'
+import { Timezone, UpdateUserDto, User, UserModel } from 'interfaces'
 import {
   Row,
   Col,
@@ -9,12 +9,17 @@ import {
   Input,
   Typography,
   message,
+  Select,
+  Spin,
 } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppDispatch } from 'store'
-import { resetUser } from 'store/slices/user.slice'
-import { deleteUser } from 'controllers'
+import { fetchUser, resetUser } from 'store/slices/user.slice'
+import { deleteUser, updateUser } from 'controllers'
 import { useRouter } from 'next/router'
+import { getTimezones } from '../../controllers/timezones'
+import debounce from 'lodash.debounce'
+import { CheckCircleTwoTone } from '@ant-design/icons'
 
 interface SettingsProps {
   user: User
@@ -27,6 +32,24 @@ export const Settings = (props: SettingsProps) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [confirmInput, setConfirmInput] = useState('')
   const [deleteLoading, setDeleteLoading] = useState(false)
+  const [updateLoading, setUpdateLoading] = useState(false)
+  const [timezones, setTimezones] = useState<Timezone[]>([])
+  const [userForm, setUserForm] = useState<UpdateUserDto>({
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    timezone: user.timezone,
+  })
+
+  const loadTimezones = async () => {
+    try {
+      const results = await getTimezones()
+      setTimezones(results)
+    } catch (e) {
+      console.log('e', e)
+      message.error('Timezones failed to load')
+    }
+  }
 
   const handleSubmit = async () => {
     try {
@@ -47,14 +70,85 @@ export const Settings = (props: SettingsProps) => {
     }
   }
 
+  const handleUpdate = async () => {
+    try {
+      setUpdateLoading(true)
+      const result = await updateUser(user.id, userForm)
+
+      if (result) {
+        dispatch(fetchUser(user.id))
+      }
+    } catch (e) {
+      console.log('e', e)
+      message.error('Failed to Update')
+    } finally {
+      setUpdateLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (
+      JSON.stringify(userForm) !==
+      JSON.stringify({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        timezone: user.timezone,
+      })
+    ) {
+      handleUpdate()
+    }
+  }, [userForm])
+
+  useEffect(() => {
+    loadTimezones()
+  }, [])
+
   return (
     <>
       <Row>
         <Col span={24}>
           <Card>
-            <Typography.Title level={5} editable>
-              {user.email}
-            </Typography.Title>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                marginBottom: 8,
+              }}
+            >
+              {updateLoading ? (
+                <Spin />
+              ) : (
+                <CheckCircleTwoTone twoToneColor="#52c41a" />
+              )}
+            </div>
+            <Form
+              initialValues={userForm}
+              onValuesChange={debounce(
+                (evt) => setUserForm(Object.assign({}, userForm, evt)),
+                500
+              )}
+            >
+              <Form.Item name="firstName" label="First Name">
+                <Input />
+              </Form.Item>
+              <Form.Item name="lastName" label="Last Name">
+                <Input />
+              </Form.Item>
+              <Form.Item name="email" label="Email" required>
+                <Input />
+              </Form.Item>
+              <Form.Item name="timezone" label="Timezone" required>
+                <Select>
+                  {timezones.length &&
+                    timezones.map((tz) => (
+                      <Select.Option value={tz.tzCode}>
+                        {tz.label}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </Form.Item>
+            </Form>
             <Button
               style={{ marginTop: 24 }}
               danger

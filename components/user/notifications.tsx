@@ -35,13 +35,14 @@ interface NotificationsProps {
   userGages: Gage[]
 }
 
-const defaultForm = {
+const defaultForm: CreateNotificationDto = {
   criteria: NotificationCriteria.ABOVE,
   gageDisabled: false,
   metric: ReadingMetric.CFS,
   channel: NotificationChannel.EMAIL,
   interval: NotificationInterval.DAILY,
   name: '',
+  alertTime: new Date(),
   userId: 0,
   gageId: 0,
   primary: false,

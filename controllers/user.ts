@@ -1,7 +1,15 @@
 import { http } from 'lib'
+import { UpdateUserDto, User } from '../interfaces'
 
 export const getUser = (id: number | string) => {
   return http.get(`/users/id/${id}`).then((res) => res.data)
+}
+
+export const updateUser = async (
+  id: number,
+  payload: UpdateUserDto
+): Promise<User> => {
+  return http.patch(`/users/${id}`, payload).then((res) => res.data)
 }
 
 export const userBookmarkGage = async (
