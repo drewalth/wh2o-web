@@ -1,12 +1,4 @@
-import {
-  Modal,
-  Form,
-  Button,
-  message,
-  AutoComplete,
-  Select,
-  Empty,
-} from 'antd'
+import { Modal, Form, Button, message, AutoComplete, Select, Empty } from 'antd'
 import { Gage, GageReading } from 'interfaces'
 import { useAppSelector } from '../../store'
 import { selectUserIsPublisher } from '../../store/slices/user.slice'

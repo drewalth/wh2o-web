@@ -52,11 +52,8 @@ const RiverDetail = (props: RiverDetailProps) => {
     dispatch(fetchRiver(id))
   }, [id])
 
-  if(!river) {
-    return (
-        <>
-        </>
-    )
+  if (!river) {
+    return <></>
   }
 
   return (

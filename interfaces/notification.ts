@@ -1,4 +1,4 @@
-import { ReadingMetric } from './gage'
+import { Gage, ReadingMetric } from './gage'
 
 export enum NotificationInterval {
   IMMEDIATE = 'IMMEDIATE',
@@ -47,7 +47,7 @@ export interface Notification {
   deletedAt: Date
   name?: string
   userId: number
-  gageId: number
+  gages: Gage[]
   primary: boolean
   minimum?: number
   maximum?: number

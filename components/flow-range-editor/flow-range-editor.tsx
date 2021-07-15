@@ -37,7 +37,7 @@ class FlowRangeEditor extends Component<
       primary: false,
       userId: 0,
       form: {},
-      modalVisible: false
+      modalVisible: false,
     }
   }
 

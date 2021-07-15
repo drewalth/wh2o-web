@@ -1,4 +1,4 @@
-import {User, UserModel} from 'interfaces'
+import { User, UserModel } from 'interfaces'
 import {
   Row,
   Col,

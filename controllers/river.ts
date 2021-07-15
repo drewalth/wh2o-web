@@ -1,11 +1,13 @@
 import { http } from 'lib'
 import { Gage, River, RiversMedia, ReachSearchParams } from 'interfaces'
 
-export const getRivers = async (params: ReachSearchParams):Promise<River[]> => {
+export const getRivers = async (
+  params: ReachSearchParams
+): Promise<River[]> => {
   return http.get('/reaches', { params }).then((res) => res.data)
 }
 
-export const getRiver = async (id: number | string):Promise<River> => {
+export const getRiver = async (id: number | string): Promise<River> => {
   return http.get(`/reaches/${id}`).then((res) => res.data)
 }
 
