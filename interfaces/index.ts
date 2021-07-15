@@ -1,15 +1,10 @@
 export * from './notification'
-export * from "./user"
-export * from "./gage"
-export * from "./media"
-export * from "./post"
-export * from "./river"
-export * from "./feature"
-
-
-
-
-
+export * from './user'
+export * from './gage'
+export * from './media'
+export * from './post'
+export * from './river'
+export * from './feature'
 
 export interface UserRiver {
   userId: number

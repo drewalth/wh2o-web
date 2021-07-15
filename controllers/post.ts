@@ -5,7 +5,7 @@ export const createPost = async (data: Post): Promise<Post> => {
   return http.post('/posts', data).then((res) => res.data)
 }
 
-export const updatePost = async (post: Post):Promise<Post> => {
+export const updatePost = async (post: Post): Promise<Post> => {
   return http.patch(`/posts/${post.id}`, post).then((res) => res.data)
 }
 

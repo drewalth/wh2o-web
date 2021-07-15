@@ -15,7 +15,7 @@ import {
   resetUser,
 } from 'store/slices/user.slice'
 import { useRouter } from 'next/router'
-import {UserModel} from "interfaces";
+import { UserModel } from 'interfaces'
 
 const index = () => {
   const [activeTab, setActiveTab] = useState('1')
