@@ -1,9 +1,10 @@
 import { User } from './index'
 
-export enum ReadingMetric {
+export enum GageReadingMetric {
   CFS = 'CFS',
   FT = 'FT',
   CMS = 'CMS',
+  TEMP = 'TEMP',
 }
 
 export interface GageReading {

@@ -11,6 +11,7 @@ import {
   message,
   Select,
   Spin,
+  AutoComplete,
 } from 'antd'
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from 'store'
@@ -40,6 +41,19 @@ export const Settings = (props: SettingsProps) => {
     email: user.email,
     timezone: user.timezone,
   })
+
+  const [options, setOptions] = useState<{ value: string }[]>([])
+  const onSearch = (searchText: string) => {
+    setOptions(
+      !searchText
+        ? timezones.map((tz) => ({ value: tz.tzCode }))
+        : timezones
+            .filter((tz) =>
+              tz.tzCode.toLowerCase().includes(searchText.toLowerCase())
+            )
+            .map((el) => ({ value: el.tzCode }))
+    )
+  }
 
   const loadTimezones = async () => {
     try {
@@ -72,6 +86,7 @@ export const Settings = (props: SettingsProps) => {
 
   const handleUpdate = async () => {
     try {
+      if (!timezones.map((tz) => tz.tzCode).includes(userForm.timezone)) return
       setUpdateLoading(true)
       const result = await updateUser(user.id, userForm)
 
@@ -139,14 +154,12 @@ export const Settings = (props: SettingsProps) => {
                 <Input />
               </Form.Item>
               <Form.Item name="timezone" label="Timezone" required>
-                <Select>
-                  {timezones.length &&
-                    timezones.map((tz) => (
-                      <Select.Option value={tz.tzCode}>
-                        {tz.label}
-                      </Select.Option>
-                    ))}
-                </Select>
+                <AutoComplete
+                  options={options}
+                  style={{ width: 200 }}
+                  onSearch={onSearch}
+                  placeholder="America/Denver"
+                />
               </Form.Item>
             </Form>
             <Button

@@ -54,7 +54,7 @@ const index = () => {
           >
             <Menu.Item key="1">Gages</Menu.Item>
             <Menu.Item key="2">Rivers</Menu.Item>
-            <Menu.Item key="4">Posts</Menu.Item>
+            {/*<Menu.Item key="4">Posts</Menu.Item>*/}
             <Menu.Item key="8">Notifications</Menu.Item>
             <Menu.Item key="5">Account</Menu.Item>
             <Menu.Divider key="6" />
@@ -79,13 +79,15 @@ const index = () => {
             {activeTab === '3' && user.id && (
               <UserMedia userId={user.id} media={user.media || []} />
             )}
-            {activeTab === '4' && user.id && (
-              <UserPosts userId={user.id} posts={user.posts || []} />
-            )}
+            {/*{activeTab === "4" && user.id && (*/}
+            {/*  <UserPosts userId={user.id} posts={user.posts || []} />*/}
+            {/*)}*/}
             {activeTab === '5' && user.id && <Settings user={user} />}
             {activeTab === '8' && user.id && (
               <Notifications
                 userId={user.id}
+                userVerified={user.verified}
+                userTimezone={user.timezone}
                 notifications={user.notifications || []}
                 userGages={user.gages || []}
               />

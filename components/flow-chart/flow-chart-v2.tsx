@@ -35,8 +35,11 @@ export const FlowChartV2 = (props: FlowChartV2Props) => {
   }, [readings, labels, chartRef])
 
   return (
-    <div>
-      <canvas ref={chartRef} />
+    <div style={{ position: 'relative', maxHeight: '50vh' }}>
+      <canvas
+        style={{ height: '100%', maxHeight: '100%', minHeight: 500 }}
+        ref={chartRef}
+      />
     </div>
   )
 }

@@ -31,11 +31,11 @@ export const SecondaryNavigation = (props: SecondaryNavigationProps) => {
             <a>Gages</a>
           </Link>
         </Menu.Item>
-        <Menu.Item key="4">
-          <Link href="/posts">
-            <a>Posts</a>
-          </Link>
-        </Menu.Item>
+        {/*<Menu.Item key="4">*/}
+        {/*  <Link href="/posts">*/}
+        {/*    <a>Posts</a>*/}
+        {/*  </Link>*/}
+        {/*</Menu.Item>*/}
         <Menu.Item key="3">
           {!user.email ? (
             <Link key="login" href="/auth/login">
