@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { getGage } from 'controllers'
 import { GetServerSideProps } from 'next'
-import { Card, Col, Layout, PageHeader, Row } from 'antd'
-import { Gage, GageModel } from '../../interfaces'
+import { Card, Col, Layout, PageHeader, Row, Table } from 'antd'
+import { Gage, GageModel, GageReading } from '../../interfaces'
 import { useRouter } from 'next/router'
+import moment from 'moment'
+import { Bookmark, BookmarkEntity } from '../../components/river'
 
 interface GageDetailProps {
   id: string
@@ -32,6 +34,21 @@ const GageDetail = (props: GageDetailProps) => {
     }
   }
 
+  const tableColumns = [
+    {
+      title: 'Reading',
+      dataIndex: 'value',
+      key: 'value',
+      render: (value: string, reading: GageReading) =>
+        `${value} ${reading.metric}`,
+    },
+    {
+      title: 'Updated',
+      dataIndex: 'createdAt',
+      render: (val: Date) => moment(val).format('llll'),
+    },
+  ]
+
   useEffect(() => {
     load()
   }, [])
@@ -41,21 +58,23 @@ const GageDetail = (props: GageDetailProps) => {
       <PageHeader
         title={gage.name}
         onBack={() => router.push('/gages')}
-        extra={
-          [
-            // <Button key="1" type="primary">
-            //   Bookmark
-            // </Button>
-          ]
-        }
+        extra={[
+          <Bookmark
+            key={'bookmark'}
+            entity={BookmarkEntity.GAGE}
+            entityId={gage.id}
+          />,
+        ]}
       />
       <Layout.Content style={{ padding: '0 24px' }}>
         <Row gutter={24}>
           <Col span={12}>
-            <Card>yo</Card>
+            <Card title="Description">{gage.description}</Card>
           </Col>
           <Col span={12}>
-            <Card>Flow chart</Card>
+            <Card>
+              <Table dataSource={gage.readings} columns={tableColumns} />
+            </Card>
           </Col>
         </Row>
       </Layout.Content>

@@ -8,6 +8,7 @@ import {
   InputNumber,
   message,
   Modal,
+  Tag,
   Row,
   Select,
   Statistic,

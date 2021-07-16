@@ -10,6 +10,7 @@ import {
   Bookmark,
   Subscribers,
   Flow,
+  BookmarkEntity,
 } from 'components/river'
 import {
   DashboardOutlined,
@@ -68,7 +69,13 @@ const RiverDetail = (props: RiverDetailProps) => {
           subTitle={river.section}
           onBack={() => props.router.push('/rivers')}
           extra={[
-            props.id && <Bookmark key={'bookmark'} riverId={props.id} />,
+            props.id && (
+              <Bookmark
+                key={'bookmark'}
+                entity={BookmarkEntity.RIVER}
+                entityId={props.id}
+              />
+            ),
             <Button disabled title="download" icon={<DownloadOutlined />}>
               <></>
             </Button>,
