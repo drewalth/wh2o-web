@@ -65,13 +65,14 @@ export const UserGages = (props: UserGagesProps) => {
       render: (gageId: number) => (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
+            size="small"
             danger
             onClick={() => handleDelete(gageId)}
             style={{ marginRight: 8 }}
           >
             Delete
           </Button>
-          <Button disabled>
+          <Button disabled size="small">
             <Link href={`/gages/${gageId}`}>view</Link>
           </Button>
         </div>

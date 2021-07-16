@@ -12,6 +12,8 @@ import {
   Select,
   Statistic,
   Table,
+  TimePicker,
+  Tooltip,
 } from 'antd'
 import {
   CreateNotificationDto,
@@ -20,38 +22,40 @@ import {
   NotificationChannel,
   NotificationCriteria,
   NotificationInterval,
-  ReadingMetric,
+  GageReadingMetric,
 } from 'interfaces'
-import moment from 'moment'
 import { useState } from 'react'
 import {
   createNotification,
   deleteNotification,
 } from '../../controllers/notification'
+import moment from 'moment'
 
 interface NotificationsProps {
   userId: number
   notifications: Notification[]
   userGages: Gage[]
+  userTimezone: string
+  userVerified: boolean
 }
 
 const defaultForm: CreateNotificationDto = {
   criteria: NotificationCriteria.ABOVE,
   gageDisabled: false,
-  metric: ReadingMetric.CFS,
+  metric: GageReadingMetric.CFS,
   channel: NotificationChannel.EMAIL,
   interval: NotificationInterval.DAILY,
   name: '',
-  alertTime: new Date(),
+  alertTime: undefined,
   userId: 0,
-  gageId: 0,
+  gageId: 1,
   primary: false,
   minimum: 0,
   maximum: 0,
 }
 
 export const Notifications = (props: NotificationsProps) => {
-  const { userId, notifications, userGages } = props
+  const { userId, notifications, userGages, userVerified, userTimezone } = props
   const [modalVisible, setModalVisible] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
   const [options, setOptions] = useState<{ label: string; value: number }[]>([])
@@ -65,8 +69,6 @@ export const Notifications = (props: NotificationsProps) => {
     notification: Notification
   ) => {
     try {
-      console.log(id)
-      console.log(notification)
       await deleteNotification(id, notification.gages[0].id)
       setTableData(tableData.filter((el) => el.id !== id))
       message.success('Notification deleted')
@@ -79,7 +81,11 @@ export const Notifications = (props: NotificationsProps) => {
   const handleOk = async () => {
     try {
       setConfirmLoading(true)
-      const result = await createNotification({ ...notificationForm, userId })
+      const result = await createNotification({
+        ...notificationForm,
+        userId,
+        alertTime: moment(notificationForm.alertTime).toDate(),
+      })
       setTableData([...tableData, result])
       setNotificationForm(defaultForm)
       setModalVisible(false)
@@ -109,6 +115,16 @@ export const Notifications = (props: NotificationsProps) => {
     setNotificationForm({ ...notificationForm, gageId: parseInt(value, 10) })
   }
 
+  const getNotificationDescription = (notification: Notification) => {
+    if (notification.interval !== 'IMMEDIATE') {
+      return `${notification.interval} ${notification.channel} @ ${moment(
+        notification.alertTime
+      ).format('hh:mm:ss a')}`
+    } else {
+      return `${notification.interval} ${notification.channel} when ${notification.gages[0].name} ${notification.criteria} ${notification.minimum} ${notification.metric}`
+    }
+  }
+
   const columns = [
     {
       title: 'Name',
@@ -116,50 +132,37 @@ export const Notifications = (props: NotificationsProps) => {
       key: 'name',
     },
     {
-      title: 'Gage',
-      dataIndex: 'gageId',
-      key: 'gageId',
-    },
-    {
-      title: 'Criteria',
-      dataIndex: 'criteria',
-      key: 'criteria',
-      render: (criteria: NotificationCriteria, val: Notification) => (
-        <span>{`${criteria} ${val.minimum} ${
-          criteria === 'BETWEEN' ? val.maximum : ''
-        }`}</span>
-      ),
-    },
-    {
-      title: 'Channel',
-      dataIndex: 'channel',
-      key: 'channel',
-    },
-    {
-      title: 'Interval',
-      dataIndex: 'interval',
-      key: 'interval',
-    },
-    {
-      title: 'Last Sent',
-      dataIndex: 'lastSent',
-      key: 'lastSent',
-      render: (lastSent: Date, val: Notification) => (
-        <span>{lastSent ? moment(lastSent).format('LL') : 'Never'}</span>
-      ),
+      title: 'Description',
+      dataIndex: 'id',
+      key: 'id',
+      render: (id: number, val: Notification) =>
+        getNotificationDescription(val),
     },
     {
       dataIndex: 'id',
       key: 'id',
       render: (id: number, val: Notification) => (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button danger onClick={() => handleRemoveNotification(id, val)}>
+          <Button
+            size={'small'}
+            danger
+            onClick={() => handleRemoveNotification(id, val)}
+          >
             Delete
           </Button>
         </div>
       ),
     },
   ]
+
+  const getHelpText = () => {
+    switch (notificationForm.interval) {
+      case 'IMMEDIATE':
+        return 'Get notified as soon as the gage is updated.'
+      case 'DAILY':
+        return 'Full overview of all your gage bookmarks'
+    }
+  }
 
   return (
     <>
@@ -173,23 +176,24 @@ export const Notifications = (props: NotificationsProps) => {
                 marginBottom: 24,
               }}
             >
-              <Row gutter={24}>
-                <Col>
-                  <Statistic title="Total Sent" value={0} />
-                </Col>
-                <Col>
-                  <Statistic title="Email" value={0} />
-                </Col>
-                <Col>
-                  <Statistic title="SMS" value={0} />
-                </Col>
-                <Col>
-                  <Statistic title="Push" value={0} />
-                </Col>
-              </Row>
-              <Button type="primary" onClick={() => setModalVisible(true)}>
-                Add Notification
-              </Button>
+              <Statistic value={userTimezone} title="Timezone" />
+              {!userVerified || !userGages.length ? (
+                <Tooltip
+                  title={
+                    !userVerified
+                      ? 'Please verify your email'
+                      : 'Gage Bookmark Required'
+                  }
+                >
+                  <Button disabled type="primary">
+                    Add Notification
+                  </Button>
+                </Tooltip>
+              ) : (
+                <Button type="primary" onClick={() => setModalVisible(true)}>
+                  Add Notification
+                </Button>
+              )}
             </div>
             <Table columns={columns} dataSource={tableData} loading={loading} />
           </Card>
@@ -204,35 +208,14 @@ export const Notifications = (props: NotificationsProps) => {
       >
         <Form
           initialValues={notificationForm}
-          onValuesChange={(evt) =>
+          onValuesChange={(evt) => {
             setNotificationForm(Object.assign({}, notificationForm, evt))
-          }
+          }}
         >
           <Form.Item label="Name" name="name">
             <Input />
           </Form.Item>
-          <Form.Item label="Gage" name="gage" rules={[{ required: true }]}>
-            <AutoComplete
-              options={options}
-              style={{ width: 200 }}
-              onSelect={onSelect}
-              onSearch={onSearch}
-              placeholder="input here"
-            />
-          </Form.Item>
-          <Form.Item name="channel" label="Channel">
-            <Select>
-              <Select.Option value="EMAIL">Email</Select.Option>
-              <Select.Option value="SMS" disabled>
-                SMS
-              </Select.Option>
-              <Select.Option value="PUSH" disabled>
-                Push
-              </Select.Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item name="interval" label="Interval">
+          <Form.Item name="interval" label="Interval" help={getHelpText()}>
             <Select>
               <Select.Option value="IMMEDIATE">Immediate</Select.Option>
               <Select.Option value="DAILY">Daily</Select.Option>
@@ -247,23 +230,70 @@ export const Notifications = (props: NotificationsProps) => {
               </Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item name="criteria" label="Criteria">
+          <Form.Item
+            label="Gage"
+            name="gage"
+            hidden={notificationForm.interval === 'DAILY'}
+          >
+            <AutoComplete
+              options={options}
+              style={{ width: 200 }}
+              onSelect={onSelect}
+              onSearch={onSearch}
+              placeholder="Animas River ..."
+            />
+          </Form.Item>
+          <Form.Item name="channel" label="Channel">
+            <Select>
+              <Select.Option value="EMAIL">Email</Select.Option>
+              <Select.Option value="SMS" disabled>
+                SMS
+              </Select.Option>
+              <Select.Option value="PUSH" disabled>
+                Push
+              </Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="alertTime"
+            label="Notificaton Time"
+            hidden={notificationForm.interval === 'IMMEDIATE'}
+          >
+            <TimePicker format="hh:mm a" minuteStep={15} />
+          </Form.Item>
+          <Form.Item
+            name="criteria"
+            label="Criteria"
+            hidden={notificationForm.interval === 'DAILY'}
+          >
             <Select>
               <Select.Option value="ABOVE">Above</Select.Option>
               <Select.Option value="BELOW">Below</Select.Option>
               <Select.Option value="BETWEEN">Between</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item name="minimum" label="Minimum">
+          <Form.Item
+            name="minimum"
+            label="Minimum"
+            hidden={notificationForm.interval === 'DAILY'}
+          >
             <InputNumber min={1} />
           </Form.Item>
-          <Form.Item name="maximum" label="Maximum">
+          <Form.Item
+            name="maximum"
+            label="Maximum"
+            hidden={notificationForm.interval === 'DAILY'}
+          >
             <InputNumber
               min={notificationForm.minimum}
               disabled={notificationForm.criteria !== 'BETWEEN'}
             />
           </Form.Item>
-          <Form.Item name="metric" label="Metric">
+          <Form.Item
+            name="metric"
+            label="Metric"
+            hidden={notificationForm.interval === 'DAILY'}
+          >
             <Select>
               <Select.Option value="CFS">CFS</Select.Option>
               <Select.Option value="FT">Ft</Select.Option>

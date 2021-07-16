@@ -102,13 +102,14 @@ export const Rivers = (props: RiversProps) => {
       render: (riverId: number) => (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
+            size="small"
             style={{ marginRight: 8 }}
             danger
             onClick={() => handleRemoveBookmark(riverId)}
           >
             Delete
           </Button>
-          <Button>
+          <Button size="small">
             <Link href={`/rivers/${riverId}`}>View</Link>
           </Button>
         </div>

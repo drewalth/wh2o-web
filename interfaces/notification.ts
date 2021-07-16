@@ -1,4 +1,4 @@
-import { Gage, ReadingMetric } from './gage'
+import { Gage, GageReadingMetric } from './gage'
 
 export enum NotificationInterval {
   IMMEDIATE = 'IMMEDIATE',
@@ -24,10 +24,10 @@ export enum NotificationChannel {
 export interface CreateNotificationDto {
   criteria: NotificationCriteria
   gageDisabled: boolean
-  metric: ReadingMetric
+  metric: GageReadingMetric
   channel: NotificationChannel
   interval: NotificationInterval
-  alertTime: Date
+  alertTime?: Date
   name?: string
   userId: number
   gageId: number
@@ -41,8 +41,9 @@ export interface Notification {
   criteria: NotificationCriteria
   gageDisabled: boolean
   active: boolean // user paused
-  metric: ReadingMetric
+  metric: GageReadingMetric
   channel: NotificationChannel
+  interval: NotificationInterval
   createdAt: Date
   updatedAt: Date
   deletedAt: Date

@@ -1,5 +1,15 @@
-import { Modal, Form, Button, message, AutoComplete, Select, Empty } from 'antd'
-import { Gage, GageReading } from 'interfaces'
+import {
+  Modal,
+  Form,
+  Button,
+  message,
+  AutoComplete,
+  Select,
+  Empty,
+  Table,
+  Divider,
+} from 'antd'
+import { Gage, GageReading, GageReadingMetric } from 'interfaces'
 import { useAppSelector } from '../../store'
 import { selectUserIsPublisher } from '../../store/slices/user.slice'
 import { useEffect, useState } from 'react'
@@ -29,12 +39,32 @@ export const Flow = (props: FlowProps) => {
   const [readings, setReadings] = useState<number[]>([])
   const [labels, setLabels] = useState<string[]>([])
   const [activeMetric, setActiveMetric] = useState('CFS')
-  const [availableMetrics, setAvailableMetrics] = useState<string[]>([])
+  const [availableMetrics, setAvailableMetrics] = useState<GageReadingMetric[]>(
+    []
+  )
+  const [tableData, setTableData] = useState<GageReading[]>([])
+
+  const tableColumns = [
+    {
+      title: 'Reading',
+      dataIndex: 'value',
+      key: 'value',
+      render: (value: string, reading: GageReading) =>
+        `${value} ${reading.metric}`,
+    },
+    {
+      title: 'Updated',
+      dataIndex: 'createdAt',
+      render: (val: Date) => moment(val).format('llll'),
+    },
+  ]
 
   const loadReadings = async () => {
     try {
       if (!activeGage) return
       const result = await getGageReadings(activeGage)
+
+      setTableData(result)
 
       const metrics = new Set(result.map((r) => r.metric))
       // @ts-ignore
@@ -49,8 +79,6 @@ export const Flow = (props: FlowProps) => {
       const test = result
         .filter((val: GageReading) => val.metric === activeMetric)
         .map((r) => r.value)
-
-      console.log('test', test)
 
       setReadings(test)
     } catch (e) {
@@ -133,7 +161,8 @@ export const Flow = (props: FlowProps) => {
         {!!gages.length && (
           <>
             <FlowChartV2 readings={readings} labels={labels} flowRanges={[]} />
-            <div>{JSON.stringify(readings)}</div>
+            <Divider style={{ marginTop: 64 }} />
+            <Table dataSource={tableData} columns={tableColumns} />
           </>
         )}
         {!gages.length && <Empty description="No gages" />}
