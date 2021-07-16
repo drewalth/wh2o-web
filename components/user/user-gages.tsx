@@ -1,4 +1,4 @@
-import { Gage } from 'interfaces'
+import { Gage, GageReading } from 'interfaces'
 import { AutoComplete, Button, Card, Form, message, Modal, Table } from 'antd'
 import moment from 'moment'
 import Link from 'next/link'
@@ -34,6 +34,36 @@ export const UserGages = (props: UserGagesProps) => {
     }
   }
 
+  const getDescription = (gage: Gage) => {
+    let latestMetric = ''
+
+    const metrics = ['CFS', 'TEMP', 'FT', 'CMS']
+
+    for (const metric of metrics) {
+      if (gage.latestReading?.includes(metric)) {
+        latestMetric = metric
+        break
+      }
+    }
+
+    if (latestMetric) {
+      const readings =
+        gage.readings?.filter((r) => r.metric === latestMetric) || []
+
+      const latest = readings[0].value
+      const previous = readings[1].value
+      const difference = latest - previous
+
+      if (difference) {
+        if (String(difference).charAt(0) === '-') {
+          return `${gage.latestReading} [ ${difference} ]`
+        }
+      }
+    }
+
+    return `${gage.latestReading}`
+  }
+
   const columns = [
     {
       title: 'Name',
@@ -50,6 +80,7 @@ export const UserGages = (props: UserGagesProps) => {
       title: 'Latest Reading',
       dataIndex: 'latestReading',
       key: 'latestReading',
+      render: (reading: string, val: Gage) => getDescription(val),
     },
     {
       title: 'Updated',
