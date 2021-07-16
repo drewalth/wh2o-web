@@ -1,14 +1,29 @@
-import { useEffect } from 'react'
-import { Row, Col, Card, Layout, PageHeader, Table, Button } from 'antd'
+import { useEffect, useState } from 'react'
+import {
+  Row,
+  Col,
+  Card,
+  Layout,
+  PageHeader,
+  Table,
+  Button,
+  message,
+  Form,
+  Input,
+} from 'antd'
 import moment from 'moment'
 import Link from 'next/link'
 import { useAppDispatch, useAppSelector } from 'store'
+import debounce from 'lodash.debounce'
+
 import {
   selectGagesData,
   fetchGages,
   selectGagesLoading,
 } from 'store/slices/gages.slice'
 import { useRouter } from 'next/router'
+import { Gage } from '../../interfaces'
+import { searchGages } from '../../controllers'
 
 const columns = [
   {
@@ -38,9 +53,9 @@ const columns = [
     key: 'id',
     render: (gageId: number) => (
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button disabled>
-          <Link href={`/gages/${gageId}`}>view</Link>
-        </Button>
+        <Link href={`/gages/${gageId}`}>
+          <Button>View</Button>
+        </Link>
       </div>
     ),
   },
@@ -51,6 +66,23 @@ const Gages = () => {
   const gages = useAppSelector(selectGagesData)
   const gagesLoading = useAppSelector(selectGagesLoading)
   const router = useRouter()
+  const [searchTerm, setSearchTerm] = useState('')
+  const [searchResults, setSearchResults] = useState<Gage[]>()
+
+  const handleSearch = async () => {
+    if (!searchTerm) return
+    try {
+      const results = await searchGages(searchTerm)
+      setSearchResults(results)
+    } catch (e) {
+      console.log(e)
+      message.error('Failed to search')
+    }
+  }
+
+  useEffect(() => {
+    handleSearch()
+  }, [searchTerm])
 
   useEffect(() => {
     if (!gages.length) {
@@ -73,9 +105,19 @@ const Gages = () => {
         <Row>
           <Col span={24}>
             <Card>
+              <Form
+                onValuesChange={debounce(
+                  ({ term }) => setSearchTerm(term),
+                  500
+                )}
+              >
+                <Form.Item name="term">
+                  <Input />
+                </Form.Item>
+              </Form>
               <Table
                 columns={columns}
-                dataSource={gages}
+                dataSource={searchTerm ? searchResults : gages}
                 loading={gagesLoading}
               />
             </Card>
