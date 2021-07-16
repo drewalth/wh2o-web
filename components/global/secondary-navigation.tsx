@@ -31,6 +31,11 @@ export const SecondaryNavigation = (props: SecondaryNavigationProps) => {
             <a>Gages</a>
           </Link>
         </Menu.Item>
+        <Menu.Item key="4">
+          <Link href="/issues">
+            <a>Issues</a>
+          </Link>
+        </Menu.Item>
         {/*<Menu.Item key="4">*/}
         {/*  <Link href="/posts">*/}
         {/*    <a>Posts</a>*/}
