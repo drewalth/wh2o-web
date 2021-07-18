@@ -1,4 +1,4 @@
-import { Layout, Menu, Tooltip, Typography } from 'antd'
+import { Button, Layout, Menu, Tooltip, Typography } from 'antd'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useAppDispatch, useAppSelector } from 'store'
@@ -125,7 +125,7 @@ const PrimaryNavigation = (props: PrimaryNavProps) => {
             <Menu.Item key="3">
               {!user.email ? (
                 <Link key="login" href="/auth/login">
-                  <a>Sign In</a>
+                  <Button>Login</Button>
                 </Link>
               ) : (
                 <Link key="dashboard" href={`/user/${user.id}`}>

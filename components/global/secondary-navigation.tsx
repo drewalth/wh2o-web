@@ -44,7 +44,7 @@ export const SecondaryNavigation = (props: SecondaryNavigationProps) => {
         <Menu.Item key="3">
           {!user.email ? (
             <Link key="login" href="/auth/login">
-              <a>Sign In</a>
+              <a>Login</a>
             </Link>
           ) : (
             <Link key="dashboard" href={`/user/${user.id}`}>
