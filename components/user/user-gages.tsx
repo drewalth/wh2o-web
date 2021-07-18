@@ -17,6 +17,7 @@ export const UserGages = (props: UserGagesProps) => {
   const dispatch = useAppDispatch()
   const cachedGages = useAppSelector(selectGagesData)
   const [modalVisible, setModalVisible] = useState(false)
+  const [saveEnabled, setSaveEnabled] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
   const [formBookmarkGage, setFormBookmarkGage] = useState(0)
   const [options, setOptions] = useState<{ label: string; value: number }[]>([])
@@ -191,14 +192,13 @@ export const UserGages = (props: UserGagesProps) => {
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
       >
-        <Form>
-          <Form.Item label="Gage Name" name="gage" rules={[{ required: true }]}>
+        <Form layout={'vertical'}>
+          <Form.Item name="gage" rules={[{ required: true }]}>
             <AutoComplete
               options={options}
-              style={{ width: 200 }}
               onSelect={onSelect}
               onSearch={onSearch}
-              placeholder="input here"
+              placeholder="Gage Name"
             />
           </Form.Item>
         </Form>

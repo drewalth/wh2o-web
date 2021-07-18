@@ -140,6 +140,12 @@ export const Notifications = (props: NotificationsProps) => {
         getNotificationDescription(val),
     },
     {
+      title: 'Last Sent',
+      dataIndex: 'lastSent',
+      key: 'lastSent',
+      render: (val: Date) => (val ? moment(val).format('llll') : 'Never'),
+    },
+    {
       dataIndex: 'id',
       key: 'id',
       render: (id: number, val: Notification) => (
@@ -260,7 +266,7 @@ export const Notifications = (props: NotificationsProps) => {
             label="Notificaton Time"
             hidden={notificationForm.interval === 'IMMEDIATE'}
           >
-            <TimePicker format="hh:mm a" minuteStep={15} />
+            <TimePicker format="hh:mm a" minuteStep={30} />
           </Form.Item>
           <Form.Item
             name="criteria"
