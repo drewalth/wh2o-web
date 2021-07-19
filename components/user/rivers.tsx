@@ -70,14 +70,16 @@ export const Rivers = (props: RiversProps) => {
 
   const columns = [
     {
-      title: 'Name',
+      title: 'Name + Section',
       dataIndex: 'name',
       key: 'name',
-    },
-    {
-      title: 'Section',
-      dataIndex: 'section',
-      key: 'section',
+      render: (name: string, val: River) => (
+        <>
+          <span style={{ fontWeight: 'bold' }}>{name}</span>
+          <br />
+          <span>{val.section || ''}</span>
+        </>
+      ),
     },
     {
       title: 'Class',
@@ -144,7 +146,11 @@ export const Rivers = (props: RiversProps) => {
                 Bookmark River
               </Button>
             </div>
-            <Table columns={columns} dataSource={rivers} loading={loading} />
+            <div
+              style={{ maxWidth: '100%', width: '100%', overflowX: 'scroll' }}
+            >
+              <Table columns={columns} dataSource={rivers} loading={loading} />
+            </div>
           </Card>
         </Col>
       </Row>

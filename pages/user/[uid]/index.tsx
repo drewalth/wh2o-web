@@ -5,7 +5,6 @@ import {
   Settings,
   UserMedia,
   UserGages,
-  UserPosts,
   Notifications,
 } from 'components/user'
 import { useAppSelector, useAppDispatch } from 'store'
@@ -16,11 +15,14 @@ import {
 } from 'store/slices/user.slice'
 import { useRouter } from 'next/router'
 import { UserModel } from 'interfaces'
+import { selectAppWindowWidth } from 'store/slices/app.slice'
+import { MenuMode } from 'antd/lib/menu'
 
 const index = () => {
   const [activeTab, setActiveTab] = useState('1')
   const user = useAppSelector(selectUserData)
   const userLoading = useAppSelector(selectUserLoading)
+  const windowWidth = useAppSelector(selectAppWindowWidth)
   const router = useRouter()
   const dispatch = useAppDispatch()
 
@@ -36,6 +38,41 @@ const index = () => {
     }
   }, [])
 
+  const menuStyle = () => {
+    if (windowWidth <= 768) {
+      return {
+        height: 50,
+      }
+    } else {
+      return {
+        height: '100%',
+      }
+    }
+  }
+
+  const MenuWrapper = () => {
+    return (
+      <Menu
+        mode={windowWidth <= 768 ? 'horizontal' : 'inline'}
+        defaultSelectedKeys={['1']}
+        style={menuStyle()}
+        onSelect={({ key }) => {
+          setActiveTab(key)
+        }}
+      >
+        <Menu.Item key="1">Gages</Menu.Item>
+        <Menu.Item key="2">Rivers</Menu.Item>
+        {/*<Menu.Item key="4">Posts</Menu.Item>*/}
+        <Menu.Item key="8">Notifications</Menu.Item>
+        <Menu.Item key="5">Account</Menu.Item>
+        <Menu.Divider key="6" />
+        <Menu.Item key="7" onClick={handleLogout}>
+          Logout
+        </Menu.Item>
+      </Menu>
+    )
+  }
+
   return (
     <>
       <PageHeader
@@ -43,11 +80,11 @@ const index = () => {
         subTitle={`${user.firstName} ${user.lastName}`}
       />
       <Layout style={{ minHeight: '40vh', padding: '0 24px' }}>
-        <Layout.Sider>
+        <Layout.Sider style={{ display: windowWidth > 768 ? 'block' : 'none' }}>
           <Menu
-            mode="inline"
+            mode={windowWidth <= 768 ? 'horizontal' : 'inline'}
             defaultSelectedKeys={['1']}
-            style={{ height: '100%' }}
+            style={menuStyle()}
             onSelect={({ key }) => {
               setActiveTab(key)
             }}
@@ -69,7 +106,30 @@ const index = () => {
           </Layout.Content>
         )}
         {user && !userLoading && (
-          <Layout.Content style={{ paddingLeft: '24px' }}>
+          <Layout.Content
+            style={{ paddingLeft: windowWidth > 768 ? '24px' : 0 }}
+          >
+            {windowWidth < 768 && (
+              <Menu
+                mode={'horizontal'}
+                defaultSelectedKeys={['1']}
+                style={menuStyle()}
+                onSelect={({ key }) => {
+                  setActiveTab(key)
+                }}
+              >
+                <Menu.Item key="1">Gages</Menu.Item>
+                <Menu.Item key="2">Rivers</Menu.Item>
+                {/*<Menu.Item key="4">Posts</Menu.Item>*/}
+                <Menu.Item key="8">Notifications</Menu.Item>
+                <Menu.Item key="5">Account</Menu.Item>
+                <Menu.Divider key="6" />
+                <Menu.Item key="7" onClick={handleLogout}>
+                  Logout
+                </Menu.Item>
+              </Menu>
+            )}
+
             {activeTab === '1' && user.id && (
               <UserGages userId={user.id} gages={user.gages || []} />
             )}

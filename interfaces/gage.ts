@@ -34,6 +34,7 @@ export interface ReachGages {
 }
 
 export interface Gage {
+  metric?: GageReadingMetric
   id: number
   name: string
   latestReading?: string
@@ -61,15 +62,4 @@ export interface CreateGageDto {
   longitude?: number
   source: GageSource
   riverId?: number
-}
-
-export const GageModel: Gage = {
-  id: 0,
-  name: '',
-  latestReading: '',
-  siteId: '',
-  state: '',
-  source: GageSource.USGS,
-  createdAt: new Date(),
-  users: [],
 }

@@ -33,34 +33,30 @@ export const RiverMap = (props: MapProps) => {
     justifyContent: 'center',
   }
 
-  useEffect(() => {
-    if (!mapboxToken) return
-    mapboxgl.accessToken = mapboxToken
-    const map = new mapboxgl.Map({
-      container: 'map', // container ID
-      style: 'mapbox://styles/mapbox/streets-v11', // style URL
-      center: [-74.5, 40], // starting position [lng, lat]
-      zoom: 9, // starting zoom
-    })
-
-    setMap(map)
-  }, [mapboxToken, map])
+  // useEffect(() => {
+  //   if (!mapboxToken) return;
+  //   mapboxgl.accessToken = mapboxToken;
+  //   const map = new mapboxgl.Map({
+  //     container: "map", // container ID
+  //     style: "mapbox://styles/mapbox/streets-v11", // style URL
+  //     center: [-74.5, 40], // starting position [lng, lat]
+  //     zoom: 9, // starting zoom
+  //   });
+  //
+  //   setMap(map);
+  // }, [mapboxToken, map]);
 
   // @ts-ignore
   // return <div id="map" style={mapStyle} />
 
   return (
     <>
-      {!mapboxToken && (
-        <>
-          {/* @ts-ignore */}
-          <div style={emptyStyle}>
-            <Typography.Text style={{ color: '#fff' }}>
-              Mapping Temporarily Unavailable
-            </Typography.Text>
-          </div>
-        </>
-      )}
+      {/* @ts-ignore */}
+      <div style={emptyStyle}>
+        <Typography.Text style={{ color: '#fff' }}>
+          Mapping Temporarily Unavailable
+        </Typography.Text>
+      </div>
     </>
   )
 }
