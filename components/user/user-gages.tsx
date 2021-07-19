@@ -51,8 +51,8 @@ export const UserGages = (props: UserGagesProps) => {
       const readings =
         gage.readings?.filter((r) => r.metric === latestMetric) || []
 
-      const latest = readings[0].value
-      const previous = readings[1].value
+      const latest = readings[0]?.value
+      const previous = readings[1]?.value
       const difference = latest - previous
 
       if (difference) {
@@ -178,12 +178,14 @@ export const UserGages = (props: UserGagesProps) => {
             Bookmark Gage
           </Button>
         </div>
-        <Table
-          columns={columns}
-          dataSource={[...props.gages, ...recentlyAdded].filter(
-            (g) => g.id && !deletedGages.includes(g.id)
-          )}
-        />
+        <div style={{ maxWidth: '100%', width: '100%', overflowX: 'scroll' }}>
+          <Table
+            columns={columns}
+            dataSource={[...props.gages, ...recentlyAdded].filter(
+              (g) => g.id && !deletedGages.includes(g.id)
+            )}
+          />
+        </div>
       </Card>
       <Modal
         title="Bookmark Gage"

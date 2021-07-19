@@ -202,7 +202,15 @@ export const Notifications = (props: NotificationsProps) => {
                 </Button>
               )}
             </div>
-            <Table columns={columns} dataSource={tableData} loading={loading} />
+            <div
+              style={{ maxWidth: '100%', width: '100%', overflowX: 'scroll' }}
+            >
+              <Table
+                columns={columns}
+                dataSource={tableData}
+                loading={loading}
+              />
+            </div>
           </Card>
         </Col>
       </Row>
