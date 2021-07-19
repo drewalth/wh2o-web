@@ -27,7 +27,7 @@ interface RiversProps {
   reaches: River[]
 }
 
-export const Rivers = (props: RiversProps) => {
+export const UserRivers = (props: RiversProps) => {
   const { userId, reaches } = props
   const [loading, setLoading] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)

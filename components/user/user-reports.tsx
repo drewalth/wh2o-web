@@ -55,7 +55,7 @@ const defaultForm: CreateNotificationDto = {
   maximum: 0,
 }
 
-export const Notifications = (props: NotificationsProps) => {
+export const UserReports = (props: NotificationsProps) => {
   const { userId, notifications, userGages, userVerified, userTimezone } = props
   const [modalVisible, setModalVisible] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
@@ -193,12 +193,12 @@ export const Notifications = (props: NotificationsProps) => {
                   }
                 >
                   <Button disabled type="primary">
-                    Add Notification
+                    Add Report
                   </Button>
                 </Tooltip>
               ) : (
                 <Button type="primary" onClick={() => setModalVisible(true)}>
-                  Add Notification
+                  Add Report
                 </Button>
               )}
             </div>
@@ -215,7 +215,7 @@ export const Notifications = (props: NotificationsProps) => {
         </Col>
       </Row>
       <Modal
-        title="Create Notification"
+        title="Create Report"
         visible={modalVisible}
         onOk={handleOk}
         confirmLoading={confirmLoading}
