@@ -6,6 +6,7 @@ import {
   PageHeader,
   Row,
   Table,
+  Tag,
   Typography,
 } from 'antd'
 import { useRouter } from 'next/router'
@@ -19,10 +20,6 @@ interface AboutProps {
 const About = (props: AboutProps) => {
   const { tickets } = props
 
-  useEffect(() => {
-    console.log(tickets[9].labels)
-  }, [])
-
   const router = useRouter()
   const columns = [
     {
@@ -30,12 +27,20 @@ const About = (props: AboutProps) => {
       dataIndex: 'title',
       key: 'title',
       render: (title: string, val: any) => (
-        <a
-          href={`https://github.com/drewalth/wh2o-docker/issues/${val.number}`}
-          target="_blank"
-        >
-          {title}
-        </a>
+        <>
+          <a
+            href={`https://github.com/drewalth/wh2o-docker/issues/${val.number}`}
+            target="_blank"
+            style={{ marginRight: 8 }}
+          >
+            {title}
+          </a>
+
+          {!!val.labels.length &&
+            val.labels.map((label: any) => (
+              <Tag color={`#${label.color}`}>{label.name}</Tag>
+            ))}
+        </>
       ),
     },
   ]
@@ -75,7 +80,7 @@ const About = (props: AboutProps) => {
 }
 
 export const getStaticProps = async (context: GetStaticPropsContext) => {
-  let tickets
+  let tickets = []
 
   try {
     const result = await fetch(

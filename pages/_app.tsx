@@ -23,7 +23,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   return (
     <Provider store={store}>
-      <Layout>
+      <Layout hasSider={true}>
         <Layout
           style={{
             minHeight: '100vh',

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { PageHeader, Layout, Spin, Menu } from 'antd'
 import {
-  Rivers,
-  Settings,
+  UserRivers,
+  UserSettings,
   UserMedia,
   UserGages,
-  Notifications,
+  UserReports,
 } from 'components/user'
 import { useAppSelector, useAppDispatch } from 'store'
 import {
@@ -41,36 +41,13 @@ const index = () => {
   const menuStyle = () => {
     if (windowWidth <= 768) {
       return {
-        height: 50,
+        height: 100,
       }
     } else {
       return {
         height: '100%',
       }
     }
-  }
-
-  const MenuWrapper = () => {
-    return (
-      <Menu
-        mode={windowWidth <= 768 ? 'horizontal' : 'inline'}
-        defaultSelectedKeys={['1']}
-        style={menuStyle()}
-        onSelect={({ key }) => {
-          setActiveTab(key)
-        }}
-      >
-        <Menu.Item key="1">Gages</Menu.Item>
-        <Menu.Item key="2">Rivers</Menu.Item>
-        {/*<Menu.Item key="4">Posts</Menu.Item>*/}
-        <Menu.Item key="8">Notifications</Menu.Item>
-        <Menu.Item key="5">Account</Menu.Item>
-        <Menu.Divider key="6" />
-        <Menu.Item key="7" onClick={handleLogout}>
-          Logout
-        </Menu.Item>
-      </Menu>
-    )
   }
 
   return (
@@ -92,7 +69,7 @@ const index = () => {
             <Menu.Item key="1">Gages</Menu.Item>
             <Menu.Item key="2">Rivers</Menu.Item>
             {/*<Menu.Item key="4">Posts</Menu.Item>*/}
-            <Menu.Item key="8">Notifications</Menu.Item>
+            <Menu.Item key="8">Reports</Menu.Item>
             <Menu.Item key="5">Account</Menu.Item>
             <Menu.Divider key="6" />
             <Menu.Item key="7" onClick={handleLogout}>
@@ -121,7 +98,7 @@ const index = () => {
                 <Menu.Item key="1">Gages</Menu.Item>
                 <Menu.Item key="2">Rivers</Menu.Item>
                 {/*<Menu.Item key="4">Posts</Menu.Item>*/}
-                <Menu.Item key="8">Notifications</Menu.Item>
+                <Menu.Item key="8">Reports</Menu.Item>
                 <Menu.Item key="5">Account</Menu.Item>
                 <Menu.Divider key="6" />
                 <Menu.Item key="7" onClick={handleLogout}>
@@ -134,7 +111,7 @@ const index = () => {
               <UserGages userId={user.id} gages={user.gages || []} />
             )}
             {activeTab === '2' && user.id && (
-              <Rivers userId={user.id} reaches={user.reaches || []} />
+              <UserRivers userId={user.id} reaches={user.reaches || []} />
             )}
             {activeTab === '3' && user.id && (
               <UserMedia userId={user.id} media={user.media || []} />
@@ -142,9 +119,9 @@ const index = () => {
             {/*{activeTab === "4" && user.id && (*/}
             {/*  <UserPosts userId={user.id} posts={user.posts || []} />*/}
             {/*)}*/}
-            {activeTab === '5' && user.id && <Settings user={user} />}
+            {activeTab === '5' && user.id && <UserSettings user={user} />}
             {activeTab === '8' && user.id && (
-              <Notifications
+              <UserReports
                 userId={user.id}
                 userVerified={user.verified}
                 userTimezone={user.timezone}

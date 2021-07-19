@@ -26,7 +26,7 @@ interface SettingsProps {
   user: User
 }
 
-export const Settings = (props: SettingsProps) => {
+export const UserSettings = (props: SettingsProps) => {
   const { user } = props
   const router = useRouter()
   const dispatch = useAppDispatch()
