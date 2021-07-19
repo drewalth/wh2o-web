@@ -1,7 +1,7 @@
-import { GageModel, Gage, GageReading } from 'interfaces'
+import { Gage, GageReading, GageSource } from 'interfaces'
 import { getGage } from 'controllers'
 import { useEffect, useRef, useState } from 'react'
-import { Card, Button } from 'antd'
+import { Button, Card } from 'antd'
 import Link from 'next/link'
 
 interface FlowChartProps {
@@ -21,7 +21,25 @@ export const FlowChart = (props: FlowChartProps) => {
   const [readings, setReadings] = useState<GageReading[]>([])
   const [flowRanges, setFlowRanges] = useState([])
   const [chartLoaded, setChartLoaded] = useState(false)
-  const [gage, setGage] = useState<Gage>({ ...GageModel })
+  const [gage, setGage] = useState<Gage>({
+    ReachGages: undefined,
+    createdAt: new Date(),
+    description: '',
+    flowRanges: [],
+    id: 0,
+    latestReading: '',
+    latitude: 0,
+    longitude: 0,
+    metric: undefined,
+    name: '',
+    readings: [],
+    riverId: 0,
+    siteId: '',
+    source: GageSource.USGS,
+    state: '',
+    updatedAt: undefined,
+    users: [],
+  })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [windowWidth, setWindowWidth] = useState(0)
