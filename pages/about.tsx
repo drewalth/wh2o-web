@@ -2,7 +2,6 @@ import {
   Card,
   Col,
   Layout,
-  List,
   PageHeader,
   Row,
   Table,
@@ -11,7 +10,6 @@ import {
 } from 'antd'
 import { useRouter } from 'next/router'
 import { GetStaticPropsContext } from 'next'
-import { useEffect } from 'react'
 
 interface AboutProps {
   tickets: any[]
