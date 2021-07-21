@@ -8,7 +8,6 @@ import {
   InputNumber,
   message,
   Modal,
-  Tag,
   Row,
   Select,
   Statistic,
@@ -72,10 +71,10 @@ export const UserReports = (props: NotificationsProps) => {
     try {
       await deleteNotification(id, notification.gages[0].id)
       setTableData(tableData.filter((el) => el.id !== id))
-      message.success('Notification deleted')
+      message.success('Report Deleted')
     } catch (e) {
       console.log('e', e)
-      message.error('failed to delete notification')
+      message.error('Failed to Delete Report')
     }
   }
 
@@ -85,12 +84,12 @@ export const UserReports = (props: NotificationsProps) => {
       const result = await createNotification({
         ...notificationForm,
         userId,
-        alertTime: moment(notificationForm.alertTime).toDate(),
+        // alertTime: moment(notificationForm.alertTime).toDate(),
       })
       setTableData([...tableData, result])
       setNotificationForm(defaultForm)
       setModalVisible(false)
-      message.success('notification created')
+      message.success('Report Created')
     } catch (e) {
       message.error('something failed...')
     } finally {
@@ -171,6 +170,26 @@ export const UserReports = (props: NotificationsProps) => {
     }
   }
 
+  const getTooltipText = () => {
+    // !userVerified || !userGages.length || tableData.length >= 5
+
+    let text = ''
+
+    if (!userVerified) {
+      text += 'Please verify your email '
+    }
+
+    if (!userGages.length) {
+      text += 'Gage Bookmark Required '
+    }
+
+    if (tableData.length >= 5) {
+      text += 'Report Limit Reached'
+    }
+
+    return text
+  }
+
   return (
     <>
       <Row>
@@ -184,14 +203,8 @@ export const UserReports = (props: NotificationsProps) => {
               }}
             >
               <Statistic value={userTimezone} title="Timezone" />
-              {!userVerified || !userGages.length ? (
-                <Tooltip
-                  title={
-                    !userVerified
-                      ? 'Please verify your email'
-                      : 'Gage Bookmark Required'
-                  }
-                >
+              {!userVerified || !userGages.length || tableData.length >= 5 ? (
+                <Tooltip title={getTooltipText()}>
                   <Button disabled type="primary">
                     Add Report
                   </Button>
@@ -220,6 +233,7 @@ export const UserReports = (props: NotificationsProps) => {
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
+        destroyOnClose={true}
       >
         <Form
           initialValues={notificationForm}
@@ -274,7 +288,7 @@ export const UserReports = (props: NotificationsProps) => {
             label="Notificaton Time"
             hidden={notificationForm.interval === 'IMMEDIATE'}
           >
-            <TimePicker format="hh:mm a" minuteStep={30} />
+            <TimePicker format="HH:mm" minuteStep={30} />
           </Form.Item>
           <Form.Item
             name="criteria"
