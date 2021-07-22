@@ -6,6 +6,7 @@ export * from './post'
 export * from './river'
 export * from './feature'
 export * from './timezone'
+export * from './subscription'
 
 export interface UserRiver {
   userId: number
