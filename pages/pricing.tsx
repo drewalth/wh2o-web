@@ -9,21 +9,11 @@ const Pricing = () => {
     <>
       <PageHeader title="Pricing" onBack={() => router.push('/')} />
       <Layout.Content style={{ padding: '0 24px' }}>
-        <Row gutter={24}>
-          <Col span={24} md={8}>
-            <Card title={'Free'} extra={<h1>$0</h1>}>
-              <ul>
-                <li>3 Daily Flow Report Emails</li>
-                <li>1 Immediate Flow Report Email</li>
-                <li>3 Gage Bookmarks</li>
-                <li>3 River Bookmarks</li>
-              </ul>
-            </Card>
-          </Col>
+        <Row gutter={24} justify={'center'}>
           <Col span={24} md={8}>
             <Card
-              title={'Premium 🎉'}
-              extra={<h1>$2.00/m</h1>}
+              title={'Premium'}
+              extra={<h1>$0.99/m</h1>}
               actions={[
                 <form action="/api/checkout_sessions" method="POST">
                   <input
@@ -31,7 +21,7 @@ const Pricing = () => {
                     name="priceId"
                     value={SubscriptionPrice.premium}
                   />
-                  <Button htmlType={'submit'} type={'primary'}>
+                  <Button disabled={true} htmlType={'submit'} type={'primary'}>
                     Purchase
                   </Button>
                 </form>,
@@ -39,8 +29,8 @@ const Pricing = () => {
             >
               <ul>
                 <li>River PDF Downloads</li>
-                <li>5 Daily Flow Report Emails</li>
-                <li>3 Immediate Flow Report Emails</li>
+                <li>Daily Flow Report Emails</li>
+                <li>Immediate Flow Report Emails</li>
                 <li>10 Gage Bookmarks</li>
                 <li>10 River Bookmarks</li>
               </ul>
@@ -49,7 +39,7 @@ const Pricing = () => {
           <Col span={24} md={8}>
             <Card
               title={'Deluxe ✨'}
-              extra={<h1>$5.00/m</h1>}
+              extra={<h1>$4.99/m</h1>}
               actions={[
                 <form action="/api/checkout_sessions" method="POST">
                   <input
@@ -57,7 +47,9 @@ const Pricing = () => {
                     name="priceId"
                     value={SubscriptionPrice.deluxe}
                   />
-                  <Button htmlType={'submit'}>Purchase</Button>
+                  <Button disabled={true} htmlType={'submit'}>
+                    Purchase
+                  </Button>
                 </form>,
               ]}
             >

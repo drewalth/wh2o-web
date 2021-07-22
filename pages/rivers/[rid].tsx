@@ -3,7 +3,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { Breadcrumb, Button, Layout, PageHeader, Menu, Col, Row } from 'antd'
 import {
   BetaBox,
-  Gallery,
+  RiverMedia,
   Features,
   RiverMap,
   Board,
@@ -169,7 +169,7 @@ const RiverDetail = (props: RiverDetailProps) => {
                   <Features reachId={props.id} features={river.features} />
                 )}
                 {activeTab === '4' && (
-                  <Gallery
+                  <RiverMedia
                     id={props.id}
                     apiUrl={props.apiUrl}
                     awsS3RootPath={props.awsS3RootPath}

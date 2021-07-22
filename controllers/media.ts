@@ -1,12 +1,25 @@
 import { http } from 'lib'
-import { Media } from '../interfaces'
+import { CreateMediaDto, Media } from '../interfaces'
 
-export const createMedia = async (payload: Media): Promise<Media> => {
-  return http.post(`/media`, payload).then((res) => res.data)
+export const createMediaEmbed = async (
+  payload: CreateMediaDto
+): Promise<Media> => {
+  return http.post(`/media/embed`, payload).then((res) => res.data)
 }
 
-export const deleteMedia = async (id: string | number): Promise<number> => {
-  return http.delete(`/media/${id}`).then((res) => res.data)
+export const createMediaFile = async (
+  payload: CreateMediaDto
+): Promise<Media> => {
+  return http.post(`/media/file`, payload).then((res) => res.data)
+}
+
+export const deleteMedia = async (
+  id: string | number,
+  reachId = 0
+): Promise<number> => {
+  return http
+    .delete(`/media/${id}?reachId=${reachId || ''}`)
+    .then((res) => res.data)
 }
 
 export const deletePendingMedia = async (fileName: string): Promise<any> => {

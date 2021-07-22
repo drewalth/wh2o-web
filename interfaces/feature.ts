@@ -14,8 +14,8 @@ export interface Feature {
   isPortage: boolean
   isPlayspot: boolean
   isAccessPoint: boolean
-  isPutin: boolean
-  isTakeout: boolean
+  isPutIn: boolean
+  isTakeOut: boolean
   isCampsite: boolean
   isRangerStation: boolean
   isWaterfall: boolean
@@ -37,8 +37,8 @@ export const FeatureModel: Feature = {
   isPortage: false,
   isPlayspot: false,
   isAccessPoint: false,
-  isPutin: false,
-  isTakeout: false,
+  isPutIn: false,
+  isTakeOut: false,
   isCampsite: false,
   isRangerStation: false,
   isWaterfall: false,

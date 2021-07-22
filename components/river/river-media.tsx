@@ -11,8 +11,13 @@ import {
 } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { useState } from 'react'
-import { Media, MediaModel } from 'interfaces'
-import { createMedia, deleteMedia, deletePendingMedia } from 'controllers'
+import { CreateMediaDto, Media, MediaModel } from 'interfaces'
+import {
+  createMediaEmbed,
+  createMediaFile,
+  deleteMedia,
+  deletePendingMedia,
+} from 'controllers'
 import { useAppSelector } from 'store'
 import { selectUserData, selectUserIsPublisher } from 'store/slices/user.slice'
 
@@ -23,20 +28,20 @@ interface GalleryProps {
   id: number
 }
 
-export const Gallery = (props: GalleryProps) => {
+export const RiverMedia = (props: GalleryProps) => {
   const [imagePaths, setImagePaths] = useState<Media[]>([])
   const [pendingFileName, setPendingFileName] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
   const [saveLoading, setSaveLoading] = useState(false)
   const [saveError, setSaveError] = useState(false)
-  const [form, setForm] = useState<Media>({ ...MediaModel })
+  const [form, setForm] = useState<CreateMediaDto>({ ...MediaModel })
   const userIsPublisher = useAppSelector(selectUserIsPublisher)
   const user = useAppSelector(selectUserData)
 
   const handleDelete = async (id: string | number | undefined) => {
     if (!id) return
     try {
-      const result = await deleteMedia(id)
+      const result = await deleteMedia(id, props.id)
       console.log('result', result)
     } catch (e) {
       console.log('e', e)
@@ -56,29 +61,27 @@ export const Gallery = (props: GalleryProps) => {
   const handleOk = async () => {
     try {
       setSaveLoading(true)
-      const result = await createMedia({
+
+      let method =
+        form.mediaType === 'photo' ? createMediaFile : createMediaEmbed
+
+      const result = await method({
         ...form,
         fileName: pendingFileName,
-        rivers: props.id || undefined,
-        // @ts-ignore
-        user: {
-          connect: {
-            id: user.id,
-          },
-        },
+        reachId: props.id,
+        userId: user.id,
         // features
         // pick from existing or upload new
       })
+      setForm({ ...MediaModel })
       setImagePaths([...imagePaths, result])
+      setModalVisible(false)
     } catch (e) {
       console.log(e)
       setSaveError(true)
+      message.error('Something went wrong')
     } finally {
-      if (!saveError) {
-        setForm({ ...MediaModel })
-        setSaveLoading(false)
-        setModalVisible(false)
-      }
+      setSaveLoading(false)
     }
   }
 
@@ -109,50 +112,49 @@ export const Gallery = (props: GalleryProps) => {
         onCancel={handleCancel}
         onOk={handleOk}
         confirmLoading={saveLoading}
+        destroyOnClose={true}
       >
         <Form
+          layout={'vertical'}
           onValuesChange={(evt) => setForm(Object.assign(form, evt))}
           name="basic"
           initialValues={{
             title: '',
             description: '',
             rapid: 0,
-            entityType: 'photo',
+            mediaType: 'photo',
           }}
         >
-          {form.entityType === 'photo' && (
-            <Form.Item>
-              <Upload
-                {...uploadConfig}
-                style={{ marginBottom: 24 }}
-                onRemove={() => handleCancel(false)}
-              >
-                <Button icon={<UploadOutlined />}>File Upload</Button>
-              </Upload>
-            </Form.Item>
-          )}
           <Form.Item label="Title" name="title">
             <Input />
           </Form.Item>
-          <Form.Item label="Entity Type" name="entityType">
+          <Form.Item label="Entity Type" name="mediaType">
             <Select
               onSelect={(evt) =>
                 setForm(Object.assign({}, form, { entityType: evt }))
               }
             >
-              <Select.Option value="photo">File Upload</Select.Option>
+              <Select.Option value="photo">Photo</Select.Option>
               <Select.Option value="youtube">YouTube</Select.Option>
               <Select.Option value="vimeo">Vimeo</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item label="Desciption" name="description">
+          <Form.Item hidden={form.mediaType !== 'photo'}>
+            <Upload
+              {...uploadConfig}
+              style={{ marginBottom: 24 }}
+              onRemove={() => handleCancel(false)}
+            >
+              <Button icon={<UploadOutlined />}>File Upload</Button>
+            </Upload>
+          </Form.Item>
+
+          <Form.Item hidden={form.mediaType === 'photo'} label="URL" name="url">
             <Input />
           </Form.Item>
-          {['vimeo', 'youtube'].includes(form.entityType) && (
-            <Form.Item label="URL" name="url">
-              <Input />
-            </Form.Item>
-          )}
+          <Form.Item label="Desciption" name="description">
+            <Input.TextArea />
+          </Form.Item>
         </Form>
       </Modal>
       <div
