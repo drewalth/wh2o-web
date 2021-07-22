@@ -5,22 +5,32 @@ export enum mediaEntityType {
   youtube = 'youtube',
 }
 
+export interface CreateMediaDto {
+  title?: string
+  fileName?: string
+  url?: string
+  mediaType: mediaEntityType
+  userId: number
+  reachId: number
+}
+
 export interface Media {
   title?: string
   fileName?: string
   url?: string
-  id?: number
+  id: number
   entityType: mediaEntityType
   rivers?: number
   user: number
 }
 
-export const MediaModel: Media = {
+export const MediaModel: CreateMediaDto = {
   title: '',
   fileName: '',
   url: '',
-  entityType: mediaEntityType.photo,
-  user: 0,
+  mediaType: mediaEntityType.photo,
+  userId: 0,
+  reachId: 0,
 }
 
 export interface RiversMedia {

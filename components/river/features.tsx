@@ -1,9 +1,24 @@
 import { Feature, FeatureModel } from 'interfaces'
 import { useState } from 'react'
-import { Card, Modal, Form, Input, Button, Switch, message, Empty } from 'antd'
+import {
+  Card,
+  Modal,
+  Form,
+  Input,
+  Button,
+  Switch,
+  message,
+  Divider,
+  Empty,
+  Row,
+  Col,
+  Select,
+  Typography,
+} from 'antd'
 import { createFeature, updateFeature, deleteFeature } from 'controllers'
 import { useAppSelector } from '../../store'
 import { selectUserIsPublisher } from '../../store/slices/user.slice'
+import { GradeRatings } from '../../lib'
 
 interface FeaturesProps {
   features: Feature[]
@@ -29,17 +44,37 @@ export const Features = (props: FeaturesProps) => {
 
   const handleUpdate = async () => {
     try {
+      setSaveError(false)
       setSaveLoading(true)
       const result = await updateFeature(form)
+
       const index = features.findIndex((el) => el.id === result.id)
-      features.splice(index, 1, result) // bad practice?
-      setModalVisible(false)
+
+      if (index > -1) {
+        const ref = [...features]
+        ref[index] = result
+        setFeatures(ref)
+      }
+
+      // if (features.length >= 2) {
+      //   //Object.assign(values[valueIndex], item)
+      //   const index = features.findIndex((el) => el.id === result.id);
+      //   const data = [...features].splice(index, 1, result);
+      //   setFeatures(data);
+      // } else {
+      //   setFeatures([result]);
+      // }
+
       message.success(`Feature updated`)
     } catch (e) {
       console.log('e', e)
       message.error(`Something went wrong...`)
+      setSaveError(true)
     } finally {
       setSaveLoading(false)
+      if (!saveError) {
+        setModalVisible(false)
+      }
     }
   }
 
@@ -90,16 +125,24 @@ export const Features = (props: FeaturesProps) => {
         onOk={handleSubmit}
         onCancel={handleCancel}
         destroyOnClose={true}
+        bodyStyle={{ maxHeight: '70vh', overflowY: 'scroll' }}
       >
         <Form
           initialValues={form}
           onValuesChange={(evt) => setForm(Object.assign({}, form, evt))}
         >
-          <Form.Item name="name" label="Title">
+          <Form.Item name="name" label="Name">
             <Input />
           </Form.Item>
+          <Form.Item name="class" label="Class">
+            <Select>
+              {GradeRatings.map((rating) => (
+                <Select.Option value={rating}>{rating}</Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
           <Form.Item name="description" label="Description">
-            <Input />
+            <Input.TextArea />
           </Form.Item>
           <Form.Item name="distance" label="Distance">
             <Input />
@@ -113,6 +156,33 @@ export const Features = (props: FeaturesProps) => {
           <Form.Item name="isRapid" label="Rapid">
             <Switch checked={form.isRapid} />
           </Form.Item>
+          <Form.Item name="isAccessPoint" label="Access Point">
+            <Switch checked={form.isAccessPoint} />
+          </Form.Item>
+          <Form.Item name="isCampsite" label="Campsite">
+            <Switch checked={form.isCampsite} />
+          </Form.Item>
+          <Form.Item name="isPutIn" label="Put In">
+            <Switch checked={form.isPutIn} />
+          </Form.Item>
+          <Form.Item name="isTakeOut" label="Take Out">
+            <Switch checked={form.isTakeOut} />
+          </Form.Item>
+          <Form.Item name="isHazard" label="Hazard">
+            <Switch checked={form.isHazard} />
+          </Form.Item>
+          <Form.Item name="isPlayspot" label="Surf Spot">
+            <Switch checked={form.isPlayspot} />
+          </Form.Item>
+          <Form.Item name="isPortage" label="Portage">
+            <Switch checked={form.isPortage} />
+          </Form.Item>
+          <Form.Item name="isWaterfall" label="Waterfall">
+            <Switch checked={form.isWaterfall} />
+          </Form.Item>
+          <Form.Item name="isRangerStation" label="Ranger Station">
+            <Switch checked={form.isRangerStation} />
+          </Form.Item>
         </Form>
       </Modal>
       <div
@@ -125,24 +195,60 @@ export const Features = (props: FeaturesProps) => {
         <Button
           type="primary"
           disabled={!userIsPublisher}
-          onClick={() => setModalVisible(true)}
+          onClick={() => {
+            setForm({ ...FeatureModel })
+            setModalVisible(true)
+          }}
         >
           Add Feature
         </Button>
       </div>
       {features &&
+        features.length &&
         features.map((feat) => (
           <Card
             title={feat.name}
             style={{ marginBottom: 24 }}
             extra={
               <>
-                <Button onClick={() => handleInitiateEdit(feat)}>Edit</Button>
-                <Button onClick={() => handleDelete(feat)}>Delete</Button>
+                <Button
+                  style={{ marginRight: 8 }}
+                  onClick={() => handleInitiateEdit(feat)}
+                >
+                  Edit
+                </Button>
+                <Button danger={true} onClick={() => handleDelete(feat)}>
+                  Delete
+                </Button>
               </>
             }
           >
-            <Card.Meta description={feat.description}></Card.Meta>
+            <Row>
+              <Col
+                span={24}
+                style={{ display: 'flex', justifyContent: 'space-between' }}
+              >
+                <Typography.Text>{`Class: ${feat.class}`}</Typography.Text>
+                <div>
+                  {feat.isRapid && <span>Rapid</span>}
+                  {feat.isWaterfall && <span>Waterfall</span>}
+                  {feat.isPutIn && <span>Put In</span>}
+                  {feat.isTakeOut && <span>Takeout</span>}
+                  {feat.isAccessPoint && <span>Access Point</span>}
+                  {feat.isHazard && <span>Hazard</span>}
+                  {feat.isPortage && <span>Portage</span>}
+                  {feat.isCampsite && <span>Campsite</span>}
+                  {feat.isPlayspot && <span>Surf Spot</span>}
+                  {feat.isRangerStation && <span>Ranger Station</span>}
+                </div>
+              </Col>
+            </Row>
+            <Divider />
+            <Row>
+              <Col span={12}>
+                {feat.description || 'No description. Log in to add one.'}
+              </Col>
+            </Row>
           </Card>
         ))}
 

@@ -1,5 +1,5 @@
 export * from './beta-box'
-export * from './gallery'
+export * from './river-media'
 export * from './features'
 export * from './map'
 export * from './board'

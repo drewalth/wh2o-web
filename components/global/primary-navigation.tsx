@@ -112,11 +112,11 @@ const PrimaryNavigation = (props: PrimaryNavProps) => {
                 <a>Gages</a>
               </Link>
             </Menu.Item>
-            <Menu.Item key="4">
-              <Link href="/pricing">
-                <a>Pricing</a>
-              </Link>
-            </Menu.Item>
+            {/*<Menu.Item key="4">*/}
+            {/*  <Link href="/pricing">*/}
+            {/*    <a>Pricing</a>*/}
+            {/*  </Link>*/}
+            {/*</Menu.Item>*/}
             {/*<Menu.Item key="4">*/}
             {/*  <Link href="/posts">*/}
             {/*    <a>Posts</a>*/}
