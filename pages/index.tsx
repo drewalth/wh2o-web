@@ -44,8 +44,8 @@ export default function Home() {
                     color: '#fff',
                   }}
                 >
-                  A community driven guidebook for whitewater rivers and creeks
-                  around the world.
+                  Custom river flow notifications and a community driven
+                  guidebook for whitewater rivers.
                 </Typography.Text>
               </Col>
             </Row>
