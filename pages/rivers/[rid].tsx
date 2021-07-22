@@ -31,6 +31,7 @@ import {
   selectRiverLoading,
 } from 'store/slices/river.slice'
 import { selectAppWindowWidth } from '../../store/slices/app.slice'
+import { exportReachPDF } from '../../controllers/exporter'
 
 interface RiverDetailProps {
   id: number
@@ -41,13 +42,33 @@ interface RiverDetailProps {
 }
 
 const RiverDetail = (props: RiverDetailProps) => {
-  const { id } = props
+  const { id, awsS3RootPath } = props
   const [activeTab, setActiveTab] = useState('1')
   const dispatch = useAppDispatch()
   const river = useAppSelector(selectRiverData)
   const loading = useAppSelector(selectRiverLoading)
   const error = useAppSelector(selectRiverError)
   const windowWidth = useAppSelector(selectAppWindowWidth)
+
+  const handleExport = async (reachId: number) => {
+    try {
+      console.log('reachId', reachId)
+      const result = await exportReachPDF()
+      console.log(result)
+
+      const target = document.createElement('a')
+
+      target.href = awsS3RootPath + 'reach-exports/' + result
+      target.id = 'export-target'
+      target.download = 'true'
+
+      document.querySelector('body')?.appendChild(target)
+
+      ;(document.querySelector('#export-target') as HTMLLinkElement).click()
+    } catch (e) {
+      console.log('e', e)
+    }
+  }
 
   useEffect(() => {
     dispatch(fetchRiver(id))
@@ -76,7 +97,11 @@ const RiverDetail = (props: RiverDetailProps) => {
                 entityId={props.id}
               />
             ),
-            <Button disabled title="download" icon={<DownloadOutlined />}>
+            <Button
+              title="download"
+              onClick={() => handleExport(props.id)}
+              icon={<DownloadOutlined />}
+            >
               <></>
             </Button>,
           ]}
