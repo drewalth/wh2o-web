@@ -18,7 +18,7 @@ import {
   AreaChartOutlined,
   EnvironmentOutlined,
   CompassOutlined,
-  DownloadOutlined,
+  ExportOutlined,
   NotificationOutlined,
   UserOutlined,
 } from '@ant-design/icons'
@@ -32,6 +32,7 @@ import {
 } from 'store/slices/river.slice'
 import { selectAppWindowWidth } from '../../store/slices/app.slice'
 import { exportReachPDF } from '../../controllers/exporter'
+import { selectUserData } from '../../store/slices/user.slice'
 
 interface RiverDetailProps {
   id: number
@@ -49,13 +50,11 @@ const RiverDetail = (props: RiverDetailProps) => {
   const loading = useAppSelector(selectRiverLoading)
   const error = useAppSelector(selectRiverError)
   const windowWidth = useAppSelector(selectAppWindowWidth)
+  const user = useAppSelector(selectUserData)
 
   const handleExport = async (reachId: number) => {
     try {
-      console.log('reachId', reachId)
-      const result = await exportReachPDF()
-      console.log(result)
-
+      const result = await exportReachPDF(reachId)
       const target = document.createElement('a')
 
       target.href = awsS3RootPath + 'reach-exports/' + result
@@ -63,8 +62,8 @@ const RiverDetail = (props: RiverDetailProps) => {
       target.download = 'true'
 
       document.querySelector('body')?.appendChild(target)
-
       ;(document.querySelector('#export-target') as HTMLLinkElement).click()
+      ;(document.querySelector('#export-target') as HTMLLinkElement).remove()
     } catch (e) {
       console.log('e', e)
     }
@@ -98,11 +97,12 @@ const RiverDetail = (props: RiverDetailProps) => {
               />
             ),
             <Button
-              title="download"
+              disabled={!user || !user.verified}
+              title="export"
               onClick={() => handleExport(props.id)}
-              icon={<DownloadOutlined />}
+              icon={<ExportOutlined />}
             >
-              <></>
+              Export
             </Button>,
           ]}
         />

@@ -1,5 +1,5 @@
 import { http } from '../lib'
 
-export const exportReachPDF = () => {
-  return http.get('/exporter/pdf').then((res) => res.data)
+export const exportReachPDF = (reachID: number) => {
+  return http.get(`/exporter/pdf?reachId=${reachID}`).then((res) => res.data)
 }
