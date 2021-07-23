@@ -98,7 +98,7 @@ export const BetaBox = (props: BetaBoxProps) => {
             {/*<Col span={6}>*/}
             {/*  <Statistic title="Quality" value={4.5} />*/}
             {/*</Col>*/}
-            <Col span={6} style={{ marginTop: 24 }}>
+            <Col span={6}>
               <Statistic
                 title="Avg Gradient"
                 value={river.averageGradient || 'N/A'}
