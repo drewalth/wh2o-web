@@ -19,7 +19,7 @@ export interface Media {
   fileName?: string
   url?: string
   id: number
-  entityType: mediaEntityType
+  mediaType: mediaEntityType
   rivers?: number
   user: number
 }

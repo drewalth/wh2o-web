@@ -8,10 +8,13 @@ import {
   Input,
   Select,
   Empty,
+  Carousel,
+  Col,
+  Row,
 } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import { useState } from 'react'
-import { CreateMediaDto, Media, MediaModel } from 'interfaces'
+import { CSSProperties, useEffect, useState } from 'react'
+import { CreateMediaDto, Media, mediaEntityType, MediaModel } from 'interfaces'
 import {
   createMediaEmbed,
   createMediaFile,
@@ -29,7 +32,7 @@ interface GalleryProps {
 }
 
 export const RiverMedia = (props: GalleryProps) => {
-  const [imagePaths, setImagePaths] = useState<Media[]>([])
+  const [imagePaths, setImagePaths] = useState<Media[]>([...props.sources])
   const [pendingFileName, setPendingFileName] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
   const [saveLoading, setSaveLoading] = useState(false)
@@ -38,13 +41,37 @@ export const RiverMedia = (props: GalleryProps) => {
   const userIsPublisher = useAppSelector(selectUserIsPublisher)
   const user = useAppSelector(selectUserData)
 
-  const handleDelete = async (id: string | number | undefined) => {
-    if (!id) return
+  // padding:56.25% 0 0 0;position:relative;
+  const VimeoVideoWrapperStyle: CSSProperties = {
+    padding: '56.25% 0 0 0',
+    position: 'relative',
+  }
+
+  const VimeoVideoStyle: CSSProperties = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  }
+
+  const contentStyle: CSSProperties = {
+    height: '500px',
+    color: '#fff',
+    lineHeight: '160px',
+    textAlign: 'center',
+    background: '#364d79',
+  }
+
+  const handleDelete = async (id: number) => {
     try {
       const result = await deleteMedia(id, props.id)
-      console.log('result', result)
+      console.log(result)
+      console.log(imagePaths)
+      setImagePaths(imagePaths.filter((img) => img.id !== result))
     } catch (e) {
       console.log('e', e)
+      message.error('Something went wrong...')
     }
   }
 
@@ -89,9 +116,9 @@ export const RiverMedia = (props: GalleryProps) => {
     name: 'file',
     accept: 'image/jpeg, image/gif, image/png',
     action: () => `${props.apiUrl}/aws-s3`,
-    headers: {
-      authorization: 'authorization-text',
-    },
+    // headers: {
+    //   authorization: "authorization-text",
+    // },
     onChange(info: any) {
       if (info.file.status !== 'uploading') {
         console.log(info.file, info.fileList)
@@ -104,6 +131,78 @@ export const RiverMedia = (props: GalleryProps) => {
       }
     },
   }
+
+  const getVimeoUrl = (url: string | undefined): string => {
+    if (!url) return ''
+
+    const urlSegments = url.split('/')
+    const videoId = urlSegments[urlSegments.length - 1]
+
+    return `https://player.vimeo.com/video/${videoId}`
+  }
+
+  const getMediaHTML = (media: Media) => {
+    switch (media.mediaType) {
+      case 'photo':
+        return (
+          <img
+            style={{ maxWidth: '100%' }}
+            key={`${media.id}`}
+            alt={media.title}
+            src={props.awsS3RootPath + media.fileName}
+          />
+        )
+      case 'youtube':
+        return (
+          <div style={VimeoVideoWrapperStyle}>
+            <iframe
+              style={VimeoVideoStyle}
+              src={media.url}
+              title="YouTube video player"
+              frameBorder="0"
+              allowFullScreen
+            />
+          </div>
+        )
+      case 'vimeo':
+        return (
+          <div style={VimeoVideoWrapperStyle}>
+            <iframe
+              src={getVimeoUrl(media.url)}
+              style={VimeoVideoStyle}
+              frameBorder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        )
+      default:
+        return <div>wut</div>
+    }
+  }
+
+  // useEffect(() => {
+  //   const existingScriptTag = document.querySelector("#vimeo-player-js");
+  //
+  //   if (imagePaths.map((el) => el.mediaType).includes(mediaEntityType.vimeo)) {
+  //     if (existingScriptTag) return;
+  //
+  //     const tag = document.createElement("script");
+  //     tag.id = "vimeo-player-js";
+  //     tag.src = "https://player.vimeo.com/api/player.js";
+  //
+  //     const parent = document.querySelector("body");
+  //
+  //     if (parent) {
+  //       parent.appendChild(tag);
+  //     }
+  //   } else {
+  //     if (existingScriptTag) {
+  //       existingScriptTag.remove();
+  //     }
+  //   }
+  // }, [imagePaths]);
+
   return (
     <>
       <Modal
@@ -173,57 +272,25 @@ export const RiverMedia = (props: GalleryProps) => {
         </Button>
       </div>
       <div>
-        {props.sources &&
-          [...props.sources, ...imagePaths]
-            .filter(
-              ({ entityType }: Media) =>
-                // @ts-ignore
-                !['vimeo', 'youtube'].includes(entityType)
-            )
-            .map((val, i) => (
-              <Card
-                extra={
-                  <Button onClick={() => handleDelete(val.id)}>Delete</Button>
-                }
-              >
-                <img
-                  style={{ maxWidth: '100%' }}
-                  key={`${val.id}-${i}`}
-                  alt={val.title}
-                  src={props.awsS3RootPath + val.fileName}
-                />
-              </Card>
-            ))}
-        {props.sources &&
-          [...props.sources, ...imagePaths]
-            // @ts-ignore
-            .filter(({ entityType }) => entityType === 'vimeo')
-            .map((vid: Media, i) => (
-              <Card
-                extra={
-                  <Button onClick={() => handleDelete(vid.id)}>Delete</Button>
-                }
-              >
-                <div
-                  key={`${vid}-${i}`}
-                  style={{ padding: '56.25% 0 0 0', position: 'relative' }}
-                >
-                  <iframe
-                    src={`${vid.url}?color=ffffff&title=0&byline=0&badge=0`}
+        <Carousel dotPosition={'bottom'}>
+          {imagePaths.length &&
+            imagePaths.map((val, i) => (
+              <div>
+                <Row style={contentStyle}>
+                  <Col
+                    span={24}
                     style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
-                    frameBorder="0"
-                    allow="autoplay; fullscreen; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-              </Card>
+                  >
+                    <div>{getMediaHTML(val)}</div>
+                  </Col>
+                </Row>
+              </div>
             ))}
+        </Carousel>
       </div>
       {!props.sources.length && !imagePaths.length && (
         <Empty description="No media" />
