@@ -274,11 +274,13 @@ export const UserReports = (props: NotificationsProps) => {
           </Form.Item>
           <Form.Item name="channel" label="Channel">
             <Select>
-              <Select.Option value="EMAIL">Email</Select.Option>
-              <Select.Option value="SMS" disabled>
+              <Select.Option value={NotificationChannel.EMAIL}>
+                Email
+              </Select.Option>
+              <Select.Option value={NotificationChannel.SMS} disabled={true}>
                 SMS
               </Select.Option>
-              <Select.Option value="PUSH" disabled>
+              <Select.Option value={NotificationChannel.PUSH} disabled>
                 Push
               </Select.Option>
             </Select>
@@ -286,14 +288,16 @@ export const UserReports = (props: NotificationsProps) => {
           <Form.Item
             name="alertTime"
             label="Notificaton Time"
-            hidden={notificationForm.interval === 'IMMEDIATE'}
+            hidden={
+              notificationForm.interval === NotificationInterval.IMMEDIATE
+            }
           >
-            <TimePicker format="HH:mm" minuteStep={30} />
+            <TimePicker format="HH:mm" minuteStep={1} />
           </Form.Item>
           <Form.Item
             name="criteria"
             label="Criteria"
-            hidden={notificationForm.interval === 'DAILY'}
+            hidden={notificationForm.interval === NotificationInterval.DAILY}
           >
             <Select>
               <Select.Option value="ABOVE">Above</Select.Option>
@@ -304,14 +308,14 @@ export const UserReports = (props: NotificationsProps) => {
           <Form.Item
             name="minimum"
             label="Minimum"
-            hidden={notificationForm.interval === 'DAILY'}
+            hidden={notificationForm.interval === NotificationInterval.DAILY}
           >
             <InputNumber min={1} />
           </Form.Item>
           <Form.Item
             name="maximum"
             label="Maximum"
-            hidden={notificationForm.interval === 'DAILY'}
+            hidden={notificationForm.interval === NotificationInterval.DAILY}
           >
             <InputNumber
               min={notificationForm.minimum}
@@ -321,12 +325,13 @@ export const UserReports = (props: NotificationsProps) => {
           <Form.Item
             name="metric"
             label="Metric"
-            hidden={notificationForm.interval === 'DAILY'}
+            hidden={notificationForm.interval === NotificationInterval.DAILY}
           >
             <Select>
-              <Select.Option value="CFS">CFS</Select.Option>
-              <Select.Option value="FT">Ft</Select.Option>
-              <Select.Option value="CMS">CMS</Select.Option>
+              <Select.Option value={GageReadingMetric.CFS}>CFS</Select.Option>
+              <Select.Option value={GageReadingMetric.FT}>Ft</Select.Option>
+              <Select.Option value={GageReadingMetric.CMS}>CMS</Select.Option>
+              <Select.Option value={GageReadingMetric.TEMP}>Temp</Select.Option>
             </Select>
           </Form.Item>
         </Form>
