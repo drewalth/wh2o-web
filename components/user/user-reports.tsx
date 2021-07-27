@@ -12,6 +12,7 @@ import {
   Select,
   Statistic,
   Table,
+  Tag,
   TimePicker,
   Tooltip,
 } from 'antd'
@@ -128,9 +129,26 @@ export const UserReports = (props: NotificationsProps) => {
 
   const getNotificationDescription = (notification: Notification) => {
     if (notification.interval !== 'IMMEDIATE') {
-      return `${notification.interval} ${notification.channel} @ ${moment(
-        notification.alertTime
-      ).format('hh:mm:ss a')}`
+      return (
+        <>
+          <Tooltip title="Interval">
+            <Tag color="cyan">{notification.interval}</Tag>
+          </Tooltip>
+          <Tooltip title="Channel">
+            <Tag color={notification.channel === 'SMS' ? 'magenta' : 'green'}>
+              {notification.channel}
+            </Tag>
+          </Tooltip>
+          <span style={{ marginRight: 8 }}>@</span>
+          <Tooltip title="Send Time">
+            <Tag>{moment(notification.alertTime).format('hh:mm:ss a')}</Tag>
+          </Tooltip>
+        </>
+      )
+
+      // return `${notification.interval} ${notification.channel} @ ${moment(
+      //   notification.alertTime
+      // ).format("hh:mm:ss a")}`;
     } else {
       return `${notification.interval} ${notification.channel} when ${notification.gages[0].name} ${notification.criteria} ${notification.minimum} ${notification.metric}`
     }
@@ -141,6 +159,7 @@ export const UserReports = (props: NotificationsProps) => {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+      render: (val: string) => val || 'Untitled',
     },
     {
       title: 'Description',
