@@ -15,6 +15,9 @@ import {
 import { UploadOutlined } from '@ant-design/icons'
 import { CSSProperties, useEffect, useState } from 'react'
 import { CreateMediaDto, Media, mediaEntityType, MediaModel } from 'interfaces'
+import { default as YouTubePlayer } from 'react-player/youtube'
+import { default as VimeoPlayer } from 'react-player/vimeo'
+
 import {
   createMediaEmbed,
   createMediaFile,
@@ -132,15 +135,6 @@ export const RiverMedia = (props: GalleryProps) => {
     },
   }
 
-  const getVimeoUrl = (url: string | undefined): string => {
-    if (!url) return ''
-
-    const urlSegments = url.split('/')
-    const videoId = urlSegments[urlSegments.length - 1]
-
-    return `https://player.vimeo.com/video/${videoId}`
-  }
-
   const getMediaHTML = (media: Media) => {
     switch (media.mediaType) {
       case 'photo':
@@ -153,55 +147,13 @@ export const RiverMedia = (props: GalleryProps) => {
           />
         )
       case 'youtube':
-        return (
-          <div style={VimeoVideoWrapperStyle}>
-            <iframe
-              style={VimeoVideoStyle}
-              src={media.url}
-              title="YouTube video player"
-              frameBorder="0"
-              allowFullScreen
-            />
-          </div>
-        )
+        return <YouTubePlayer url={media.url} />
       case 'vimeo':
-        return (
-          <div style={VimeoVideoWrapperStyle}>
-            <iframe
-              src={getVimeoUrl(media.url)}
-              style={VimeoVideoStyle}
-              frameBorder="0"
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        )
+        return <VimeoPlayer url={media.url} controls={true} />
       default:
-        return <div>wut</div>
+        return <div>unsupported format</div>
     }
   }
-
-  // useEffect(() => {
-  //   const existingScriptTag = document.querySelector("#vimeo-player-js");
-  //
-  //   if (imagePaths.map((el) => el.mediaType).includes(mediaEntityType.vimeo)) {
-  //     if (existingScriptTag) return;
-  //
-  //     const tag = document.createElement("script");
-  //     tag.id = "vimeo-player-js";
-  //     tag.src = "https://player.vimeo.com/api/player.js";
-  //
-  //     const parent = document.querySelector("body");
-  //
-  //     if (parent) {
-  //       parent.appendChild(tag);
-  //     }
-  //   } else {
-  //     if (existingScriptTag) {
-  //       existingScriptTag.remove();
-  //     }
-  //   }
-  // }, [imagePaths]);
 
   return (
     <>
