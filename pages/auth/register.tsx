@@ -15,7 +15,7 @@ import { useAppDispatch } from 'store'
 import { useEffect, useState } from 'react'
 import { CreateUserDto, Timezone } from '../../interfaces'
 import { getTimezones } from '../../controllers/timezones'
-import ReCAPTCHA from 'react-google-recaptcha'
+// import ReCAPTCHA from 'react-google-recaptcha'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 
 const layout = {
@@ -89,8 +89,7 @@ const Register = (props: RegisterProps) => {
 
   const canSave =
     Object.values(form).every((val) => val.length > 1) &&
-    timezones.map((tz) => tz.tzCode).includes(form.timezone) &&
-    isHuman
+    timezones.map((tz) => tz.tzCode).includes(form.timezone)
 
   const onSearch = (searchText: string) => {
     setOptions(
@@ -168,17 +167,17 @@ const Register = (props: RegisterProps) => {
             >
               <Input.Password />
             </Form.Item>
-            <Form.Item hidden={!reCaptchaSecret}>
-              <ReCAPTCHA
-                size="normal"
-                sitekey={reCaptchaSecret}
-                onChange={(evt) => {
-                  console.log(evt)
-                  console.log('recaptch')
-                  setIsHuman(true)
-                }}
-              />
-            </Form.Item>
+            {/*<Form.Item hidden={!reCaptchaSecret}>*/}
+            {/*  <ReCAPTCHA*/}
+            {/*    size="normal"*/}
+            {/*    sitekey={reCaptchaSecret}*/}
+            {/*    onChange={(evt) => {*/}
+            {/*      console.log(evt)*/}
+            {/*      console.log('recaptch')*/}
+            {/*      setIsHuman(true)*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*</Form.Item>*/}
             <Form.Item {...tailLayout}>
               <Button type="primary" htmlType="submit" disabled={!canSave}>
                 Submit
