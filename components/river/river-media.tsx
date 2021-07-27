@@ -23,6 +23,7 @@ import {
   createMediaFile,
   deleteMedia,
   deletePendingMedia,
+  reportMedia,
 } from 'controllers'
 import { useAppSelector } from 'store'
 import { selectUserData, selectUserIsPublisher } from 'store/slices/user.slice'
@@ -44,25 +45,14 @@ export const RiverMedia = (props: GalleryProps) => {
   const userIsPublisher = useAppSelector(selectUserIsPublisher)
   const user = useAppSelector(selectUserData)
 
-  // padding:56.25% 0 0 0;position:relative;
-  const VimeoVideoWrapperStyle: CSSProperties = {
-    padding: '56.25% 0 0 0',
-    position: 'relative',
-  }
-
-  const VimeoVideoStyle: CSSProperties = {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-  }
-
   const contentStyle: CSSProperties = {
     height: '500px',
     color: '#fff',
     lineHeight: '160px',
     textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     background: '#364d79',
   }
 
@@ -75,6 +65,15 @@ export const RiverMedia = (props: GalleryProps) => {
     } catch (e) {
       console.log('e', e)
       message.error('Something went wrong...')
+    }
+  }
+
+  const handleReportMedia = async (mediaId: number) => {
+    try {
+      await reportMedia(mediaId)
+      message.success('Media Reported')
+    } catch (e) {
+      message.error('Failed to Report')
     }
   }
 
@@ -139,15 +138,28 @@ export const RiverMedia = (props: GalleryProps) => {
     switch (media.mediaType) {
       case 'photo':
         return (
-          <img
-            style={{ maxWidth: '100%' }}
-            key={`${media.id}`}
-            alt={media.title}
-            src={props.awsS3RootPath + media.fileName}
-          />
+          <Col span={24}>
+            <img
+              style={{ maxWidth: '100%' }}
+              key={`${media.id}`}
+              alt={media.title}
+              src={props.awsS3RootPath + media.fileName}
+            />
+          </Col>
         )
       case 'youtube':
-        return <YouTubePlayer url={media.url} />
+        return (
+          <Col
+            span={24}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <YouTubePlayer url={media.url} />
+          </Col>
+        )
       case 'vimeo':
         return <VimeoPlayer url={media.url} controls={true} />
       default:
@@ -228,17 +240,8 @@ export const RiverMedia = (props: GalleryProps) => {
           {imagePaths.length &&
             imagePaths.map((val, i) => (
               <div>
-                <Row style={contentStyle}>
-                  <Col
-                    span={24}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <div>{getMediaHTML(val)}</div>
-                  </Col>
+                <Row gutter={24} style={contentStyle}>
+                  {getMediaHTML(val)}
                 </Row>
               </div>
             ))}
