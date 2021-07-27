@@ -44,8 +44,8 @@ export default function Home() {
                     color: '#fff',
                   }}
                 >
-                  Custom river flow notifications and a community driven
-                  guidebook for whitewater rivers.
+                  Download river information for offline use, track river flows,
+                  and create custom flow reports via email and SMS messaging.
                 </Typography.Text>
               </Col>
             </Row>
