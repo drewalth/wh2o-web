@@ -40,6 +40,7 @@ export const UserSettings = (props: SettingsProps) => {
     lastName: user.lastName,
     email: user.email,
     timezone: user.timezone,
+    telephone: user.telephone,
   })
 
   const [options, setOptions] = useState<{ value: string }[]>([])
@@ -158,7 +159,7 @@ export const UserSettings = (props: SettingsProps) => {
                 style={{ marginBottom: 16 }}
                 name="telephone"
                 label="Telephone"
-                help={'Required for SMS alerts.'}
+                help={'Include country code. Required for SMS alerts.'}
               >
                 <Input />
               </Form.Item>

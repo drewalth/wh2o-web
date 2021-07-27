@@ -40,6 +40,7 @@ export interface UpdateUserDto {
   lastName?: string
   email: string
   timezone: string
+  telephone?: string
 }
 
 export interface User {
