@@ -23,6 +23,8 @@ import {
   NotificationCriteria,
   NotificationInterval,
   GageReadingMetric,
+  User,
+  UpdateNotificationDto,
 } from 'interfaces'
 import { useState } from 'react'
 import {
@@ -32,7 +34,7 @@ import {
 import moment from 'moment'
 
 interface NotificationsProps {
-  userId: number
+  user: User
   notifications: Notification[]
   userGages: Gage[]
   userTimezone: string
@@ -55,7 +57,7 @@ const defaultForm: CreateNotificationDto = {
 }
 
 export const UserReports = (props: NotificationsProps) => {
-  const { userId, notifications, userGages, userVerified, userTimezone } = props
+  const { user, notifications, userGages, userVerified, userTimezone } = props
   const [modalVisible, setModalVisible] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
   const [options, setOptions] = useState<{ label: string; value: number }[]>([])
@@ -63,6 +65,8 @@ export const UserReports = (props: NotificationsProps) => {
   const [notificationForm, setNotificationForm] =
     useState<CreateNotificationDto>(defaultForm)
   const [tableData, setTableData] = useState<any[]>([...notifications])
+  const [updateNotificationForm, setUpdateNotificationForm] =
+    useState<UpdateNotificationDto>()
 
   const handleRemoveNotification = async (
     id: number,
@@ -83,7 +87,7 @@ export const UserReports = (props: NotificationsProps) => {
       setConfirmLoading(true)
       const result = await createNotification({
         ...notificationForm,
-        userId,
+        userId: user.id,
         // alertTime: moment(notificationForm.alertTime).toDate(),
       })
       setTableData([...tableData, result])
@@ -99,6 +103,13 @@ export const UserReports = (props: NotificationsProps) => {
 
   const handleCancel = () => {
     setModalVisible(false)
+    setUpdateNotificationForm(undefined)
+    setNotificationForm(defaultForm)
+  }
+
+  const initiateEdit = (report: Notification) => {
+    setUpdateNotificationForm(report)
+    setModalVisible(true)
   }
 
   const onSearch = async (evt: string) => {
@@ -236,9 +247,17 @@ export const UserReports = (props: NotificationsProps) => {
         destroyOnClose={true}
       >
         <Form
-          initialValues={notificationForm}
+          initialValues={
+            updateNotificationForm ? updateNotificationForm : notificationForm
+          }
           onValuesChange={(evt) => {
-            setNotificationForm(Object.assign({}, notificationForm, evt))
+            if (updateNotificationForm) {
+              setUpdateNotificationForm(
+                Object.assign({}, updateNotificationForm, evt)
+              )
+            } else {
+              setNotificationForm(Object.assign({}, notificationForm, evt))
+            }
           }}
         >
           <Form.Item label="Name" name="name">
@@ -277,11 +296,11 @@ export const UserReports = (props: NotificationsProps) => {
               <Select.Option value={NotificationChannel.EMAIL}>
                 Email
               </Select.Option>
-              <Select.Option value={NotificationChannel.SMS} disabled={true}>
+              <Select.Option
+                value={NotificationChannel.SMS}
+                disabled={!user.verified || !user.telephone}
+              >
                 SMS
-              </Select.Option>
-              <Select.Option value={NotificationChannel.PUSH} disabled>
-                Push
               </Select.Option>
             </Select>
           </Form.Item>
@@ -292,7 +311,7 @@ export const UserReports = (props: NotificationsProps) => {
               notificationForm.interval === NotificationInterval.IMMEDIATE
             }
           >
-            <TimePicker format="HH:mm" minuteStep={1} />
+            <TimePicker format="HH:mm" minuteStep={5} />
           </Form.Item>
           <Form.Item
             name="criteria"

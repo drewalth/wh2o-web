@@ -138,6 +138,7 @@ export const UserSettings = (props: SettingsProps) => {
               )}
             </div>
             <Form
+              layout={'vertical'}
               initialValues={userForm}
               onValuesChange={debounce(
                 (evt) => setUserForm(Object.assign({}, userForm, evt)),
@@ -151,6 +152,14 @@ export const UserSettings = (props: SettingsProps) => {
                 <Input />
               </Form.Item>
               <Form.Item name="email" label="Email" required>
+                <Input />
+              </Form.Item>
+              <Form.Item
+                style={{ marginBottom: 16 }}
+                name="telephone"
+                label="Telephone"
+                help={'Required for SMS alerts.'}
+              >
                 <Input />
               </Form.Item>
               <Form.Item name="timezone" label="Timezone" required>

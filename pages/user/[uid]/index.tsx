@@ -122,7 +122,7 @@ const index = () => {
             {activeTab === '5' && user.id && <UserSettings user={user} />}
             {activeTab === '8' && user.id && (
               <UserReports
-                userId={user.id}
+                user={user}
                 userVerified={user.verified}
                 userTimezone={user.timezone}
                 notifications={user.notifications || []}

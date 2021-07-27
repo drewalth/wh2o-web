@@ -36,6 +36,25 @@ export interface CreateNotificationDto {
   maximum?: number
 }
 
+export interface UpdateNotificationDto {
+  id: number
+  criteria: NotificationCriteria
+  gageDisabled: boolean
+  active: boolean // user paused
+  metric: GageReadingMetric
+  channel: NotificationChannel
+  interval: NotificationInterval
+  createdAt: Date
+  updatedAt: Date
+  alertTime: Date
+  name?: string
+  userId: number
+  primary: boolean
+  minimum?: number
+  maximum?: number
+  count: number
+}
+
 export interface Notification {
   id: number
   criteria: NotificationCriteria

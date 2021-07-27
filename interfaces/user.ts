@@ -21,6 +21,7 @@ export const UserModel: CreateUserDto = {
   firstName: '',
   lastName: '',
   email: '',
+  telephone: '',
   timezone: 'America/Denver',
   password: '',
 }
@@ -28,6 +29,7 @@ export const UserModel: CreateUserDto = {
 export interface CreateUserDto {
   firstName?: string
   lastName?: string
+  telephone?: string
   password: string
   email: string
   timezone: string
@@ -48,6 +50,7 @@ export interface User {
   firstName?: string
   lastName?: string
   password?: string
+  telephone?: string
   email: string
   timezone: string
   gages: Gage[]
