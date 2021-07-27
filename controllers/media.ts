@@ -27,3 +27,7 @@ export const deletePendingMedia = async (fileName: string): Promise<any> => {
     .delete(`/media/pending?fileName=${fileName}`)
     .then((res) => res.data)
 }
+
+export const reportMedia = async (mediaId: number) => {
+  return http.post(`/media/report`, { mediaId }).then((res) => res.data)
+}
