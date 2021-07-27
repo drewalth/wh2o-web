@@ -330,7 +330,7 @@ export const UserReports = (props: NotificationsProps) => {
               notificationForm.interval === NotificationInterval.IMMEDIATE
             }
           >
-            <TimePicker format="HH:mm" minuteStep={5} />
+            <TimePicker format="HH:mm" minuteStep={30} />
           </Form.Item>
           <Form.Item
             name="criteria"
