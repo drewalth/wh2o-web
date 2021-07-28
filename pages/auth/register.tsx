@@ -136,7 +136,7 @@ const Register = (props: RegisterProps) => {
       })
       if (response.ok) {
         // If the response is ok than show the success alert
-        alert('Email registered successfully')
+        await onFinish(form)
       } else {
         // Else throw an error with the message returned
         // from the API
