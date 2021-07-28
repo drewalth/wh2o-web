@@ -34,7 +34,7 @@ const Register = (props: RegisterProps) => {
   const { reCaptchaSiteKey } = props
   const [options, setOptions] = useState<{ value: string }[]>([])
   const [timezones, setTimezones] = useState<Timezone[]>([])
-  const [isHuman, setIsHuman] = useState(false)
+  const [submitLoading, setSubmitLoading] = useState(false)
   const [form, setForm] = useState<CreateUserDto>({
     email: '',
     firstName: '',
@@ -78,6 +78,7 @@ const Register = (props: RegisterProps) => {
       })
 
       if (result && result.id) {
+        setSubmitLoading(false)
         dispatch(setUser(result))
         dispatch(setUserLoading(false))
         await router.push(`/user/${result.id}`)
@@ -125,7 +126,7 @@ const Register = (props: RegisterProps) => {
       return
     }
     try {
-      console.log(captchaCode)
+      setSubmitLoading(true)
 
       const response = await fetch('/api/register', {
         method: 'POST',
@@ -217,7 +218,12 @@ const Register = (props: RegisterProps) => {
               />
             </Form.Item>
             <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit" disabled={!canSave}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                disabled={!canSave}
+                loading={submitLoading}
+              >
                 Submit
               </Button>
             </Form.Item>
