@@ -12,10 +12,10 @@ import { authRegister } from 'controllers'
 import { useRouter } from 'next/router'
 import { setUser, setUserLoading } from 'store/slices/user.slice'
 import { useAppDispatch } from 'store'
-import { useEffect, useState } from 'react'
+import { createRef, useEffect, useState } from 'react'
 import { CreateUserDto, Timezone } from '../../interfaces'
 import { getTimezones } from '../../controllers/timezones'
-// import ReCAPTCHA from 'react-google-recaptcha'
+import ReCAPTCHA from 'react-google-recaptcha'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 
 const layout = {
@@ -27,11 +27,11 @@ const tailLayout = {
 }
 
 interface RegisterProps {
-  reCaptchaSecret: string
+  reCaptchaSiteKey: string
 }
 
 const Register = (props: RegisterProps) => {
-  const { reCaptchaSecret } = props
+  const { reCaptchaSiteKey } = props
   const [options, setOptions] = useState<{ value: string }[]>([])
   const [timezones, setTimezones] = useState<Timezone[]>([])
   const [isHuman, setIsHuman] = useState(false)
@@ -44,6 +44,7 @@ const Register = (props: RegisterProps) => {
   })
   const router = useRouter()
   const dispatch = useAppDispatch()
+  const recaptchaRef = createRef<ReCAPTCHA>()
 
   const loadTimezones = async () => {
     try {
@@ -112,6 +113,46 @@ const Register = (props: RegisterProps) => {
     console.log(props)
   }, [])
 
+  const handleSubmit = (event: any) => {
+    // Execute the reCAPTCHA when the form is submitted
+    recaptchaRef?.current?.execute()
+  }
+
+  const onReCAPTCHAChange = async (captchaCode: any) => {
+    // If the reCAPTCHA code is null or undefined indicating that
+    // the reCAPTCHA was expired then return early
+    if (!captchaCode) {
+      return
+    }
+    try {
+      console.log(captchaCode)
+
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        body: JSON.stringify({ form, captcha: captchaCode }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      if (response.ok) {
+        // If the response is ok than show the success alert
+        alert('Email registered successfully')
+      } else {
+        // Else throw an error with the message returned
+        // from the API
+        const error = await response.json()
+        throw new Error(error.message)
+      }
+    } catch (error) {
+      console.log(error)
+      alert(error?.message || 'Something went wrong')
+    } finally {
+      // Reset the reCAPTCHA when the request has failed or succeeeded
+      // so that it can be executed again if user submits another email.
+      recaptchaRef?.current?.reset()
+    }
+  }
+
   return (
     <Row justify="center" gutter={24} style={{ paddingTop: 24 }}>
       <Col span={24} md={8}>
@@ -122,7 +163,7 @@ const Register = (props: RegisterProps) => {
             layout={'vertical'}
             initialValues={{ remember: true }}
             onValuesChange={(evt) => setForm(Object.assign({}, form, evt))}
-            onFinish={onFinish}
+            onFinish={handleSubmit}
             onFinishFailed={onFinishFailed}
           >
             <Form.Item label="First Name" name="firstName" required>
@@ -167,17 +208,14 @@ const Register = (props: RegisterProps) => {
             >
               <Input.Password />
             </Form.Item>
-            {/*<Form.Item hidden={!reCaptchaSecret}>*/}
-            {/*  <ReCAPTCHA*/}
-            {/*    size="normal"*/}
-            {/*    sitekey={reCaptchaSecret}*/}
-            {/*    onChange={(evt) => {*/}
-            {/*      console.log(evt)*/}
-            {/*      console.log('recaptch')*/}
-            {/*      setIsHuman(true)*/}
-            {/*    }}*/}
-            {/*  />*/}
-            {/*</Form.Item>*/}
+            <Form.Item hidden={!reCaptchaSiteKey}>
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                size="invisible"
+                sitekey={reCaptchaSiteKey}
+                onChange={onReCAPTCHAChange}
+              />
+            </Form.Item>
             <Form.Item {...tailLayout}>
               <Button type="primary" htmlType="submit" disabled={!canSave}>
                 Submit
@@ -195,7 +233,7 @@ export const getServerSideProps: GetServerSideProps = async (
 ) => {
   return {
     props: {
-      reCaptchaSecret: process.env.RECAPTCHA_SECRET || '',
+      reCaptchaSiteKey: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
     },
   }
 }
