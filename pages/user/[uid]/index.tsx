@@ -12,7 +12,7 @@ import { useRouter } from 'next/router'
 import { useUserContext } from '../../../components/Provider/UserProvider'
 import { useAppContext } from '../../../components/Provider/AppProvider'
 
-const index = () => {
+const Index = () => {
   const [activeTab, setActiveTab] = useState('1')
   const { user, requestStatus, resetUser } = useUserContext()
   const { windowWidth } = useAppContext()
@@ -130,4 +130,4 @@ const index = () => {
   )
 }
 
-export default index
+export default Index
