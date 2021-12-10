@@ -92,7 +92,7 @@ export default function Home() {
             src="https://wh2o-app.s3-us-west-1.amazonaws.com/landing-comp-02.mp4"
           />
           <p>
-            Your browser doesn't support HTML5 video. Here is a
+            {"Your browser doesn't support HTML5 video. Here is a"}
             <a href="https://wh2o-app.s3-us-west-1.amazonaws.com/landing-comp-02.mp4">
               link to the video
             </a>

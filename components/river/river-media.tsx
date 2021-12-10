@@ -238,7 +238,7 @@ export const RiverMedia = (props: GalleryProps) => {
         <Carousel dotPosition={'bottom'}>
           {imagePaths.length &&
             imagePaths.map((val, i) => (
-              <div>
+              <div key={i}>
                 <Row gutter={24} style={contentStyle}>
                   {getMediaHTML(val)}
                 </Row>

@@ -197,7 +197,9 @@ const Rivers = (props: RiversProps) => {
                       <Select.Option value="">--</Select.Option>
                       {props.activeCountries &&
                         props.activeCountries.map((c) => (
-                          <Select.Option value={c.code}>{c.name}</Select.Option>
+                          <Select.Option key={c.code} value={c.code}>
+                            {c.name}
+                          </Select.Option>
                         ))}
                     </Select>
                   </Form.Item>
@@ -226,7 +228,9 @@ const Rivers = (props: RiversProps) => {
             <Select>
               {props.countriesList &&
                 props.countriesList.map((c) => (
-                  <Select.Option value={c.code}>{c.name}</Select.Option>
+                  <Select.Option key={c.code} value={c.code}>
+                    {c.name}
+                  </Select.Option>
                 ))}
             </Select>
           </Form.Item>

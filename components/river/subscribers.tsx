@@ -11,7 +11,10 @@ export const Subscribers = (props: SubscribersProps) => {
     <>
       {subscribers.length ? (
         subscribers.map((sub) => (
-          <Tag color="magenta">{`${sub.firstName} ${sub.lastName}`}</Tag>
+          <Tag
+            key={sub.firstName}
+            color="magenta"
+          >{`${sub.firstName} ${sub.lastName}`}</Tag>
         ))
       ) : (
         <Empty description="No subscribers" />

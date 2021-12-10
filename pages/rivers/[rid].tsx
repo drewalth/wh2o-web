@@ -90,6 +90,7 @@ const RiverDetail = (props: RiverDetailProps) => {
               />
             ),
             <Button
+              key={'export'}
               disabled={!user || !user.verified}
               title="export"
               onClick={() => handleExport(props.id)}

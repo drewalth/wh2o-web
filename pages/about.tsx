@@ -30,13 +30,16 @@ const About = (props: AboutProps) => {
             href={`https://github.com/drewalth/wh2o-docker/issues/${val.number}`}
             target="_blank"
             style={{ marginRight: 8 }}
+            rel="noreferrer"
           >
             {title}
           </a>
 
           {!!val.labels.length &&
-            val.labels.map((label: any) => (
-              <Tag color={`#${label.color}`}>{label.name}</Tag>
+            val.labels.map((label: any, index: number) => (
+              <Tag key={index} color={`#${label.color}`}>
+                {label.name}
+              </Tag>
             ))}
         </>
       ),
@@ -54,13 +57,14 @@ const About = (props: AboutProps) => {
                 Bug reports, feature requests and general To-Dos. To submit a
                 ticket or weight-in on a potential new feature, please create an
                 account with{' '}
-                <a href="https://github.com/" target="_blank">
+                <a href="https://github.com/" target="_blank" rel="noreferrer">
                   GitHub
                 </a>{' '}
                 and visit the{' '}
                 <a
                   href="https://github.com/drewalth/wh2o-docker/issues"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   issue board
                 </a>

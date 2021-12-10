@@ -136,7 +136,9 @@ export const Features = (props: FeaturesProps) => {
           <Form.Item name="class" label="Class">
             <Select>
               {GradeRatings.map((rating) => (
-                <Select.Option value={rating}>{rating}</Select.Option>
+                <Select.Option key={rating} value={rating}>
+                  {rating}
+                </Select.Option>
               ))}
             </Select>
           </Form.Item>
@@ -203,9 +205,10 @@ export const Features = (props: FeaturesProps) => {
         </Button>
       </div>
       {features &&
-        features.length &&
+        features.length > 0 &&
         features.map((feat) => (
           <Card
+            key={feat.name}
             title={feat.name}
             style={{ marginBottom: 24 }}
             extra={

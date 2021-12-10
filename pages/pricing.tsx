@@ -15,7 +15,11 @@ const Pricing = () => {
               title={'Premium'}
               extra={<h1>$0.99/m</h1>}
               actions={[
-                <form action="/api/checkout_sessions" method="POST">
+                <form
+                  key={'form'}
+                  action="/api/checkout_sessions"
+                  method="POST"
+                >
                   <input
                     type="hidden"
                     name="priceId"
@@ -41,7 +45,11 @@ const Pricing = () => {
               title={'Deluxe ✨'}
               extra={<h1>$4.99/m</h1>}
               actions={[
-                <form action="/api/checkout_sessions" method="POST">
+                <form
+                  key={'form-02'}
+                  action="/api/checkout_sessions"
+                  method="POST"
+                >
                   <input
                     type="hidden"
                     name="priceId"
