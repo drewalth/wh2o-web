@@ -7,7 +7,7 @@ export type UserContextData = {
   requestStatus: RequestStatus
   isPublisher: boolean
   resetUser: () => void
-  setUserData: (user:User) => void
+  setUserData: (user: User) => void
 }
 
 export const UserContext = createContext({} as UserContextData)

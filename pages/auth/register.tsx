@@ -15,7 +15,7 @@ import { CreateUserDto, Timezone } from 'types'
 import { getTimezones } from '../../controllers/timezones'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
-import {useUserContext} from "../../components/Provider/UserProvider";
+import { useUserContext } from '../../components/Provider/UserProvider'
 
 const layout = {
   labelCol: { span: 8 },
@@ -31,7 +31,7 @@ interface RegisterProps {
 
 const Register = (props: RegisterProps) => {
   const { reCaptchaSiteKey } = props
-  const {setUserData} = useUserContext()
+  const { setUserData } = useUserContext()
   const [options, setOptions] = useState<{ value: string }[]>([])
   const [timezones, setTimezones] = useState<Timezone[]>([])
   const [submitLoading, setSubmitLoading] = useState(false)

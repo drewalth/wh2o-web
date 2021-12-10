@@ -18,16 +18,16 @@ import { ContentEditor } from '../../components/content-editor'
 import debounce from 'lodash.debounce'
 import { createPost, searchRiver, updatePost } from '../../controllers'
 import { PostModel } from 'types'
-import {useUserContext} from "../../components/Provider/UserProvider";
-import {useRiversContext} from "../../components/Provider/RiversProvider";
+import { useUserContext } from '../../components/Provider/UserProvider'
+import { useRiversContext } from '../../components/Provider/RiversProvider'
 
 const Creator = () => {
   const router = useRouter()
-  const {user} = useUserContext()
+  const { user } = useUserContext()
   const [form, setForm] = useState({ ...PostModel })
   const [loading, setLoading] = useState(false)
 
-  const {rivers:cachedRivers} = useRiversContext()
+  const { rivers: cachedRivers } = useRiversContext()
   const [options, setOptions] = useState<{ label: string; value: number }[]>(
     [...cachedRivers].map((el) => ({ label: el.name, value: el.id }))
   )
