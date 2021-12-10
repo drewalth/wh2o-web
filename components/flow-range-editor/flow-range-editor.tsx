@@ -1,26 +1,17 @@
 import { Component } from 'react'
 import { Row, Col, Card, Modal, Button, Form, Input, AutoComplete } from 'antd'
-import { Notification, Gage, User } from 'interfaces'
-import { connect } from 'react-redux'
-import { RootState } from 'store'
+import { Notification, Gage, User } from 'types'
 import { createUserGageNotify } from 'controllers'
 
 interface FlowRangeEditorProps {
   userId: number
   entity: string // USER or GAGE
-  user: User
-  gages: Gage[]
 }
 
 interface FlowRangeEditorState extends Notification {
   form: any
   modalVisible: boolean
 }
-
-const mapStateToProps = (state: RootState) => ({
-  user: state.user.data,
-  gages: state.gages.data,
-})
 
 class FlowRangeEditor extends Component<
   FlowRangeEditorProps,
@@ -63,7 +54,7 @@ class FlowRangeEditor extends Component<
                 </Button>
               }
             >
-              <div>{JSON.stringify(this.props.user)}</div>
+              {/*<div>{JSON.stringify(this.props.user)}</div>*/}
             </Card>
           </Col>
         </Row>
@@ -89,4 +80,4 @@ class FlowRangeEditor extends Component<
   }
 }
 
-export default connect(mapStateToProps)(FlowRangeEditor)
+export default FlowRangeEditor

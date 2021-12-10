@@ -1,12 +1,11 @@
 import { Form, Modal, Input, Statistic, Row, Col, Divider, message } from 'antd'
 import { useState, useEffect } from 'react'
 import moment from 'moment'
-import { River } from 'interfaces'
+import { River } from 'types'
 import { updateRiver } from 'controllers'
-import { useAppDispatch, useAppSelector } from 'store'
-import { fetchRiver } from 'store/slices/river.slice'
 import { ContentEditor } from '../content-editor'
-import { selectUserIsPublisher } from '../../store/slices/user.slice'
+import { useUserContext } from '../Provider/UserProvider'
+import { useRiverContext } from '../Provider/RiverProvider'
 
 interface BetaBoxProps {
   river: River
@@ -19,8 +18,8 @@ export const BetaBox = (props: BetaBoxProps) => {
   const [formRiver, setFormRiver] = useState<River>()
   const [modalVisible, setModalVisible] = useState(false)
   const [updateLoading, setUpdateLoading] = useState(false)
-  const dispatch = useAppDispatch()
-  const userIsPublisher = useAppSelector(selectUserIsPublisher)
+  const { isPublisher } = useUserContext()
+  const { loadRiver } = useRiverContext()
 
   const getPrimaryGage = () => {
     if (!river.gages || !river.gages.length) {
@@ -43,7 +42,7 @@ export const BetaBox = (props: BetaBoxProps) => {
       setUpdateLoading(true)
       if (!formRiver) return
       await updateRiver(river.id, formRiver)
-      dispatch(fetchRiver(river.id))
+      await loadRiver(river.id)
       message.success('Reach updated')
     } catch (e) {
       console.log('e', e)
@@ -112,7 +111,7 @@ export const BetaBox = (props: BetaBoxProps) => {
       </Row>
       <Divider />
       <ContentEditor
-        disabled={!userIsPublisher}
+        disabled={!isPublisher}
         entityId={river.id}
         updateFunction={updateDescription}
         content={river.description || ''}

@@ -3,29 +3,24 @@ import { useRouter } from 'next/router'
 import { Button, Card, Checkbox, Col, Form, Input, message, Row } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { authLogin } from '../../controllers'
-import { useAppDispatch } from '../../store'
-import { setUser, setUserLoading } from '../../store/slices/user.slice'
+import {useUserContext} from "../../components/Provider/UserProvider";
 
 const Login = () => {
   const router = useRouter()
-  const dispatch = useAppDispatch()
+  const {setUserData} = useUserContext()
 
   const onFinish = async (values: any) => {
     try {
-      dispatch(setUserLoading(true))
       const result = await authLogin(values)
 
       if (result?.access_token) {
         localStorage.setItem('wh2o-auth-token', result.access_token)
-        dispatch(setUser(result.user))
-        dispatch(setUserLoading(false))
+        setUserData(result.user)
         await router.push(`/user/${result.user.id}`)
       }
     } catch (e) {
       console.log('e', e)
       message.error('Login failed...')
-    } finally {
-      dispatch(setUserLoading(false))
     }
   }
 

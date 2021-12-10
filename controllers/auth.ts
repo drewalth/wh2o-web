@@ -1,10 +1,5 @@
 import { http } from 'lib'
-import {
-  CreateUserDto,
-  User,
-  UserLogin,
-  UserLoginResponse,
-} from '../interfaces'
+import { CreateUserDto, User, UserLogin, UserLoginResponse } from 'types'
 
 export const authRegister = (data: CreateUserDto): Promise<User> => {
   return http.post(`/users`, data).then((res) => res.data)

@@ -1,5 +1,5 @@
 import { http } from 'lib'
-import { CreateMediaDto, Media } from '../interfaces'
+import { CreateMediaDto, Media } from 'types'
 
 export const createMediaEmbed = async (
   payload: CreateMediaDto

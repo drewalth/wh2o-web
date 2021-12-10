@@ -1,60 +1,34 @@
 import { Button, Layout, Menu, Tooltip, Typography } from 'antd'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useAppDispatch, useAppSelector } from 'store'
 import { FrownTwoTone } from '@ant-design/icons'
-import {
-  selectUserData,
-  setUser,
-  setUserLoading,
-} from 'store/slices/user.slice'
-import { authRefresh } from 'controllers'
 import { createElement, useEffect, useState } from 'react'
-import { selectAppWindowWidth, setWidth } from 'store/slices/app.slice'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { NavigationState } from 'pages/_app'
 import { ping } from 'controllers'
-import debounce from 'lodash.debounce'
+import { useUserContext } from '../Provider/UserProvider'
+import { useAppContext } from '../Provider/AppProvider'
 
 interface PrimaryNavProps extends NavigationState {}
 
 const PrimaryNavigation = (props: PrimaryNavProps) => {
-  const dispatch = useAppDispatch()
-  const user = useAppSelector(selectUserData)
-  const windowWidth = useAppSelector(selectAppWindowWidth)
   const [apiConnected, setApiConnected] = useState(true)
+  const { user } = useUserContext()
+  const { windowWidth } = useAppContext()
 
   const getApiStatus = async () => {
     try {
       await ping()
-      await setApiConnected(true)
+      setApiConnected(true)
     } catch (e) {
-      await setApiConnected(false)
-    }
-  }
-
-  const refreshUser = async () => {
-    try {
-      dispatch(setUserLoading(true))
-      const result = await authRefresh()
-      dispatch(setUser(result))
-    } catch (e) {
-    } finally {
-      dispatch(setUserLoading(false))
+      setApiConnected(false)
     }
   }
 
   useEffect(() => {
-    getApiStatus()
-  }, [apiConnected])
-
-  useEffect(() => {
-    refreshUser()
-    dispatch(setWidth(window.innerWidth))
-    window.addEventListener(
-      'resize',
-      debounce(() => dispatch(setWidth(window.innerWidth)), 250)
-    )
+    ;(async () => {
+      await getApiStatus()
+    })()
   }, [])
 
   return (
@@ -123,7 +97,7 @@ const PrimaryNavigation = (props: PrimaryNavProps) => {
             {/*  </Link>*/}
             {/*</Menu.Item>*/}
             <Menu.Item key="3">
-              {!user.email ? (
+              {!user ? (
                 <Link key="login" href="/auth/login">
                   <Button>Login</Button>
                 </Link>

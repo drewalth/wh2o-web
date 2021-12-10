@@ -1,5 +1,5 @@
 import { http } from 'lib'
-import { Feature } from '../interfaces'
+import { Feature } from 'types'
 
 export const createFeature = async (data: Feature) => {
   return http.post('/features', data).then((res) => res.data)

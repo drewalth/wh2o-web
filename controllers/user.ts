@@ -1,5 +1,5 @@
 import { http } from 'lib'
-import { UpdateUserDto, User } from '../interfaces'
+import { UpdateUserDto, User } from 'types'
 
 export const getUser = (id: number | string) => {
   return http.get(`/users/id/${id}`).then((res) => res.data)

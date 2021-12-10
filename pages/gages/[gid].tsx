@@ -11,7 +11,7 @@ import {
   Spin,
   Table,
 } from 'antd'
-import { Gage, GageReading, GageSource } from '../../interfaces'
+import { Gage, GageReading, GageSource } from 'types'
 import { useRouter } from 'next/router'
 import moment from 'moment'
 import { Bookmark, BookmarkEntity } from '../../components/river'

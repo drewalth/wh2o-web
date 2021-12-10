@@ -9,14 +9,13 @@ import {
   Table,
   Divider,
 } from 'antd'
-import { Gage, GageReading, GageReadingMetric } from 'interfaces'
-import { useAppSelector } from '../../store'
-import { selectUserIsPublisher } from '../../store/slices/user.slice'
+import { Gage, GageReading, GageReadingMetric } from 'types'
 import { useEffect, useState } from 'react'
 import { addGage, searchGages, getGageReadings } from 'controllers'
 import debounce from 'lodash.debounce'
 import { FlowChartV2 } from '../flow-chart/flow-chart-v2'
 import moment from 'moment'
+import { useUserContext } from '../Provider/UserProvider'
 
 interface FlowProps {
   gages: Gage[]
@@ -30,7 +29,7 @@ interface SearchOptions {
 
 export const Flow = (props: FlowProps) => {
   const { riverId } = props
-  const userIsPublisher = useAppSelector(selectUserIsPublisher)
+  const { isPublisher: userIsPublisher } = useUserContext()
   const [modalVisible, setModalVisible] = useState(false)
   const [form, setForm] = useState(0)
   const [options, setOptions] = useState<SearchOptions[]>()

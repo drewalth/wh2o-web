@@ -1,14 +1,13 @@
 import { Layout, Menu } from 'antd'
 import Link from 'next/link'
-import { useAppSelector } from 'store'
-import { selectUserData } from 'store/slices/user.slice'
-import { selectAppWindowWidth } from 'store/slices/app.slice'
 import { NavigationState } from '../../pages/_app'
+import { useUserContext } from '../Provider/UserProvider'
+import { useAppContext } from '../Provider/AppProvider'
 interface SecondaryNavigationProps extends NavigationState {}
 
 export const SecondaryNavigation = (props: SecondaryNavigationProps) => {
-  const user = useAppSelector(selectUserData)
-  const windowWidth = useAppSelector(selectAppWindowWidth)
+  const { user } = useUserContext()
+  const { windowWidth } = useAppContext()
 
   if (windowWidth > 768) {
     return <></>
@@ -42,7 +41,7 @@ export const SecondaryNavigation = (props: SecondaryNavigationProps) => {
         {/*  </Link>*/}
         {/*</Menu.Item>*/}
         <Menu.Item key="3">
-          {!user.email ? (
+          {!user ? (
             <Link key="login" href="/auth/login">
               <a>Login</a>
             </Link>

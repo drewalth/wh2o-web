@@ -1,4 +1,4 @@
-import { User } from '../../interfaces'
+import { User } from 'types'
 import { Empty, Tag } from 'antd'
 
 interface SubscribersProps {

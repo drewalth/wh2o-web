@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { renderChart } from './render-chart'
-import { FlowRange } from 'interfaces'
+import { FlowRange } from 'types'
 import { Chart } from 'chart.js'
 
 interface FlowChartV2Props {

@@ -23,16 +23,10 @@ import {
   UserOutlined,
 } from '@ant-design/icons'
 import { withRouter, NextRouter } from 'next/router'
-import { useAppDispatch, useAppSelector } from 'store'
-import {
-  fetchRiver,
-  selectRiverData,
-  selectRiverError,
-  selectRiverLoading,
-} from 'store/slices/river.slice'
-import { selectAppWindowWidth } from '../../store/slices/app.slice'
 import { exportReachPDF } from '../../controllers/exporter'
-import { selectUserData } from '../../store/slices/user.slice'
+import { useRiverContext } from '../../components/Provider/RiverProvider'
+import { useAppContext } from '../../components/Provider/AppProvider'
+import { useUserContext } from '../../components/Provider/UserProvider'
 
 interface RiverDetailProps {
   id: number
@@ -45,12 +39,9 @@ interface RiverDetailProps {
 const RiverDetail = (props: RiverDetailProps) => {
   const { id, awsS3RootPath } = props
   const [activeTab, setActiveTab] = useState('1')
-  const dispatch = useAppDispatch()
-  const river = useAppSelector(selectRiverData)
-  const loading = useAppSelector(selectRiverLoading)
-  const error = useAppSelector(selectRiverError)
-  const windowWidth = useAppSelector(selectAppWindowWidth)
-  const user = useAppSelector(selectUserData)
+  const { user } = useUserContext()
+  const { river, requestStatus, loadRiver } = useRiverContext()
+  const { windowWidth } = useAppContext()
 
   const handleExport = async (reachId: number) => {
     try {
@@ -70,7 +61,9 @@ const RiverDetail = (props: RiverDetailProps) => {
   }
 
   useEffect(() => {
-    dispatch(fetchRiver(id))
+    ;(async () => {
+      await loadRiver(id)
+    })()
   }, [id])
 
   if (!river) {
@@ -159,7 +152,11 @@ const RiverDetail = (props: RiverDetailProps) => {
                   <>
                     <RiverMap mapboxToken={props.mapboxToken} />
                     <div style={{ marginBottom: 20 }} />
-                    <BetaBox river={river} loading={loading} error={error} />
+                    <BetaBox
+                      river={river}
+                      loading={requestStatus === 'loading'}
+                      error={requestStatus === 'failure'}
+                    />
                   </>
                 )}
                 {activeTab === '2' && (

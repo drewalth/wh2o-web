@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import { Post, PostModel } from 'interfaces'
+import { Post, PostModel } from 'types'
 import { createPost, deletePost } from 'controllers'
 import { Modal, Form, Input, message, Button, Spin, Select, Empty } from 'antd'
-import { useAppSelector } from 'store'
-import { selectUserData, selectUserIsPublisher } from 'store/slices/user.slice'
+import { useUserContext } from '../Provider/UserProvider'
 
 interface BoardProps {
   reachId: number
@@ -18,13 +17,12 @@ interface BoardState {
 }
 
 export const Board = (props: BoardProps) => {
+  const { user, isPublisher } = useUserContext()
   const { reachId, posts: data } = props
-  const userIsPublisher = useAppSelector(selectUserIsPublisher)
-  const user = useAppSelector(selectUserData)
   const [form, setForm] = useState<Post>({
     ...PostModel,
     reachId,
-    userId: user.id || 0,
+    userId: user?.id || 0,
   })
   const [state, setState] = useState<BoardState>({
     loading: false,
@@ -81,7 +79,7 @@ export const Board = (props: BoardProps) => {
       >
         <Button
           type="primary"
-          disabled={!userIsPublisher}
+          disabled={!isPublisher}
           onClick={() => setState({ ...state, modalVisible: true })}
         >
           Add Post

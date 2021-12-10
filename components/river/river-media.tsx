@@ -14,7 +14,7 @@ import {
 } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { CSSProperties, useEffect, useState } from 'react'
-import { CreateMediaDto, Media, mediaEntityType, MediaModel } from 'interfaces'
+import { CreateMediaDto, Media, mediaEntityType, MediaModel } from 'types'
 import { default as YouTubePlayer } from 'react-player/youtube'
 import { default as VimeoPlayer } from 'react-player/vimeo'
 
@@ -25,8 +25,7 @@ import {
   deletePendingMedia,
   reportMedia,
 } from 'controllers'
-import { useAppSelector } from 'store'
-import { selectUserData, selectUserIsPublisher } from 'store/slices/user.slice'
+import { useUserContext } from '../Provider/UserProvider'
 
 interface GalleryProps {
   apiUrl: string
@@ -42,8 +41,7 @@ export const RiverMedia = (props: GalleryProps) => {
   const [saveLoading, setSaveLoading] = useState(false)
   const [saveError, setSaveError] = useState(false)
   const [form, setForm] = useState<CreateMediaDto>({ ...MediaModel })
-  const userIsPublisher = useAppSelector(selectUserIsPublisher)
-  const user = useAppSelector(selectUserData)
+  const { user, isPublisher: userIsPublisher } = useUserContext()
 
   const contentStyle: CSSProperties = {
     height: '500px',
@@ -89,6 +87,7 @@ export const RiverMedia = (props: GalleryProps) => {
 
   const handleOk = async () => {
     try {
+      if (!user) return
       setSaveLoading(true)
 
       let method =

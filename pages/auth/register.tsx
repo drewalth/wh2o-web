@@ -10,13 +10,12 @@ import {
 } from 'antd'
 import { authRegister } from 'controllers'
 import { useRouter } from 'next/router'
-import { setUser, setUserLoading } from 'store/slices/user.slice'
-import { useAppDispatch } from 'store'
 import { createRef, useEffect, useState } from 'react'
-import { CreateUserDto, Timezone } from '../../interfaces'
+import { CreateUserDto, Timezone } from 'types'
 import { getTimezones } from '../../controllers/timezones'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import {useUserContext} from "../../components/Provider/UserProvider";
 
 const layout = {
   labelCol: { span: 8 },
@@ -32,6 +31,7 @@ interface RegisterProps {
 
 const Register = (props: RegisterProps) => {
   const { reCaptchaSiteKey } = props
+  const {setUserData} = useUserContext()
   const [options, setOptions] = useState<{ value: string }[]>([])
   const [timezones, setTimezones] = useState<Timezone[]>([])
   const [submitLoading, setSubmitLoading] = useState(false)
@@ -43,7 +43,6 @@ const Register = (props: RegisterProps) => {
     timezone: '',
   })
   const router = useRouter()
-  const dispatch = useAppDispatch()
   const recaptchaRef = createRef<ReCAPTCHA>()
 
   const loadTimezones = async () => {
@@ -70,7 +69,6 @@ const Register = (props: RegisterProps) => {
         return
       }
 
-      dispatch(setUserLoading(true))
       const result = await authRegister({
         ...values,
         verified: false,
@@ -79,8 +77,7 @@ const Register = (props: RegisterProps) => {
 
       if (result && result.id) {
         setSubmitLoading(false)
-        dispatch(setUser(result))
-        dispatch(setUserLoading(false))
+        setUserData(result)
         await router.push(`/user/${result.id}`)
       }
       console.log(result)

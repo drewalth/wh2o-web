@@ -15,20 +15,19 @@ import { CheckCircleTwoTone, QuestionCircleOutlined } from '@ant-design/icons'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { ContentEditor } from '../../components/content-editor'
-import { useAppSelector } from '../../store'
-import { selectUserData } from '../../store/slices/user.slice'
 import debounce from 'lodash.debounce'
-import { selectRiversData } from '../../store/slices/rivers.slice'
 import { createPost, searchRiver, updatePost } from '../../controllers'
-import { PostModel } from '../../interfaces'
+import { PostModel } from 'types'
+import {useUserContext} from "../../components/Provider/UserProvider";
+import {useRiversContext} from "../../components/Provider/RiversProvider";
 
 const Creator = () => {
   const router = useRouter()
-  const user = useAppSelector(selectUserData)
+  const {user} = useUserContext()
   const [form, setForm] = useState({ ...PostModel })
   const [loading, setLoading] = useState(false)
 
-  const cachedRivers = useAppSelector(selectRiversData)
+  const {rivers:cachedRivers} = useRiversContext()
   const [options, setOptions] = useState<{ label: string; value: number }[]>(
     [...cachedRivers].map((el) => ({ label: el.name, value: el.id }))
   )
@@ -43,7 +42,7 @@ const Creator = () => {
 
   const handleCreatePost = async (title: string) => {
     try {
-      if (!user.id || form.reachId === 1) return
+      if (!user || form.reachId === 1) return
 
       const payload = form
 

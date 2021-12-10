@@ -1,4 +1,4 @@
-import { Timezone, UpdateUserDto, User, UserModel } from 'interfaces'
+import { Timezone, UpdateUserDto, User, UserModel } from 'types'
 import {
   Row,
   Col,
@@ -14,13 +14,12 @@ import {
   AutoComplete,
 } from 'antd'
 import { useEffect, useState } from 'react'
-import { useAppDispatch } from 'store'
-import { fetchUser, resetUser } from 'store/slices/user.slice'
 import { deleteUser, updateUser } from 'controllers'
 import { useRouter } from 'next/router'
 import { getTimezones } from '../../controllers/timezones'
 import debounce from 'lodash.debounce'
 import { CheckCircleTwoTone } from '@ant-design/icons'
+import {useUserContext} from "../Provider/UserProvider";
 
 interface SettingsProps {
   user: User
@@ -29,7 +28,7 @@ interface SettingsProps {
 export const UserSettings = (props: SettingsProps) => {
   const { user } = props
   const router = useRouter()
-  const dispatch = useAppDispatch()
+  const {loadUser, resetUser} = useUserContext()
   const [modalVisible, setModalVisible] = useState(false)
   const [confirmInput, setConfirmInput] = useState('')
   const [deleteLoading, setDeleteLoading] = useState(false)
@@ -76,7 +75,7 @@ export const UserSettings = (props: SettingsProps) => {
         setModalVisible(false)
         message.success('Account Deleted.')
         localStorage.removeItem('wh2o-auth-token')
-        dispatch(resetUser(UserModel))
+        resetUser()
         await router.push('/')
       }
     } catch (e) {
@@ -92,7 +91,7 @@ export const UserSettings = (props: SettingsProps) => {
       const result = await updateUser(user.id, userForm)
 
       if (result) {
-        dispatch(fetchUser(user.id))
+        await loadUser(user.id)
       }
     } catch (e) {
       console.log('e', e)

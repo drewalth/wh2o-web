@@ -1,4 +1,4 @@
-import { Gage, GageReading, GageSource } from 'interfaces'
+import { Gage, GageReading, GageSource } from 'types'
 import { getGage } from 'controllers'
 import { useEffect, useRef, useState } from 'react'
 import { Button, Card } from 'antd'

@@ -1,11 +1,10 @@
-import { Gage, GageReading } from 'interfaces'
+import { Gage, GageReading } from 'types'
 import { AutoComplete, Button, Card, Form, message, Modal, Table } from 'antd'
 import moment from 'moment'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from 'store'
-import { fetchGages, selectGagesData } from 'store/slices/gages.slice'
 import { removeBookmarkGage, searchGages, userBookmarkGage } from 'controllers'
+import {useGagesContext} from "../Provider/GagesProvider";
 
 interface UserGagesProps {
   gages: Gage[]
@@ -13,9 +12,8 @@ interface UserGagesProps {
 }
 
 export const UserGages = (props: UserGagesProps) => {
-  const { gages, userId } = props
-  const dispatch = useAppDispatch()
-  const cachedGages = useAppSelector(selectGagesData)
+  const { gages: userGages, userId } = props
+  const {gages, loadGages} = useGagesContext()
   const [modalVisible, setModalVisible] = useState(false)
   const [saveEnabled, setSaveEnabled] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
@@ -120,7 +118,7 @@ export const UserGages = (props: UserGagesProps) => {
       const result = await userBookmarkGage(
         userId,
         formBookmarkGage,
-        !gages.length
+        !userGages.length
       )
       setRecentlyAdded([...recentlyAdded, result])
       message.success('Gage Bookmarked')
@@ -158,10 +156,12 @@ export const UserGages = (props: UserGagesProps) => {
   }
 
   useEffect(() => {
-    if (!cachedGages.length) {
-      dispatch(fetchGages())
-      onSearch('')
-    }
+    (async () => {
+      if (!gages.length) {
+        await loadGages()
+        await onSearch('')
+      }
+    })()
   }, [])
 
   return (

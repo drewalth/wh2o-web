@@ -6,10 +6,11 @@ import {
   removeBookmarkGage,
   userBookmarkGage,
 } from 'controllers'
-import { useAppDispatch, useAppSelector } from 'store'
-import { fetchUser, selectUserData } from 'store/slices/user.slice'
+// import { useAppDispatch, useAppSelector } from 'store'
+// import { fetchUser, selectUserData } from 'store/slices/user.slice'
 import { useEffect, useState } from 'react'
-import { Gage, River } from '../../interfaces'
+import { Gage, River } from 'types'
+import { useUserContext } from '../Provider/UserProvider'
 
 export enum BookmarkEntity {
   GAGE = 'GAGE',
@@ -22,22 +23,22 @@ interface BookMarkProps {
 }
 
 export const Bookmark = (props: BookMarkProps) => {
-  const user = useAppSelector(selectUserData)
+  const { user, loadUser } = useUserContext()
   const [buttonText, setButtonText] = useState('Bookmark')
   const [bookmarked, setBookmarked] = useState(false)
-  const dispatch = useAppDispatch()
+  // const dispatch = useAppDispatch()
 
   const checkBookmark = () => {
     let data
 
     if (props.entity === 'RIVER') {
-      data = user.reaches
+      data = user?.reaches
         ?.map((reach: River) => reach.id)
         .includes(props.entityId)
     }
 
     if (props.entity === 'GAGE') {
-      data = user.gages?.map((gage: Gage) => gage.id).includes(props.entityId)
+      data = user?.gages?.map((gage: Gage) => gage.id).includes(props.entityId)
     }
 
     setBookmarked(data || false)
@@ -51,7 +52,7 @@ export const Bookmark = (props: BookMarkProps) => {
   const handleBookmark = async () => {
     try {
       if (bookmarked) {
-        if (!user.id) return
+        if (!user) return
 
         if (props.entity === 'RIVER') {
           await removeBookmarkRiver(user.id, props.entityId)
@@ -62,17 +63,18 @@ export const Bookmark = (props: BookMarkProps) => {
         setButtonText('Bookmark')
         setBookmarked(false)
         message.success('Bookmark Removed')
-        dispatch(fetchUser(user.id))
+        await loadUser(user.id)
       } else {
+        if (!user) return
         if (props.entity === 'RIVER') {
-          await userBookmarkRiver(user.id || 0, props.entityId)
+          await userBookmarkRiver(user?.id || 0, props.entityId)
         } else if (props.entity === 'GAGE') {
-          await userBookmarkGage(user.id, props.entityId)
+          await userBookmarkGage(user?.id || 0, props.entityId)
         }
         setButtonText('Remove Bookmark')
         setBookmarked(true)
         message.success('Bookmark Added')
-        dispatch(fetchUser(user.id))
+        await loadUser(user.id)
       }
     } catch (e) {
       console.log('e', e)
@@ -85,7 +87,7 @@ export const Bookmark = (props: BookMarkProps) => {
       onClick={() => handleBookmark()}
       key="1"
       type="dashed"
-      disabled={!user.id}
+      disabled={!user}
       icon={<BookOutlined />}
     >
       {buttonText}
