@@ -1,5 +1,5 @@
 import { http } from 'lib'
-import { Gage, GageReading } from '../interfaces'
+import { Gage, GageReading } from 'types'
 
 export const getGages = async (): Promise<Gage[]> => {
   return http.get('/gages').then((res) => res.data)

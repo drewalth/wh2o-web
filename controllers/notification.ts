@@ -1,5 +1,5 @@
 import { http } from 'lib'
-import { CreateNotificationDto } from '../interfaces'
+import { CreateNotificationDto } from 'types'
 
 export const createNotification = async (
   payload: CreateNotificationDto

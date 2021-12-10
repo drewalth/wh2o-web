@@ -17,19 +17,14 @@ import {
 } from 'antd'
 import moment from 'moment'
 import Link from 'next/link'
-import { useAppSelector, useAppDispatch } from 'store'
-import {
-  selectRiversData,
-  selectRiversLoading,
-  fetchRivers,
-} from 'store/slices/rivers.slice'
 import debounce from 'lodash.debounce'
-import { Country, River, ReachSearchParams } from 'interfaces'
+import { Country, River, ReachSearchParams } from 'types'
 import { GetStaticProps } from 'next'
-import { selectUserIsPublisher } from 'store/slices/user.slice'
 import { createReach } from 'controllers'
 import { useRouter } from 'next/router'
-import { selectAppWindowWidth } from '../../store/slices/app.slice'
+import { useUserContext } from '../../components/Provider/UserProvider'
+import { useRiversContext } from '../../components/Provider/RiversProvider'
+import { useAppContext } from '../../components/Provider/AppProvider'
 
 const ReachFormDefaults = {
   country: 'US',
@@ -99,11 +94,10 @@ interface RiversProps {
 
 const Rivers = (props: RiversProps) => {
   const router = useRouter()
-  const dispatch = useAppDispatch()
-  const windowWidth = useAppSelector(selectAppWindowWidth)
-  const rivers = useAppSelector(selectRiversData)
-  const loading = useAppSelector(selectRiversLoading)
-  const userIsPublisher = useAppSelector(selectUserIsPublisher)
+  const { isPublisher: userIsPublisher } = useUserContext()
+  const { rivers, requestStatus, loadRivers } = useRiversContext()
+  const { windowWidth } = useAppContext()
+
   const [modalVisible, setModalVisible] = useState(false)
   const [saveLoading, setSaveLoading] = useState(false)
   const [reachForm, setReachForm] = useState({ ...ReachFormDefaults })
@@ -121,7 +115,9 @@ const Rivers = (props: RiversProps) => {
   }
 
   useEffect(() => {
-    dispatch(fetchRivers(params))
+    ;(async () => {
+      await loadRivers(params)
+    })()
   }, [params])
 
   const handleCancel = () => {
@@ -211,7 +207,7 @@ const Rivers = (props: RiversProps) => {
                 <Table
                   columns={columns}
                   dataSource={rivers}
-                  loading={loading}
+                  loading={requestStatus === 'loading'}
                 />
               </div>
             </Card>

@@ -13,17 +13,11 @@ import {
 } from 'antd'
 import moment from 'moment'
 import Link from 'next/link'
-import { useAppDispatch, useAppSelector } from 'store'
 import debounce from 'lodash.debounce'
-
-import {
-  selectGagesData,
-  fetchGages,
-  selectGagesLoading,
-} from 'store/slices/gages.slice'
 import { useRouter } from 'next/router'
-import { Gage } from '../../interfaces'
+import { Gage } from 'types'
 import { searchGages } from '../../controllers'
+import { useGagesContext } from '../../components/Provider/GagesProvider'
 
 const columns = [
   {
@@ -62,12 +56,10 @@ const columns = [
 ]
 
 const Gages = () => {
-  const dispatch = useAppDispatch()
-  const gages = useAppSelector(selectGagesData)
-  const gagesLoading = useAppSelector(selectGagesLoading)
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState('')
   const [searchResults, setSearchResults] = useState<Gage[]>()
+  const { gages, requestStatus, loadGages } = useGagesContext()
 
   const handleSearch = async () => {
     if (!searchTerm) return
@@ -81,13 +73,17 @@ const Gages = () => {
   }
 
   useEffect(() => {
-    handleSearch()
+    ;(async () => {
+      await handleSearch()
+    })()
   }, [searchTerm])
 
   useEffect(() => {
-    if (!gages.length) {
-      dispatch(fetchGages())
-    }
+    ;(async () => {
+      if (!gages.length) {
+        await loadGages()
+      }
+    })()
   }, [])
 
   return (
@@ -118,7 +114,7 @@ const Gages = () => {
               <Table
                 columns={columns}
                 dataSource={searchTerm ? searchResults : gages}
-                loading={gagesLoading}
+                loading={requestStatus === 'loading'}
               />
             </Card>
           </Col>

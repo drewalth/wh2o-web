@@ -7,35 +7,29 @@ import {
   UserGages,
   UserReports,
 } from 'components/user'
-import { useAppSelector, useAppDispatch } from 'store'
-import {
-  selectUserData,
-  selectUserLoading,
-  resetUser,
-} from 'store/slices/user.slice'
+
 import { useRouter } from 'next/router'
-import { UserModel } from 'interfaces'
-import { selectAppWindowWidth } from 'store/slices/app.slice'
-import { MenuMode } from 'antd/lib/menu'
+import {useUserContext} from "../../../components/Provider/UserProvider";
+import {useAppContext} from "../../../components/Provider/AppProvider";
 
 const index = () => {
   const [activeTab, setActiveTab] = useState('1')
-  const user = useAppSelector(selectUserData)
-  const userLoading = useAppSelector(selectUserLoading)
-  const windowWidth = useAppSelector(selectAppWindowWidth)
+  const {user, requestStatus, resetUser} = useUserContext()
+  const {windowWidth} = useAppContext()
   const router = useRouter()
-  const dispatch = useAppDispatch()
 
   const handleLogout = async () => {
     localStorage.removeItem('wh2o-auth-token')
-    dispatch(resetUser(UserModel))
+    resetUser()
     await router.push('/')
   }
 
   useEffect(() => {
-    if (!user && !userLoading) {
-      router.replace('/')
-    }
+    (async () => {
+      if (!user) {
+       await router.replace('/')
+      }
+    })()
   }, [])
 
   const menuStyle = () => {
@@ -54,7 +48,7 @@ const index = () => {
     <>
       <PageHeader
         title="Account"
-        subTitle={`${user.firstName} ${user.lastName}`}
+        subTitle={`${user?.firstName} ${user?.lastName}`}
       />
       <Layout style={{ minHeight: '40vh', padding: '0 24px' }}>
         <Layout.Sider style={{ display: windowWidth > 768 ? 'block' : 'none' }}>
@@ -77,12 +71,12 @@ const index = () => {
             </Menu.Item>
           </Menu>
         </Layout.Sider>
-        {!user && userLoading && (
+        {!user && requestStatus === 'loading' && (
           <Layout.Content>
             <Spin />
           </Layout.Content>
         )}
-        {user && !userLoading && (
+        {user && (
           <Layout.Content
             style={{ paddingLeft: windowWidth > 768 ? '24px' : 0 }}
           >

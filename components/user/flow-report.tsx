@@ -1,27 +1,25 @@
-import { Gage, User } from 'interfaces'
+import { Gage, User } from 'types'
 import { Row, Col, Button, Modal, AutoComplete, Form, Card } from 'antd'
-import { useAppDispatch, useAppSelector } from 'store'
-import { selectGagesData, fetchGages } from 'store/slices/gages.slice'
 import { useEffect, useState } from 'react'
-import { fetchUser, selectUserData } from '../../store/slices/user.slice'
 import { removeBookmarkGage, userBookmarkGage } from 'controllers'
 import { FlowChartV2 } from '../flow-chart/flow-chart-v2'
+import {useGagesContext} from "../Provider/GagesProvider";
+import {useUserContext} from "../Provider/UserProvider";
 
 interface FlowReportProps {
   gages: Gage[]
 }
 
 export const FlowReport = (props: FlowReportProps) => {
-  const dispatch = useAppDispatch()
+  const {gages, loadGages} = useGagesContext()
+  const {user, loadUser} = useUserContext()
   const userGages = props.gages
-  const gages: Gage[] = useAppSelector(selectGagesData)
   const [visible, setVisible] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
   const [options, setOptions] = useState<{ value: string }[]>(
     gages.map((gage) => ({ value: gage.name }))
   )
   const [formGageBookmark, setFormGageBookMark] = useState(0)
-  const user = useAppSelector<User>(selectUserData)
 
   const onSearch = (searchText: string) => {
     const searchPayload = !searchText
@@ -37,10 +35,10 @@ export const FlowReport = (props: FlowReportProps) => {
 
   const handleDelete = async (gageId: number) => {
     try {
-      if (!user.id) return
+      if (!user) return
       await removeBookmarkGage(user.id, gageId)
       if (user && user.id) {
-        dispatch(fetchUser(user.id))
+        await loadUser(user.id)
       }
     } catch (e) {
       console.log('e', e)
@@ -61,7 +59,7 @@ export const FlowReport = (props: FlowReportProps) => {
 
   const handleOk = async () => {
     try {
-      if (!user.id) return
+      if (!user) return
       setConfirmLoading(true)
       await userBookmarkGage(user.id, formGageBookmark, true)
     } catch (e) {
@@ -70,7 +68,7 @@ export const FlowReport = (props: FlowReportProps) => {
       setConfirmLoading(false)
       setVisible(false)
       if (user && user.id) {
-        dispatch(fetchUser(user.id))
+        await loadUser(user.id)
       }
     }
   }
@@ -80,10 +78,12 @@ export const FlowReport = (props: FlowReportProps) => {
   }
 
   useEffect(() => {
-    if (!gages.length) {
-      dispatch(fetchGages())
-      onSearch('')
-    }
+    (async () => {
+      if (!gages.length) {
+        await loadGages()
+        onSearch('')
+      }
+    })()
   }, [])
 
   const placeholderBlockStyle = {

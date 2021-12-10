@@ -26,7 +26,7 @@ import {
   GageReadingMetric,
   User,
   UpdateNotificationDto,
-} from 'interfaces'
+} from 'types'
 import { useState } from 'react'
 import {
   createNotification,

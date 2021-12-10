@@ -1,4 +1,4 @@
-import { Feature, FeatureModel } from 'interfaces'
+import { Feature, FeatureModel } from 'types'
 import { useState } from 'react'
 import {
   Card,
@@ -16,9 +16,8 @@ import {
   Typography,
 } from 'antd'
 import { createFeature, updateFeature, deleteFeature } from 'controllers'
-import { useAppSelector } from '../../store'
-import { selectUserIsPublisher } from '../../store/slices/user.slice'
 import { GradeRatings } from '../../lib'
+import { useUserContext } from '../Provider/UserProvider'
 
 interface FeaturesProps {
   features: Feature[]
@@ -32,7 +31,7 @@ export const Features = (props: FeaturesProps) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [form, setForm] = useState<Feature>({ ...FeatureModel })
   const [features, setFeatures] = useState<Feature[]>([...props.features])
-  const userIsPublisher = useAppSelector(selectUserIsPublisher)
+  const { isPublisher: userIsPublisher } = useUserContext()
 
   const handleSubmit = async () => {
     if (form.id) {

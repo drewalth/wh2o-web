@@ -1,6 +1,6 @@
 import { Col, Layout, PageHeader, Row, Card, Button } from 'antd'
 import { useRouter } from 'next/router'
-import { SubscriptionPrice } from '../interfaces'
+import { SubscriptionPrice } from 'types'
 
 const Pricing = () => {
   const router = useRouter()

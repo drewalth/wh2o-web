@@ -16,11 +16,10 @@ import {
   Form,
   AutoComplete,
 } from 'antd'
-import { River } from 'interfaces'
+import { River } from 'types'
 import moment from 'moment'
 import Link from 'next/link'
-import { useAppSelector } from 'store'
-import { selectRiversData } from 'store/slices/rivers.slice'
+import {useRiversContext} from "../Provider/RiversProvider";
 
 interface RiversProps {
   userId: number
@@ -28,12 +27,12 @@ interface RiversProps {
 }
 
 export const UserRivers = (props: RiversProps) => {
+  const {rivers:cachedRivers} = useRiversContext()
   const { userId, reaches } = props
   const [loading, setLoading] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
   const [rivers, setRivers] = useState<River[]>(reaches)
   const [bookmarkForm, setBookmarkForm] = useState(0)
-  const cachedRivers = useAppSelector(selectRiversData)
   const [options, setOptions] = useState<{ label: string; value: number }[]>(
     [...cachedRivers].map((el) => ({ label: el.name, value: el.id }))
   )

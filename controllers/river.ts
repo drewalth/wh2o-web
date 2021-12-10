@@ -1,5 +1,5 @@
 import { http } from 'lib'
-import { Gage, River, RiversMedia, ReachSearchParams } from 'interfaces'
+import { Gage, River, RiversMedia, ReachSearchParams } from 'types'
 
 export const getRivers = async (
   params: ReachSearchParams
