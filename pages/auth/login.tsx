@@ -3,11 +3,11 @@ import { useRouter } from 'next/router'
 import { Button, Card, Checkbox, Col, Form, Input, message, Row } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { authLogin } from '../../controllers'
-import {useUserContext} from "../../components/Provider/UserProvider";
+import { useUserContext } from '../../components/Provider/UserProvider'
 
 const Login = () => {
   const router = useRouter()
-  const {setUserData} = useUserContext()
+  const { setUserData } = useUserContext()
 
   const onFinish = async (values: any) => {
     try {

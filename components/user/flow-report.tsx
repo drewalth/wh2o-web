@@ -3,16 +3,16 @@ import { Row, Col, Button, Modal, AutoComplete, Form, Card } from 'antd'
 import { useEffect, useState } from 'react'
 import { removeBookmarkGage, userBookmarkGage } from 'controllers'
 import { FlowChartV2 } from '../flow-chart/flow-chart-v2'
-import {useGagesContext} from "../Provider/GagesProvider";
-import {useUserContext} from "../Provider/UserProvider";
+import { useGagesContext } from '../Provider/GagesProvider'
+import { useUserContext } from '../Provider/UserProvider'
 
 interface FlowReportProps {
   gages: Gage[]
 }
 
 export const FlowReport = (props: FlowReportProps) => {
-  const {gages, loadGages} = useGagesContext()
-  const {user, loadUser} = useUserContext()
+  const { gages, loadGages } = useGagesContext()
+  const { user, loadUser } = useUserContext()
   const userGages = props.gages
   const [visible, setVisible] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
@@ -78,7 +78,7 @@ export const FlowReport = (props: FlowReportProps) => {
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (!gages.length) {
         await loadGages()
         onSearch('')

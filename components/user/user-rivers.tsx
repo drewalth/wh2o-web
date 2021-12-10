@@ -19,7 +19,7 @@ import {
 import { River } from 'types'
 import moment from 'moment'
 import Link from 'next/link'
-import {useRiversContext} from "../Provider/RiversProvider";
+import { useRiversContext } from '../Provider/RiversProvider'
 
 interface RiversProps {
   userId: number
@@ -27,7 +27,7 @@ interface RiversProps {
 }
 
 export const UserRivers = (props: RiversProps) => {
-  const {rivers:cachedRivers} = useRiversContext()
+  const { rivers: cachedRivers } = useRiversContext()
   const { userId, reaches } = props
   const [loading, setLoading] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)

@@ -18,7 +18,7 @@ import {
 import moment from 'moment'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import {useGagesContext} from "../Provider/GagesProvider";
+import { useGagesContext } from '../Provider/GagesProvider'
 
 interface UserPostsProps {
   userId: number
@@ -27,7 +27,7 @@ interface UserPostsProps {
 
 export const UserPosts = (props: UserPostsProps) => {
   const { posts, userId } = props
-  const {gages:cachedGages, loadGages} = useGagesContext()
+  const { gages: cachedGages, loadGages } = useGagesContext()
   const [modalVisible, setModalVisible] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
   const [formBookmarkGage, setFormBookmarkGage] = useState(0)
@@ -160,7 +160,7 @@ export const UserPosts = (props: UserPostsProps) => {
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (!cachedGages.length) {
         await loadGages()
         await onSearch('')

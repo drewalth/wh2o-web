@@ -39,7 +39,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     setUser(undefined)
   }
 
-  const setUserData = (user:User) => {
+  const setUserData = (user: User) => {
     setUser(user)
   }
 
@@ -57,7 +57,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         loadUser,
         isPublisher: user ? user.role === user_role.ADMIN : false,
         resetUser,
-        setUserData
+        setUserData,
       }}
     >
       {children}

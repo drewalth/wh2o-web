@@ -19,7 +19,7 @@ import { useRouter } from 'next/router'
 import { getTimezones } from '../../controllers/timezones'
 import debounce from 'lodash.debounce'
 import { CheckCircleTwoTone } from '@ant-design/icons'
-import {useUserContext} from "../Provider/UserProvider";
+import { useUserContext } from '../Provider/UserProvider'
 
 interface SettingsProps {
   user: User
@@ -28,7 +28,7 @@ interface SettingsProps {
 export const UserSettings = (props: SettingsProps) => {
   const { user } = props
   const router = useRouter()
-  const {loadUser, resetUser} = useUserContext()
+  const { loadUser, resetUser } = useUserContext()
   const [modalVisible, setModalVisible] = useState(false)
   const [confirmInput, setConfirmInput] = useState('')
   const [deleteLoading, setDeleteLoading] = useState(false)

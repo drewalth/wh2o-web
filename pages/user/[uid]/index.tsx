@@ -9,13 +9,13 @@ import {
 } from 'components/user'
 
 import { useRouter } from 'next/router'
-import {useUserContext} from "../../../components/Provider/UserProvider";
-import {useAppContext} from "../../../components/Provider/AppProvider";
+import { useUserContext } from '../../../components/Provider/UserProvider'
+import { useAppContext } from '../../../components/Provider/AppProvider'
 
 const index = () => {
   const [activeTab, setActiveTab] = useState('1')
-  const {user, requestStatus, resetUser} = useUserContext()
-  const {windowWidth} = useAppContext()
+  const { user, requestStatus, resetUser } = useUserContext()
+  const { windowWidth } = useAppContext()
   const router = useRouter()
 
   const handleLogout = async () => {
@@ -25,9 +25,9 @@ const index = () => {
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (!user) {
-       await router.replace('/')
+        await router.replace('/')
       }
     })()
   }, [])

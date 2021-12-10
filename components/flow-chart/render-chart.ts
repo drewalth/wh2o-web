@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react'
 import moment from 'moment'
 import Chart from 'chart.js/auto'
 import { flowChartBackground } from './flow-chart-background'
