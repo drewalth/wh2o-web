@@ -11,7 +11,7 @@
     "prepare": "node ./prepare.js"
   },
   "dependencies": {
-    "@sentry/nextjs": "^6.9.0",
+    "@sentry/nextjs": "^6.16.1",
     "@stripe/stripe-js": "^1.16.0",
     "@tiptap/react": "^2.0.0-beta.52",
     "@tiptap/starter-kit": "^2.0.0-beta.52",
