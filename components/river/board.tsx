@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Post, PostModel } from 'types'
+import { Post, CreatePostDto, PostType } from 'types'
 import { createPost, deletePost } from 'controllers'
 import { Modal, Form, Input, message, Button, Spin, Select, Empty } from 'antd'
 import { useUserContext } from '../Provider/UserProvider'
@@ -19,11 +19,17 @@ interface BoardState {
 export const Board = (props: BoardProps) => {
   const { user, isPublisher } = useUserContext()
   const { reachId, posts: data } = props
-  const [form, setForm] = useState<Post>({
-    ...PostModel,
+  const defaultForm: CreatePostDto = {
     reachId,
     userId: user?.id || 0,
-  })
+    content: '',
+    postType: PostType.INFO,
+    private: false,
+    published: false,
+    subtitle: '',
+    title: '',
+  }
+  const [form, setForm] = useState<CreatePostDto>(defaultForm)
   const [state, setState] = useState<BoardState>({
     loading: false,
     error: false,
@@ -35,7 +41,7 @@ export const Board = (props: BoardProps) => {
 
   const handleCancel = () => {
     setState({ ...state, modalVisible: false })
-    setForm({ ...PostModel })
+    setForm(defaultForm)
   }
 
   const handleSave = async () => {

@@ -6,8 +6,6 @@ import {
   removeBookmarkGage,
   userBookmarkGage,
 } from 'controllers'
-// import { useAppDispatch, useAppSelector } from 'store'
-// import { fetchUser, selectUserData } from 'store/slices/user.slice'
 import { useEffect, useState } from 'react'
 import { Gage, River } from 'types'
 import { useUserContext } from '../Provider/UserProvider'

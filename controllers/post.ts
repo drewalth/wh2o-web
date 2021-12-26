@@ -1,7 +1,7 @@
 import { http } from 'lib'
-import { Post } from 'types'
+import { CreatePostDto, Post } from 'types'
 
-export const createPost = async (data: Post): Promise<Post> => {
+export const createPost = async (data: CreatePostDto): Promise<Post> => {
   return http.post('/posts', data).then((res) => res.data)
 }
 

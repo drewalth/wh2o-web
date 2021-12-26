@@ -49,7 +49,7 @@ const defaultForm: CreateNotificationDto = {
   channel: NotificationChannel.EMAIL,
   interval: NotificationInterval.DAILY,
   name: '',
-  alertTime: undefined,
+  alertTime: new Date(),
   userId: 0,
   gageId: 1,
   primary: false,

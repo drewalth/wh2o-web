@@ -1,4 +1,4 @@
-import { Gage, GageReading, GageSource } from 'types'
+import { Gage, GageReading, GageReadingMetric, GageSource } from 'types'
 import { getGage } from 'controllers'
 import { useEffect, useRef, useState } from 'react'
 import { Button, Card } from 'antd'
@@ -30,14 +30,14 @@ export const FlowChart = (props: FlowChartProps) => {
     latestReading: '',
     latitude: 0,
     longitude: 0,
-    metric: undefined,
+    metric: GageReadingMetric.CFS,
     name: '',
     readings: [],
     riverId: 0,
     siteId: '',
     source: GageSource.USGS,
     state: '',
-    updatedAt: undefined,
+    updatedAt: new Date(),
     users: [],
   })
   const [loading, setLoading] = useState(false)

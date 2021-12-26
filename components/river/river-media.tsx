@@ -1,20 +1,19 @@
 import {
-  Upload,
-  message,
   Button,
-  Card,
-  Modal,
-  Form,
-  Input,
-  Select,
-  Empty,
   Carousel,
   Col,
+  Empty,
+  Form,
+  Input,
+  message,
+  Modal,
   Row,
+  Select,
+  Upload,
 } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import { CSSProperties, useEffect, useState } from 'react'
-import { CreateMediaDto, Media, mediaEntityType, MediaModel } from 'types'
+import { CSSProperties, useState } from 'react'
+import { CreateMediaDto, Media, mediaEntityType } from 'types'
 import { default as YouTubePlayer } from 'react-player/youtube'
 import { default as VimeoPlayer } from 'react-player/vimeo'
 
@@ -35,13 +34,24 @@ interface GalleryProps {
 }
 
 export const RiverMedia = (props: GalleryProps) => {
+  const { user, isPublisher: userIsPublisher } = useUserContext()
+  const defaultForm: CreateMediaDto = {
+    reachId: props.id,
+    userId: user?.id || 0,
+    fileName: '',
+    mediaType: mediaEntityType.photo,
+    rivers: 0,
+    title: '',
+    url: '',
+    user: 0,
+  }
+
   const [imagePaths, setImagePaths] = useState<Media[]>([...props.sources])
   const [pendingFileName, setPendingFileName] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
   const [saveLoading, setSaveLoading] = useState(false)
   const [saveError, setSaveError] = useState(false)
-  const [form, setForm] = useState<CreateMediaDto>({ ...MediaModel })
-  const { user, isPublisher: userIsPublisher } = useUserContext()
+  const [form, setForm] = useState<CreateMediaDto>(defaultForm)
 
   const contentStyle: CSSProperties = {
     height: '500px',
@@ -96,12 +106,8 @@ export const RiverMedia = (props: GalleryProps) => {
       const result = await method({
         ...form,
         fileName: pendingFileName,
-        reachId: props.id,
-        userId: user.id,
-        // features
-        // pick from existing or upload new
       })
-      setForm({ ...MediaModel })
+      setForm({ ...defaultForm })
       setImagePaths([...imagePaths, result])
       setModalVisible(false)
     } catch (e) {

@@ -1,4 +1,4 @@
-import { Timezone, UpdateUserDto, User, UserModel } from 'types'
+import { Timezone, UpdateUserDto, User } from 'types'
 import {
   Row,
   Col,
@@ -102,21 +102,25 @@ export const UserSettings = (props: SettingsProps) => {
   }
 
   useEffect(() => {
-    if (
-      JSON.stringify(userForm) !==
-      JSON.stringify({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        timezone: user.timezone,
-      })
-    ) {
-      handleUpdate()
-    }
+    (async () => {
+      if (
+          JSON.stringify(userForm) !==
+          JSON.stringify({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            timezone: user.timezone,
+          })
+      ) {
+        await handleUpdate()
+      }
+    })()
   }, [userForm])
 
   useEffect(() => {
-    loadTimezones()
+    (async () => {
+      await loadTimezones()
+    })()
   }, [])
 
   return (

@@ -7,43 +7,17 @@ export enum user_role {
   EDITOR = 'EDITOR',
 }
 
-export interface UserLogin {
+export type UserLogin = {
   email: string
   password: string
 }
 
-export interface UserLoginResponse {
+export type UserLoginResponse = {
   access_token: string
   user: User
 }
 
-export const UserModel: CreateUserDto = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  telephone: '',
-  timezone: 'America/Denver',
-  password: '',
-}
-
-export interface CreateUserDto {
-  firstName?: string
-  lastName?: string
-  telephone?: string
-  password: string
-  email: string
-  timezone: string
-}
-
-export interface UpdateUserDto {
-  firstName?: string
-  lastName?: string
-  email: string
-  timezone: string
-  telephone?: string
-}
-
-export interface User {
+export type User = {
   verified: boolean
   media: Media[]
   role: user_role
@@ -58,11 +32,24 @@ export interface User {
   posts: Post[]
   reaches: River[]
   notifications: Notification[]
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt: Date
+  updatedAt: Date
 }
 
-export interface Timezone {
+export type CreateUserDto = Pick<
+  User,
+  'firstName' | 'lastName' | 'telephone' | 'password' | 'email' | 'timezone'
+>
+
+export type UpdateUserDto = {
+  firstName?: string
+  lastName?: string
+  email: string
+  timezone: string
+  telephone?: string
+}
+
+export type Timezone = {
   label: string
   tzCode: string
   name: string
@@ -82,9 +69,9 @@ export enum ClassRating {
   V = 'V',
 }
 
-export interface River {
-  gages?: Gage[]
-  posts?: Post[]
+export type River = {
+  gages: Gage[]
+  posts: Post[]
   id: number
   name: string
   section?: string
@@ -101,33 +88,14 @@ export interface River {
   createdAt: Date
 }
 
-export const RiverModel: River = {
-  id: 0,
-  name: '',
-  section: '',
-  class: ClassRating.none,
-  minimumGradient: 0,
-  maximumGradient: 0,
-  averageGradient: 0,
-  length: 0,
-  description: '',
-  features: [],
-  posts: [],
-  media: [],
-  gages: [],
-  users: [],
-  updatedAt: new Date(),
-  createdAt: new Date(),
-}
-
-export enum postType {
+export enum PostType {
   ALERT = 'ALERT',
   INFO = 'INFO',
   NEWS = 'NEWS',
   COMMENT = 'COMMENT',
 }
 
-export interface Post {
+export type Post = {
   published: boolean
   id: number
   userId: number
@@ -135,24 +103,13 @@ export interface Post {
   private: boolean
   content: string
   createdAt: Date
-  updatedAt?: Date
-  postType: postType
+  updatedAt: Date
+  postType: PostType
   title: string
   subtitle: string
 }
 
-export const PostModel: Post = {
-  id: 0,
-  userId: 0,
-  reachId: 0,
-  private: true,
-  published: false,
-  content: '',
-  createdAt: new Date(),
-  postType: postType.INFO,
-  title: '',
-  subtitle: '',
-}
+export type CreatePostDto = Omit<Post, 'id' | 'createdAt' | 'updatedAt'>
 
 export enum NotificationInterval {
   IMMEDIATE = 'IMMEDIATE',
@@ -175,41 +132,7 @@ export enum NotificationChannel {
   PUSH = 'PUSH',
 }
 
-export interface CreateNotificationDto {
-  criteria: NotificationCriteria
-  gageDisabled: boolean
-  metric: GageReadingMetric
-  channel: NotificationChannel
-  interval: NotificationInterval
-  alertTime?: Date
-  name?: string
-  userId: number
-  gageId: number
-  primary: boolean
-  minimum?: number
-  maximum?: number
-}
-
-export interface UpdateNotificationDto {
-  id: number
-  criteria: NotificationCriteria
-  gageDisabled: boolean
-  active: boolean // user paused
-  metric: GageReadingMetric
-  channel: NotificationChannel
-  interval: NotificationInterval
-  createdAt: Date
-  updatedAt: Date
-  alertTime: Date
-  name?: string
-  userId: number
-  primary: boolean
-  minimum?: number
-  maximum?: number
-  count: number
-}
-
-export interface Notification {
+export type Notification = {
   id: number
   criteria: NotificationCriteria
   gageDisabled: boolean
@@ -223,12 +146,23 @@ export interface Notification {
   alertTime: Date
   name?: string
   userId: number
+  gageId: number
   gages: Gage[]
   primary: boolean
   minimum?: number
   maximum?: number
   count: number
 }
+
+export type CreateNotificationDto = Omit<
+  Notification,
+  'createdAt' | 'deletedAt' | 'updatedAt' | 'id' | 'gages' | 'active' | 'count'
+>
+
+export type UpdateNotificationDto = Omit<
+  Notification,
+  'createdAt' | 'deletedAt' | 'updatedAt'
+>
 
 export enum mediaEntityType {
   photo = 'photo',
@@ -237,16 +171,7 @@ export enum mediaEntityType {
   youtube = 'youtube',
 }
 
-export interface CreateMediaDto {
-  title?: string
-  fileName?: string
-  url?: string
-  mediaType: mediaEntityType
-  userId: number
-  reachId: number
-}
-
-export interface Media {
+export type Media = {
   title?: string
   fileName?: string
   url?: string
@@ -254,25 +179,23 @@ export interface Media {
   mediaType: mediaEntityType
   rivers?: number
   user: number
+  createdAt: Date
+  updatedAt: Date
 }
 
-export const MediaModel: CreateMediaDto = {
-  title: '',
-  fileName: '',
-  url: '',
-  mediaType: mediaEntityType.photo,
-  userId: 0,
-  reachId: 0,
-}
+export type CreateMediaDto = { reachId: number; userId: number } & Omit<
+  Media,
+  'id' | 'createdAt' | 'updatedAt'
+>
 
-export interface RiversMedia {
+export type RiversMedia = {
   riverId: number
   mediaId: number
   primary: boolean
   key?: string
 }
 
-export interface UserRiver {
+export type UserRiver = {
   userId: number
   riverId: number
   primary: boolean
@@ -280,13 +203,13 @@ export interface UserRiver {
   updatedAt?: Date
 }
 
-export interface Country {
+export type Country = {
   id: number
   name: string
   code: string
 }
 
-export interface ReachSearchParams {
+export type ReachSearchParams = {
   name: string
   section?: string
   country: string
@@ -299,7 +222,7 @@ export enum GageReadingMetric {
   TEMP = 'TEMP',
 }
 
-export interface GageReading {
+export type GageReading = {
   reading: string
   createdAt: Date
   id: number
@@ -317,16 +240,16 @@ export enum GageSource {
   VISUAL = 'visual',
 }
 
-export interface FlowRange {}
+export type FlowRange = {}
 
-export interface ReachGages {
+export type ReachGages = {
   reachId: number
   gageId: number
   primary: boolean
 }
 
-export interface Gage {
-  metric?: GageReadingMetric
+export type Gage = {
+  metric: GageReadingMetric
   id: number
   name: string
   latestReading?: string
@@ -337,7 +260,7 @@ export interface Gage {
   longitude?: number
   source: GageSource
   createdAt: Date
-  updatedAt?: Date
+  updatedAt: Date
   riverId?: number
   readings?: GageReading[]
   flowRanges?: FlowRange[]
@@ -345,7 +268,7 @@ export interface Gage {
   ReachGages?: ReachGages
 }
 
-export interface CreateGageDto {
+export type CreateGageDto = {
   name: string
   description?: string
   siteId: string
@@ -354,10 +277,11 @@ export interface CreateGageDto {
   longitude?: number
   source: GageSource
   riverId?: number
+  metric: GageReadingMetric
 }
 
-export interface Feature {
-  id?: number
+export type Feature = {
+  id: number
   name: string
   description: string
   distance: number
@@ -380,25 +304,4 @@ export interface Feature {
   updatedAt: Date
 }
 
-export const FeatureModel: Feature = {
-  name: '',
-  description: '',
-  distance: 0,
-  reachId: 0,
-  class: ClassRating.none,
-  latitude: 0,
-  longitude: 0,
-  isRapid: true,
-  isHazard: false,
-  isPortage: false,
-  isPlayspot: false,
-  isAccessPoint: false,
-  isPutIn: false,
-  isTakeOut: false,
-  isCampsite: false,
-  isRangerStation: false,
-  isWaterfall: false,
-  isScenicOverlook: false,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-}
+export type CreateFeatureDto = Omit<Feature, 'id' | 'createdAt' | 'updatedAt'>

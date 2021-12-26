@@ -1,21 +1,12 @@
-import { useEffect, useState } from 'react'
-import { getGage } from 'controllers'
-import { GetServerSideProps } from 'next'
-import {
-  Card,
-  Col,
-  Descriptions,
-  Layout,
-  PageHeader,
-  Row,
-  Spin,
-  Table,
-} from 'antd'
-import { Gage, GageReading, GageSource } from 'types'
-import { useRouter } from 'next/router'
+import {useEffect, useState} from 'react'
+import {getGage} from 'controllers'
+import {GetServerSideProps} from 'next'
+import {Card, Col, Descriptions, Layout, PageHeader, Row, Spin, Table,} from 'antd'
+import {Gage, GageReading, GageReadingMetric, GageSource} from 'types'
+import {useRouter} from 'next/router'
 import moment from 'moment'
-import { Bookmark, BookmarkEntity } from '../../components/river'
-import { GageMap } from 'components/gage'
+import {Bookmark, BookmarkEntity} from '../../components/river'
+import {GageMap} from 'components/gage'
 
 interface GageDetailProps {
   id: string
@@ -35,14 +26,14 @@ const GageDetail = (props: GageDetailProps) => {
     latestReading: '',
     latitude: 0,
     longitude: 0,
-    metric: undefined,
+    metric: GageReadingMetric.CFS,
     name: '',
     readings: [],
     riverId: 0,
     siteId: '',
     source: GageSource.USGS,
     state: '',
-    updatedAt: undefined,
+    updatedAt: new Date(),
     users: [],
     createdAt: new Date(),
   })

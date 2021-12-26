@@ -1,21 +1,21 @@
-import { Feature, FeatureModel } from 'types'
+import { ClassRating, Feature } from 'types'
 import { useState } from 'react'
 import {
-  Card,
-  Modal,
-  Form,
-  Input,
   Button,
-  Switch,
-  message,
+  Card,
+  Col,
   Divider,
   Empty,
+  Form,
+  Input,
+  message,
+  Modal,
   Row,
-  Col,
   Select,
+  Switch,
   Typography,
 } from 'antd'
-import { createFeature, updateFeature, deleteFeature } from 'controllers'
+import { createFeature, deleteFeature, updateFeature } from 'controllers'
 import { GradeRatings } from '../../lib'
 import { useUserContext } from '../Provider/UserProvider'
 
@@ -26,10 +26,35 @@ interface FeaturesProps {
 
 export const Features = (props: FeaturesProps) => {
   let { reachId } = props
+
+  const defaultForm = {
+    class: ClassRating.none,
+    createdAt: new Date(),
+    description: '',
+    distance: 0,
+    id: 0,
+    isAccessPoint: false,
+    isCampsite: false,
+    isHazard: false,
+    isPlayspot: false,
+    isPortage: false,
+    isPutIn: false,
+    isRangerStation: false,
+    isRapid: false,
+    isScenicOverlook: false,
+    isTakeOut: false,
+    isWaterfall: false,
+    latitude: null,
+    longitude: null,
+    name: '',
+    reachId: 0,
+    updatedAt: new Date(),
+  }
+
   const [saveLoading, setSaveLoading] = useState(false)
   const [saveError, setSaveError] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
-  const [form, setForm] = useState<Feature>({ ...FeatureModel })
+  const [form, setForm] = useState<Feature>(defaultForm)
   const [features, setFeatures] = useState<Feature[]>([...props.features])
   const { isPublisher: userIsPublisher } = useUserContext()
 
@@ -94,7 +119,7 @@ export const Features = (props: FeaturesProps) => {
   }
 
   const handleCancel = async () => {
-    setForm({ ...FeatureModel })
+    setForm({ ...defaultForm })
     setModalVisible(false)
   }
 
@@ -197,7 +222,7 @@ export const Features = (props: FeaturesProps) => {
           type="primary"
           disabled={!userIsPublisher}
           onClick={() => {
-            setForm({ ...FeatureModel })
+            setForm({ ...defaultForm })
             setModalVisible(true)
           }}
         >
