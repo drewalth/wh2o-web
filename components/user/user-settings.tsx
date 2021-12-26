@@ -102,15 +102,15 @@ export const UserSettings = (props: SettingsProps) => {
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (
-          JSON.stringify(userForm) !==
-          JSON.stringify({
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            timezone: user.timezone,
-          })
+        JSON.stringify(userForm) !==
+        JSON.stringify({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          timezone: user.timezone,
+        })
       ) {
         await handleUpdate()
       }
@@ -118,7 +118,7 @@ export const UserSettings = (props: SettingsProps) => {
   }, [userForm])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       await loadTimezones()
     })()
   }, [])

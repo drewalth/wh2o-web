@@ -1,26 +1,38 @@
-import {AutoComplete, Card, Col, Divider, message, PageHeader, Row, Spin, Switch, Tooltip, Typography,} from 'antd'
-import {CheckCircleTwoTone, QuestionCircleOutlined} from '@ant-design/icons'
-import {useRouter} from 'next/router'
-import {useState} from 'react'
-import {ContentEditor} from '../../components/content-editor'
+import {
+  AutoComplete,
+  Card,
+  Col,
+  Divider,
+  message,
+  PageHeader,
+  Row,
+  Spin,
+  Switch,
+  Tooltip,
+  Typography,
+} from 'antd'
+import { CheckCircleTwoTone, QuestionCircleOutlined } from '@ant-design/icons'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { ContentEditor } from '../../components/content-editor'
 import debounce from 'lodash.debounce'
-import {createPost, searchRiver, updatePost} from '../../controllers'
-import {Post, PostType} from 'types'
-import {useUserContext} from '../../components/Provider/UserProvider'
-import {useRiversContext} from '../../components/Provider/RiversProvider'
+import { createPost, searchRiver, updatePost } from '../../controllers'
+import { Post, PostType } from 'types'
+import { useUserContext } from '../../components/Provider/UserProvider'
+import { useRiversContext } from '../../components/Provider/RiversProvider'
 
-const defaultPost:Post = {
-  content: "",
+const defaultPost: Post = {
+  content: '',
   createdAt: new Date(),
   id: 0,
   postType: PostType.INFO,
   private: false,
   published: false,
   reachId: 0,
-  subtitle: "",
-  updatedAt:new Date(),
+  subtitle: '',
+  updatedAt: new Date(),
   userId: 0,
-  title: ''
+  title: '',
 }
 
 const Creator = () => {
