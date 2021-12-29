@@ -1,11 +1,10 @@
-import React from 'react'
 import moment from 'moment'
-import Chart from 'chart.js/auto'
+import Chart, { ChartItem } from 'chart.js/auto'
 import { flowChartBackground } from './flow-chart-background'
 import { FlowRange } from 'types'
 
 export const renderChart = (
-  ctx: React.MutableRefObject<undefined>,
+  ctx: ChartItem,
   labels: string[] = [],
   data: number[] = [],
   flowRanges?: FlowRange[],
@@ -194,6 +193,6 @@ export const renderChart = (
         },
       ],
     },
-    chartOptions,
+    ...chartOptions,
   })
 }

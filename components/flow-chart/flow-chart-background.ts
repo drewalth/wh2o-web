@@ -2,6 +2,7 @@ import { Chart } from 'chart.js'
 
 // TODO make this work
 const flowChartBackground = {
+  id: 'flow-background',
   beforeDraw: (chart: Chart) => {
     // @ts-ignore
     const graphRange = chart.config._config.chartOptions.graphRange

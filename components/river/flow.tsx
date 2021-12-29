@@ -13,7 +13,7 @@ import { Gage, GageReading, GageReadingMetric } from 'types'
 import { useEffect, useState } from 'react'
 import { addGage, searchGages, getGageReadings } from 'controllers'
 import debounce from 'lodash.debounce'
-import { FlowChartV2 } from '../flow-chart/flow-chart-v2'
+import { FlowChart } from '../flow-chart/flow-chart'
 import moment from 'moment'
 import { useUserContext } from '../Provider/UserProvider'
 
@@ -137,14 +137,14 @@ export const Flow = (props: FlowProps) => {
         }}
       >
         {!!activeGage && (
-          <Select value={activeGage} onSelect={(evt) => setActiveGage(evt)}>
+          <Select
+            value={activeGage}
+            onSelect={(evt) => setActiveGage(evt as number)}
+          >
             {gages.map((gage, index) => (
-              <>
-                {/* @ts-ignore */}
-                <Select.Option key={index} value={gage.id}>
-                  {gage.name}
-                </Select.Option>
-              </>
+              <Select.Option key={index} value={gage.id}>
+                {gage.name}
+              </Select.Option>
             ))}
           </Select>
         )}
@@ -157,14 +157,15 @@ export const Flow = (props: FlowProps) => {
         </Button>
       </div>
       <div>
-        {!!gages.length && (
+        {gages.length !== 0 ? (
           <>
-            <FlowChartV2 readings={readings} labels={labels} flowRanges={[]} />
+            <FlowChart readings={readings} labels={labels} flowRanges={[]} />
             <Divider style={{ marginTop: 64 }} />
             <Table dataSource={tableData} columns={tableColumns} />
           </>
+        ) : (
+          <Empty description="No gages" />
         )}
-        {!gages.length && <Empty description="No gages" />}
       </div>
       <Modal visible={modalVisible} onCancel={handleCancel} onOk={handleOk}>
         <Form initialValues={{ term: '' }}>

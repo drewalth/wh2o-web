@@ -2,7 +2,7 @@ import { Gage, User } from 'types'
 import { Row, Col, Button, Modal, AutoComplete, Form, Card } from 'antd'
 import { useEffect, useState } from 'react'
 import { removeBookmarkGage, userBookmarkGage } from 'controllers'
-import { FlowChartV2 } from '../flow-chart/flow-chart-v2'
+import { FlowChart } from '../flow-chart/flow-chart'
 import { useGagesContext } from '../Provider/GagesProvider'
 import { useUserContext } from '../Provider/UserProvider'
 
@@ -112,7 +112,7 @@ export const FlowReport = (props: FlowReportProps) => {
                 </>
               }
             >
-              <FlowChartV2 readings={[]} labels={[]} flowRanges={[]} />
+              <FlowChart readings={[]} labels={[]} flowRanges={[]} />
             </Card>
           ) : (
             <div style={placeholderBlockStyle}>
