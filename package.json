@@ -54,7 +54,7 @@
     "pre-commit": "npm run format"
   },
   "engines": {
-    "node": "16.x",
-    "npm": "8.x"
+    "node": "14.x",
+    "npm": "6.x"
   }
 }
