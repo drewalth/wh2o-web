@@ -30,7 +30,7 @@ export default async function handler(req: NextRequest, res: NextApiResponse) {
               'Content-Type':
                 'application/x-www-form-urlencoded; charset=utf-8',
             },
-          }
+          },
         )
         .then((res) => res.data)
       /**

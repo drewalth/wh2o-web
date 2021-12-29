@@ -104,7 +104,7 @@ const Gages = () => {
               <Form
                 onValuesChange={debounce(
                   ({ term }) => setSearchTerm(term),
-                  500
+                  500,
                 )}
               >
                 <Form.Item name="term">

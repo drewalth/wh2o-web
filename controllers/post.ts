@@ -10,7 +10,7 @@ export const updatePost = async (post: Post): Promise<Post> => {
 }
 
 export const getRiverPosts = async (
-  riverId: string | number
+  riverId: string | number,
 ): Promise<Post[]> => {
   return http.get(`/posts/river/${riverId}`).then((res) => res.data)
 }

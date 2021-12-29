@@ -7,7 +7,7 @@ export const getUser = (id: number | string) => {
 
 export const updateUser = async (
   id: number,
-  payload: UpdateUserDto
+  payload: UpdateUserDto,
 ): Promise<User> => {
   return http.patch(`/users/${id}`, payload).then((res) => res.data)
 }
@@ -15,7 +15,7 @@ export const updateUser = async (
 export const userBookmarkGage = async (
   userId: number,
   gageId: number,
-  primary = false
+  primary = false,
 ) => {
   return http
     .post('user-gages', { userId, gageId, primary })
@@ -29,7 +29,7 @@ export const removeBookmarkGage = async (userId: number, gageId: number) => {
 export const userBookmarkRiver = async (
   userId: number,
   reachId: number,
-  primary = false
+  primary = false,
 ) => {
   return http
     .post('/reach-users', { userId, reachId, primary })
@@ -38,7 +38,7 @@ export const userBookmarkRiver = async (
 
 export const removeBookmarkRiver = async (
   userId: number | undefined,
-  reachId: number
+  reachId: number,
 ) => {
   return http
     .delete(`/reach-users/${userId}/${reachId}`)

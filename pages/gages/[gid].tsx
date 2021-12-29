@@ -1,12 +1,21 @@
-import {useEffect, useState} from 'react'
-import {getGage} from 'controllers'
-import {GetServerSideProps} from 'next'
-import {Card, Col, Descriptions, Layout, PageHeader, Row, Spin, Table,} from 'antd'
-import {Gage, GageReading, GageReadingMetric, GageSource} from 'types'
-import {useRouter} from 'next/router'
+import { useEffect, useState } from 'react'
+import { getGage } from 'controllers'
+import { GetServerSideProps } from 'next'
+import {
+  Card,
+  Col,
+  Descriptions,
+  Layout,
+  PageHeader,
+  Row,
+  Spin,
+  Table,
+} from 'antd'
+import { Gage, GageReading, GageReadingMetric, GageSource } from 'types'
+import { useRouter } from 'next/router'
 import moment from 'moment'
-import {Bookmark, BookmarkEntity} from '../../components/river'
-import {GageMap} from 'components/gage'
+import { Bookmark, BookmarkEntity } from '../../components/river'
+import { GageMap } from 'components/gage'
 
 interface GageDetailProps {
   id: string

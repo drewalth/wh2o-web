@@ -86,7 +86,7 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
 
   try {
     const result = await fetch(
-      'https://api.github.com/repos/drewalth/wh2o-docker/issues'
+      'https://api.github.com/repos/drewalth/wh2o-docker/issues',
     )
       .then((res) => res.json())
       .catch((e) => {

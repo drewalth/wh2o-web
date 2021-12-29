@@ -48,9 +48,9 @@ const flowChartBackground = {
             chartArea.left,
             drawTop,
             rangeWidth,
-            drawBottom - drawTop
+            drawBottom - drawTop,
           )
-        }
+        },
       )
     }
     ctx.restore()

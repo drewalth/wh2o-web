@@ -96,9 +96,9 @@ const Register = (props: RegisterProps) => {
         ? timezones.map((tz) => ({ value: tz.tzCode }))
         : timezones
             .filter((tz) =>
-              tz.tzCode.toLowerCase().includes(searchText.toLowerCase())
+              tz.tzCode.toLowerCase().includes(searchText.toLowerCase()),
             )
-            .map((el) => ({ value: el.tzCode }))
+            .map((el) => ({ value: el.tzCode })),
     )
   }
 
@@ -232,7 +232,7 @@ const Register = (props: RegisterProps) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ) => {
   return {
     props: {

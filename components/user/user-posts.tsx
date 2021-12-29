@@ -122,7 +122,7 @@ export const UserPosts = (props: UserPostsProps) => {
       const result = await userBookmarkGage(
         userId,
         formBookmarkGage,
-        !posts.length
+        !posts.length,
       )
       setRecentlyAdded([...recentlyAdded, result])
       message.success('Gage Bookmarked')
@@ -145,7 +145,7 @@ export const UserPosts = (props: UserPostsProps) => {
     try {
       const results = await searchGages(searchText)
       setOptions(
-        results.map((val: Gage) => ({ label: val.name, value: val.id }))
+        results.map((val: Gage) => ({ label: val.name, value: val.id })),
       )
     } catch (e) {
       message.error('Failed to search...')
@@ -185,7 +185,7 @@ export const UserPosts = (props: UserPostsProps) => {
         <Table
           columns={columns}
           dataSource={[...props.posts].filter(
-            (g) => g.id && !deletedGages.includes(g.id)
+            (g) => g.id && !deletedGages.includes(g.id),
           )}
         />
       </Card>

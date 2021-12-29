@@ -122,7 +122,7 @@ const PrimaryNavigation = (props: PrimaryNavProps) => {
                 style: {
                   color: '#fff',
                 },
-              }
+              },
             )}
           </div>
         )}

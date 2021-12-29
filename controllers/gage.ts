@@ -10,7 +10,7 @@ export const getGage = async (id: string | number): Promise<Gage> => {
 }
 
 export const getGageReadings = async (
-  gageId: string | number
+  gageId: string | number,
 ): Promise<GageReading[]> => {
   return http.get(`/gage-readings/${gageId}`).then((res) => res.data)
 }

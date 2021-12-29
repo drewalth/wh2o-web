@@ -70,7 +70,7 @@ const Verify = (props: VerifyProps) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ) => {
   return {
     props: {

@@ -22,8 +22,8 @@ export const FlowChartV2 = (props: FlowChartV2Props) => {
           chartRef.current.getContext('2d'),
           labels,
           readings,
-          flowRanges
-        )
+          flowRanges,
+        ),
       )
     }
 

@@ -34,7 +34,7 @@ export const UserRivers = (props: RiversProps) => {
   const [rivers, setRivers] = useState<River[]>(reaches)
   const [bookmarkForm, setBookmarkForm] = useState(0)
   const [options, setOptions] = useState<{ label: string; value: number }[]>(
-    [...cachedRivers].map((el) => ({ label: el.name, value: el.id }))
+    [...cachedRivers].map((el) => ({ label: el.name, value: el.id })),
   )
   const onSearch = async (searchText: string) => {
     try {

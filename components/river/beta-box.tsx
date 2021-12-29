@@ -26,7 +26,7 @@ export const BetaBox = (props: BetaBoxProps) => {
       return 'N/A'
     } else if (river.gages.length) {
       const primaryGage = river.gages.find(
-        (g) => g.ReachGages && g.ReachGages.primary
+        (g) => g.ReachGages && g.ReachGages.primary,
       )
 
       if (primaryGage) {

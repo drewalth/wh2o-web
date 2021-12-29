@@ -2,7 +2,7 @@ import { http } from 'lib'
 import { Gage, River, RiversMedia, ReachSearchParams } from 'types'
 
 export const getRivers = async (
-  params: ReachSearchParams
+  params: ReachSearchParams,
 ): Promise<River[]> => {
   return http.get('/reaches', { params }).then((res) => res.data)
 }
@@ -13,7 +13,7 @@ export const getRiver = async (id: number | string): Promise<River> => {
 
 export const updateRiver = async (
   id: number | string,
-  payload: River
+  payload: River,
 ): Promise<River> => {
   return http.patch(`/reaches/${id}`, payload).then((res) => res.data)
 }

@@ -8,7 +8,7 @@ export const renderChart = (
   ctx: React.MutableRefObject<undefined>,
   labels: string[] = [],
   data: number[] = [],
-  flowRanges?: FlowRange[]
+  flowRanges?: FlowRange[],
 ) => {
   if (!ctx || !data.length) return
 

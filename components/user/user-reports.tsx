@@ -71,7 +71,7 @@ export const UserReports = (props: NotificationsProps) => {
 
   const handleRemoveNotification = async (
     id: number,
-    notification: Notification
+    notification: Notification,
   ) => {
     try {
       await deleteNotification(id, notification.gages[0].id)
@@ -272,7 +272,7 @@ export const UserReports = (props: NotificationsProps) => {
           onValuesChange={(evt) => {
             if (updateNotificationForm) {
               setUpdateNotificationForm(
-                Object.assign({}, updateNotificationForm, evt)
+                Object.assign({}, updateNotificationForm, evt),
               )
             } else {
               setNotificationForm(Object.assign({}, notificationForm, evt))

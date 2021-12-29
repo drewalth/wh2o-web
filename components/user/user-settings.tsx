@@ -49,9 +49,9 @@ export const UserSettings = (props: SettingsProps) => {
         ? timezones.map((tz) => ({ value: tz.tzCode }))
         : timezones
             .filter((tz) =>
-              tz.tzCode.toLowerCase().includes(searchText.toLowerCase())
+              tz.tzCode.toLowerCase().includes(searchText.toLowerCase()),
             )
-            .map((el) => ({ value: el.tzCode }))
+            .map((el) => ({ value: el.tzCode })),
     )
   }
 
@@ -102,15 +102,15 @@ export const UserSettings = (props: SettingsProps) => {
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (
-          JSON.stringify(userForm) !==
-          JSON.stringify({
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            timezone: user.timezone,
-          })
+        JSON.stringify(userForm) !==
+        JSON.stringify({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          timezone: user.timezone,
+        })
       ) {
         await handleUpdate()
       }
@@ -118,7 +118,7 @@ export const UserSettings = (props: SettingsProps) => {
   }, [userForm])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       await loadTimezones()
     })()
   }, [])
@@ -146,7 +146,7 @@ export const UserSettings = (props: SettingsProps) => {
               initialValues={userForm}
               onValuesChange={debounce(
                 (evt) => setUserForm(Object.assign({}, userForm, evt)),
-                500
+                500,
               )}
             >
               <Form.Item name="firstName" label="First Name">

@@ -39,7 +39,7 @@ export const Flow = (props: FlowProps) => {
   const [labels, setLabels] = useState<string[]>([])
   const [activeMetric, setActiveMetric] = useState('CFS')
   const [availableMetrics, setAvailableMetrics] = useState<GageReadingMetric[]>(
-    []
+    [],
   )
   const [tableData, setTableData] = useState<GageReading[]>([])
 
@@ -72,7 +72,7 @@ export const Flow = (props: FlowProps) => {
       setLabels(
         result
           .filter((val: GageReading) => val.metric === activeMetric)
-          .map((r) => moment(r.createdAt).format('LLL'))
+          .map((r) => moment(r.createdAt).format('LLL')),
       )
 
       const test = result
@@ -115,7 +115,7 @@ export const Flow = (props: FlowProps) => {
     try {
       const results = await searchGages(searchText)
       setOptions(
-        results.map((val: Gage) => ({ label: val.name, value: val.id }))
+        results.map((val: Gage) => ({ label: val.name, value: val.id })),
       )
     } catch (e) {
       message.error('Failed to search...')

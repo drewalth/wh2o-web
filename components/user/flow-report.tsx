@@ -17,7 +17,7 @@ export const FlowReport = (props: FlowReportProps) => {
   const [visible, setVisible] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
   const [options, setOptions] = useState<{ value: string }[]>(
-    gages.map((gage) => ({ value: gage.name }))
+    gages.map((gage) => ({ value: gage.name })),
   )
   const [formGageBookmark, setFormGageBookMark] = useState(0)
 
@@ -27,7 +27,7 @@ export const FlowReport = (props: FlowReportProps) => {
       : gages
           .map((gage) => ({ value: gage.name }))
           .filter((el) =>
-            el.value.toLowerCase().includes(searchText.toLowerCase())
+            el.value.toLowerCase().includes(searchText.toLowerCase()),
           )
 
     setOptions(searchPayload)

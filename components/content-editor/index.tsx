@@ -151,7 +151,7 @@ export const ContentEditor = (props: ContentEditorProps) => {
     1500,
     {
       maxWait: 6000,
-    }
+    },
   )
 
   const editor = useEditor(
@@ -167,7 +167,7 @@ export const ContentEditor = (props: ContentEditorProps) => {
         debouncedUpdateFunction(sanitize(editor.getHTML()))
       },
     },
-    [entityId]
+    [entityId],
   )
 
   return (

@@ -118,7 +118,7 @@ export const UserGages = (props: UserGagesProps) => {
       const result = await userBookmarkGage(
         userId,
         formBookmarkGage,
-        !userGages.length
+        !userGages.length,
       )
       setRecentlyAdded([...recentlyAdded, result])
       message.success('Gage Bookmarked')
@@ -141,7 +141,7 @@ export const UserGages = (props: UserGagesProps) => {
     try {
       const results = await searchGages(searchText)
       setOptions(
-        results.map((val: Gage) => ({ label: val.name, value: val.id }))
+        results.map((val: Gage) => ({ label: val.name, value: val.id })),
       )
     } catch (e) {
       message.error('Failed to search...')
@@ -182,7 +182,7 @@ export const UserGages = (props: UserGagesProps) => {
           <Table
             columns={columns}
             dataSource={[...props.gages, ...recentlyAdded].filter(
-              (g) => g.id && !deletedGages.includes(g.id)
+              (g) => g.id && !deletedGages.includes(g.id),
             )}
           />
         </div>
