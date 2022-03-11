@@ -26,6 +26,7 @@ function App() {
                   </div>
                 )}
               />
+              {/* @ts-ignore */}
               <GuardedRoute exact path={'/user'} component={User} authenticated={true} />
               <Route exact path={'/login'} component={AuthLogin} />
               <Route exact path={'/reach'} component={ReachTable} />

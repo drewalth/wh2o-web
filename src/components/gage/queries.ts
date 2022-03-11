@@ -31,6 +31,7 @@ query($id: Int!) {
     metric
     latestReading
     delta
+    country
     lastFetch
     updatedAt
     readings {

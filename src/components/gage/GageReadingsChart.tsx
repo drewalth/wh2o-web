@@ -1,8 +1,8 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import Chart from 'react-apexcharts';
 import { GageMetric, GageReading } from '../../types';
 import moment from 'moment';
-import { Card } from 'antd';
+import { Card, Select, Divider } from 'antd';
 
 export type GageReadingsChartProps = {
   readings: GageReading[];
@@ -13,10 +13,17 @@ export type GageReadingsChartProps = {
 export const GageReadingsChart = ({ readings, chartId, metric }: GageReadingsChartProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [chartWidth, setChartWidth] = useState(500);
+  const [activeMetric, setActiveMetric] = useState<GageMetric>(metric);
+
+  const getAvailableMetrics = () => {
+    const m = new Set(readings.map((r) => r.metric));
+
+    return [...m];
+  };
 
   const getChartData = () => {
     if (readings.length > 0) {
-      const filteredReadings = readings.filter((r) => r.metric === metric);
+      const filteredReadings = readings.filter((r) => r.metric === activeMetric);
       return {
         categories: filteredReadings.map((r) => moment(r.createdAt).format('hh:mm a')),
         data: filteredReadings.map((r) => r.value)
@@ -70,13 +77,19 @@ export const GageReadingsChart = ({ readings, chartId, metric }: GageReadingsCha
         data
       }
     ],
-    title: 'foo'
+    title: {
+      text: 'Processes',
+      align: 'left',
+      style: {
+        fontSize: '12px'
+      }
+    }
   };
 
   const handleWindowResize = () => {
     if (cardRef && cardRef.current) {
       console.log();
-      setChartWidth(cardRef.current.clientWidth - 24);
+      setChartWidth(cardRef.current.clientWidth - 32);
     }
   };
 
@@ -92,6 +105,18 @@ export const GageReadingsChart = ({ readings, chartId, metric }: GageReadingsCha
     <div ref={cardRef}>
       <Card>
         <Chart options={chart.options} series={chart.series} type="area" width={chartWidth} />
+        {readings.length > 0 && (
+          <>
+            <Divider />
+            <Select value={activeMetric} onSelect={(metric: GageMetric) => setActiveMetric(metric)}>
+              {getAvailableMetrics().map((m) => (
+                <Select.Option key={m} value={m}>
+                  {m}
+                </Select.Option>
+              ))}
+            </Select>
+          </>
+        )}
       </Card>
     </div>
   );

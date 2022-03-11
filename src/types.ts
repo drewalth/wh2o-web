@@ -263,6 +263,11 @@ export interface UpdateUserInput {
     notifications?: Nullable<number[]>;
 }
 
+export interface AddUserGageInput {
+    gageId: number;
+    userId: number;
+}
+
 export interface AuthLoginResponse {
     id: number;
     email: string;
@@ -298,6 +303,7 @@ export interface IMutation {
     removeReach(id: number): Nullable<Reach> | Promise<Nullable<Reach>>;
     createUser(createUserInput: CreateUserInput): User | Promise<User>;
     updateUser(updateUserInput: UpdateUserInput): User | Promise<User>;
+    addUserGage(addUserGageInput: AddUserGageInput): User | Promise<User>;
     removeUser(id: number): Nullable<User> | Promise<Nullable<User>>;
 }
 
@@ -350,6 +356,7 @@ export interface Gage {
     name: string;
     source: GageSource;
     siteId: string;
+    country: string;
     state?: Nullable<string>;
     metric: GageMetric;
     latestReading?: Nullable<string>;

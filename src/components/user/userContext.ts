@@ -12,6 +12,7 @@ export type UserContextData = {
   updateUser: (key: UpdateUser, value: any) => void;
   loadUser: () => Promise<LazyQueryResult<any, { email: any }>>;
   decodeJwt: () => Promise<LazyQueryResult<any, { email: any }>>;
+  addUserGage: (gageId: number) => Promise<void>;
   createNotification: (
     input: CreateNotificationInput
   ) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;

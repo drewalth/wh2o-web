@@ -120,7 +120,7 @@ export const UserNotifications = () => {
       title: 'Last Sent',
       dataIndex: 'lastSent',
       key: 'lastSent',
-      render: (lastSent: Date) => (lastSent ? lastSent : '-')
+      render: (lastSent: Date) => (lastSent ? moment(lastSent).format('lll') : '-')
     },
     {
       dataIndex: 'id',

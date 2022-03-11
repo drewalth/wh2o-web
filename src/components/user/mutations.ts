@@ -40,3 +40,11 @@ mutation ($createNotificationInput: CreateNotificationInput!) {
   }
 }
 `);
+
+export const ADD_USER_GAGE = gql(`
+mutation AddUserGage($addUserGageInput: AddUserGageInput!) {
+  addUserGage(addUserGageInput: $addUserGageInput) {
+    id
+  }
+}
+`);

@@ -11,6 +11,23 @@ query WhoAmI{
 }
 `);
 
+export const USER_GAGES = gql(`
+query User($email: String!) {
+  user(email: $email) {
+    gages {
+      id
+      name
+      latestReading
+      metric
+      updatedAt
+      readings {
+        value
+      }
+    }
+  }
+}
+`);
+
 export const USER = gql(`
 query User($email: String!) {
   user(email: $email) {
@@ -59,20 +76,20 @@ query User($email: String!) {
 }
 `);
 
-export const USER_GAGES = gql(`
-query User($email: String!) {
-  user(email: $email) {
-    id
-    gages {
-      id
-      name
-      latestReading
-      metric
-      updatedAt
-      readings {
-        value
-      }
-    }
-  }
-}
-`);
+// export const USER_GAGES = gql(`
+// query User($email: String!) {
+//   user(email: $email) {
+//     id
+//     gages {
+//       id
+//       name
+//       latestReading
+//       metric
+//       updatedAt
+//       readings {
+//         value
+//       }
+//     }
+//   }
+// }
+// `);

@@ -1,8 +1,8 @@
 import React, { ReactNode, useEffect } from 'react';
 import { UpdateUser, UserContext } from './userContext';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { USER, WHO_AM_I } from './queries';
-import { CREATE_NOTIFICATION, REMOVE_NOTIFICATION, UPDATE_USER } from './mutations';
+import { USER, USER_GAGES, WHO_AM_I } from './queries';
+import { ADD_USER_GAGE, CREATE_NOTIFICATION, REMOVE_NOTIFICATION, UPDATE_USER } from './mutations';
 import { CreateNotificationInput, User } from '../../types';
 
 type UserProviderProps = {
@@ -19,8 +19,26 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   const [handleUpdate] = useMutation<User>(UPDATE_USER);
   const [handleRemoveNotification] = useMutation(REMOVE_NOTIFICATION);
   const [handleCreateNotification] = useMutation(CREATE_NOTIFICATION);
+  const [handleAddUserGage] = useMutation(ADD_USER_GAGE, {
+    refetchQueries: [USER_GAGES]
+  });
 
   const jwt = data?.whoAmI || {};
+
+  const addUserGage = async (gageId: number) => {
+    if (!userData) {
+      throw new Error('no user...');
+    }
+
+    await handleAddUserGage({
+      variables: {
+        addUserGageInput: {
+          gageId,
+          userId: userData.user.id
+        }
+      }
+    });
+  };
 
   const createNotification = (createNotificationInput: CreateNotificationInput) =>
     handleCreateNotification({
@@ -93,10 +111,13 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         loading,
         error,
         updateUser,
+        // @ts-ignore
         loadUser,
         removeNotification,
         createNotification,
-        decodeJwt
+        // @ts-ignore
+        decodeJwt,
+        addUserGage
       }}
     >
       {children}

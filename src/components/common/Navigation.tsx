@@ -2,13 +2,7 @@ import React, { ReactNode } from 'react';
 import { Layout, Menu, Typography } from 'antd';
 import Logo from './Logo';
 const { Content, Sider } = Layout;
-import {
-  AreaChartOutlined,
-  DashboardOutlined,
-  HeatMapOutlined,
-  LogoutOutlined,
-  LoginOutlined
-} from '@ant-design/icons';
+import { AreaChartOutlined, UserOutlined, LogoutOutlined, LoginOutlined } from '@ant-design/icons';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useUserContext } from '../user/userContext';
 import { setAuthToken } from '../auth';
@@ -44,12 +38,12 @@ export const Navigation = ({ children }: NavigationProps) => {
   const getNavItems = (): NavItem[] => {
     if (!user.loading && user.data && Object.keys(user.data).length > 0) {
       return [
+        ...defaultNavItems,
         {
           path: '/user',
-          text: 'Dashboard',
-          icon: <DashboardOutlined />
+          text: 'Account',
+          icon: <UserOutlined />
         },
-        ...defaultNavItems,
         {
           path: '/logout',
           text: 'Logout',

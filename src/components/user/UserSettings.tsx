@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useUserContext } from './userContext';
-import { Form, Input } from 'antd';
+import { Form, Input, Select } from 'antd';
 import { debounce } from 'lodash';
+import timezones from '../../helpers/timezones';
 
 export const UserSettings = () => {
-  const { data, updateUser, loading, error } = useUserContext();
-
-  const [form, setForm] = useState();
+  const { data, updateUser } = useUserContext();
 
   const debouncedUpdate = debounce(updateUser, 300);
 
@@ -15,13 +14,11 @@ export const UserSettings = () => {
   }, [data]);
 
   if (data) {
-    // return <div>{JSON.stringify(data)}</div>;
     return (
       <div>
         <Form
           initialValues={data}
           onValuesChange={(val) => {
-            console.log('val: ', Object.values(val)[0]);
             // @ts-ignore
             debouncedUpdate(Object.keys(val)[0], Object.values(val)[0]);
           }}
@@ -36,7 +33,13 @@ export const UserSettings = () => {
             <Input />
           </Form.Item>
           <Form.Item name={'timezone'} label={'Timezone'}>
-            <Input />
+            <Select>
+              {timezones.map((tz) => (
+                <Select.Option key={tz} value={tz}>
+                  {tz}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
         </Form>
       </div>

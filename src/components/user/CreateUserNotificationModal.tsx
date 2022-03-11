@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Modal, Select, InputNumber, TimePicker } from 'antd';
 import {
   CreateNotificationInput,
@@ -20,7 +20,7 @@ export type UserNotificationModalProps = {
 
 export const CreateUserNotificationModal = ({ visible, onCancel }: UserNotificationModalProps) => {
   const { data, createNotification } = useUserContext();
-  const [formData, setFormData] = useState<CreateNotificationInput>({
+  const DEFAULT_FORM = {
     active: false,
     alertTime: undefined,
     channel: NotificationChannel.EMAIL,
@@ -33,11 +33,8 @@ export const CreateUserNotificationModal = ({ visible, onCancel }: UserNotificat
     primary: false,
     userId: data?.id || 0,
     name: ''
-  });
-
-  useEffect(() => {
-    console.log('formData: ', formData);
-  }, [formData]);
+  };
+  const [formData, setFormData] = useState<CreateNotificationInput>(DEFAULT_FORM);
 
   return (
     <Modal
@@ -49,7 +46,10 @@ export const CreateUserNotificationModal = ({ visible, onCancel }: UserNotificat
         });
         onCancel();
       }}
-      onCancel={onCancel}
+      onCancel={() => {
+        setFormData(DEFAULT_FORM);
+        onCancel();
+      }}
       destroyOnClose
     >
       <Form initialValues={formData} onValuesChange={(val) => setFormData(Object.assign({}, formData, val))}>
