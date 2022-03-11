@@ -7,11 +7,13 @@ import { ReactNode } from 'react';
 import { WebSocketLink } from './WebSocketLink';
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:3000/graphql'
+  // @ts-ignore
+  uri: import.meta.env.VITE_APOLLO_SERVER
 });
 
 const wsLink = new WebSocketLink({
-  url: 'ws://localhost:3000/subscriptions',
+  // @ts-ignore
+  url: import.meta.env.VITE_APOLLO_SUBSCRIPTION || '',
   retryAttempts: 20,
   keepAlive: 10_000
 });
