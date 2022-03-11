@@ -42,7 +42,8 @@ export const CreateUserNotificationModal = ({ visible, onCancel }: UserNotificat
       onOk={async () => {
         await createNotification({
           ...formData,
-          alertTime: formData.alertTime ? moment(formData.alertTime).toDate() : undefined
+          alertTime: formData.alertTime ? moment(formData.alertTime).toDate() : undefined,
+          value: formData.value ? Number(formData.value) : null
         });
         onCancel();
       }}
