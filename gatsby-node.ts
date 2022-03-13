@@ -30,9 +30,7 @@ exports.createPages = async function ({actions}) {
             }
         })
     }
-
-    console.log(process.env.NODE_ENV)
-
+    
     if (process.env.NODE_ENV === 'development') {
         const mockGages: GagePageData[] = [...Array(10)].map((el, i) => ({
             id: i + 1,
