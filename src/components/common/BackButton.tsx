@@ -1,17 +1,17 @@
 import React from 'react';
-import { Button } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
-import { useHistory } from 'react-router-dom';
+import {Button} from 'antd';
+import {ArrowLeftOutlined} from '@ant-design/icons';
+import {navigate} from "gatsby";
 
 type BackButtonProps = {
-  path: string;
+    path: string;
 };
 
-export const BackButton = ({ path }: BackButtonProps) => {
-  const history = useHistory();
-  return (
-    <Button onClick={() => history.push(path)} size="small">
-      <ArrowLeftOutlined />
-    </Button>
-  );
+export const BackButton = ({path}: BackButtonProps) => {
+    // const history = useHistory();
+    return (
+        <Button onClick={() => navigate(path)} size="small">
+            <ArrowLeftOutlined/>
+        </Button>
+    );
 };

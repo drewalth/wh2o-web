@@ -248,6 +248,7 @@ export interface CreateUserInput {
     isActive: boolean;
     email: string;
     timezone: string;
+    password: string;
 }
 
 export interface UpdateUserInput {
@@ -277,7 +278,6 @@ export interface AuthLoginResponse {
 
 export interface IMutation {
     login(authLoginInput: AuthLoginInput): Nullable<AuthLoginResponse> | Promise<Nullable<AuthLoginResponse>>;
-    refresh(email: string): Nullable<User> | Promise<Nullable<User>>;
     createCountry(createCountryInput: CreateCountryInput): Country | Promise<Country>;
     updateCountry(updateCountryInput: UpdateCountryInput): Country | Promise<Country>;
     removeCountry(id: number): Nullable<Country> | Promise<Nullable<Country>>;
@@ -301,7 +301,7 @@ export interface IMutation {
     createReach(createReachInput: CreateReachInput): Reach | Promise<Reach>;
     updateReach(updateReachInput: UpdateReachInput): Reach | Promise<Reach>;
     removeReach(id: number): Nullable<Reach> | Promise<Nullable<Reach>>;
-    createUser(createUserInput: CreateUserInput): User | Promise<User>;
+    createUser(createUserInput: CreateUserInput): Nullable<User> | Promise<Nullable<User>>;
     updateUser(updateUserInput: UpdateUserInput): User | Promise<User>;
     addUserGage(addUserGageInput: AddUserGageInput): User | Promise<User>;
     removeUser(id: number): Nullable<User> | Promise<Nullable<User>>;
@@ -357,7 +357,7 @@ export interface Gage {
     source: GageSource;
     siteId: string;
     country: string;
-    state?: Nullable<string>;
+    state: string;
     metric: GageMetric;
     latestReading?: Nullable<string>;
     readings: GageReading[];

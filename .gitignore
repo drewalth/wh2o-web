@@ -1,10 +1,4 @@
 node_modules/
+.cache/
+public
 .DS_Store
-dist
-dist-ssr
-*.local
-coverage
-.eslintcache
-.nvmrc
-*.code-workspace
-.env
