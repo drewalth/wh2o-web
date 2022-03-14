@@ -1,7 +1,7 @@
 import React, {ReactNode, useRef, useState} from 'react';
 import {Layout, Menu, Typography} from 'antd';
 import Logo from './Logo';
-import {AreaChartOutlined, LoginOutlined, LogoutOutlined, UserOutlined} from '@ant-design/icons';
+import {AreaChartOutlined, LoginOutlined, LogoutOutlined, UserOutlined, WifiOutlined} from '@ant-design/icons';
 import {useUserContext} from '../user/userContext';
 import {setAuthToken} from '../auth';
 import {Link} from "gatsby";
@@ -28,6 +28,11 @@ const defaultNavItems: NavItem[] = [
         path: '/gages',
         text: 'Gages',
         icon: <AreaChartOutlined/>
+    },
+    {
+        path: '/status',
+        text: 'Status',
+        icon: <WifiOutlined/>
     }
 ];
 
