@@ -17,20 +17,36 @@ const loadGages = async (): Promise<Gage[]> => {
 }
 
 
-exports.createPages = async function ({actions}) {
+exports.onCreateWebpackConfig = ({stage, loaders, actions}) => {
+    if (stage === "build-html") {
+        actions.setWebpackConfig({
+            module: {
+                rules: [
+                    {
+                        test: /apexcharts/,
+                        use: loaders.null(),
+                    },
+                ],
+            },
+        })
+    }
+}
+
+exports.createPages = async function ({graphql, actions}) {
     const gages = await loadGages()
 
     const handleCreate = (gage: any) => {
         actions.createPage({
             path: `/gages/${gage.state.toLocaleLowerCase()}/${gage.id}`,
             component: path.resolve(`./src/components/gage/GageDetail.tsx`),
-            defer: true,
+            defer: false,
             context: {
                 gage
             }
         })
     }
     
+
     if (process.env.NODE_ENV === 'development') {
         const mockGages: GagePageData[] = [...Array(10)].map((el, i) => ({
             id: i + 1,
