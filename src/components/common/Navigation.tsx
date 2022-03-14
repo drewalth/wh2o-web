@@ -37,10 +37,7 @@ const defaultNavItems: NavItem[] = [
 ];
 
 export const Navigation = (props: NavigationProps) => {
-    // const history = useHistory();
-    // const location = useLocation();
-    const linkRef = useRef<Link<any>>(null)
-    const [linkPath, setLinkPath] = useState('/')
+    const [_, setLinkPath] = useState('/')
     const user = useUserContext();
 
     const getNavItems = (): NavItem[] => {
@@ -76,7 +73,6 @@ export const Navigation = (props: NavigationProps) => {
     const isBrowser = typeof window !== "undefined"
 
     const getSelectedItems = (): string[] => {
-        console.log('yo')
         return [navItems.find((item) => isBrowser && window.location.href.includes(item.path))?.path || '/'];
     };
 
