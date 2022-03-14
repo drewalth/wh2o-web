@@ -1,10 +1,10 @@
-import React, {ReactNode, useRef, useState} from 'react';
+import React, {ReactNode, useState} from 'react';
 import {Layout, Menu, Typography} from 'antd';
 import Logo from './Logo';
 import {AreaChartOutlined, LoginOutlined, LogoutOutlined, UserOutlined, WifiOutlined} from '@ant-design/icons';
 import {useUserContext} from '../user/userContext';
 import {setAuthToken} from '../auth';
-import {Link} from "gatsby";
+import {Link, navigate} from "gatsby";
 
 const {Content, Sider} = Layout;
 
@@ -101,9 +101,7 @@ export const Navigation = (props: NavigationProps) => {
                     }}
                 >
                     <Logo
-                        onClick={() => {
-                            console.log('click home');
-                        }}
+                        onClick={() => navigate('/')}
                     />
                     <Typography.Title level={5} style={{color: '#fff', lineHeight: 1}}>
                         wh2o

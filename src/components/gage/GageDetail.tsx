@@ -2,8 +2,6 @@ import React, {useEffect} from 'react';
 import {Button, Card, Col, Row, Statistic, Typography} from 'antd';
 import {useGageContext} from './gageContext';
 import {GageReadingsChart} from './GageReadingsChart';
-
-import {ArrowUpOutlined} from '@ant-design/icons';
 import moment from 'moment';
 import {BackButton} from '../common';
 import {useUserContext} from '../user/userContext';
@@ -46,11 +44,11 @@ const GageDetail = ({pageContext: {gage: preloadedData}}: PageContext) => {
                             <Col span={12}>
                                 <Statistic
                                     title={'delta'}
-                                    value={80}
-                                    prefix={<ArrowUpOutlined/>}
-                                    valueStyle={{color: '#3f8600'}}
+                                    value={'-'}
+                                    // prefix={<ArrowUpOutlined/>}
+                                    // valueStyle={{color: '#3f8600'}}
                                     loading={loading}
-                                    suffix={gage?.metric || 'cfs'}
+                                    // suffix={gage?.metric || 'cfs'}
                                 />
                             </Col>
                         </Row>
