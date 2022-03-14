@@ -4,7 +4,7 @@ module.exports = {
         title: `wh2o-web`,
         siteUrl: `https://wh2o.netlify.app/`
     },
-    plugins: ['gatsby-plugin-antd', {
+    plugins: ['gatsby-plugin-netlify', 'gatsby-plugin-antd', {
         resolve: 'gatsby-plugin-google-analytics',
         options: {
             "trackingId": "UA-70972027-5"
