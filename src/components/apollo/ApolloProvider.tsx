@@ -1,13 +1,12 @@
 import React, {ReactNode} from 'react';
-import {ApolloClient, ApolloProvider as ApolloProviderCore, HttpLink, InMemoryCache, split} from '@apollo/client';
-import {getMainDefinition} from '@apollo/client/utilities';
+import {ApolloClient, ApolloProvider as ApolloProviderCore, HttpLink, InMemoryCache} from '@apollo/client';
 import {setContext} from '@apollo/client/link/context';
 // import {WebSocketLink} from './WebSocketLink';
 import fetch from 'isomorphic-fetch'
 
 const httpLink = new HttpLink({
     // @ts-ignore
-    uri: process.env.APOLLO_SERVER,
+    uri: process.env.GATSBY_APOLLO_SERVER,
     fetch
 });
 // const isBrowser = typeof window !== "undefined"
