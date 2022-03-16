@@ -1,7 +1,14 @@
 import React, { ReactNode, useState } from 'react'
-import { Layout, Menu, Typography } from 'antd'
+import { Layout, Menu } from 'antd'
 import Logo from './Logo'
-import { AreaChartOutlined, LoginOutlined, LogoutOutlined, UserOutlined, WifiOutlined } from '@ant-design/icons'
+import {
+  AreaChartOutlined,
+  LoginOutlined,
+  LogoutOutlined,
+  QuestionCircleOutlined,
+  ReadOutlined,
+  UserOutlined
+} from '@ant-design/icons'
 import { useUserContext } from '../user/userContext'
 import { setAuthToken } from '../auth'
 import { Link, navigate } from 'gatsby'
@@ -20,25 +27,25 @@ type NavItem = {
 }
 
 const defaultNavItems: NavItem[] = [
-  // {
-  //   path: '/reach',
-  //   text: 'Rivers',
-  //   icon: <HeatMapOutlined />
-  // },
   {
     path: '/gages',
     text: 'Gages',
     icon: <AreaChartOutlined />
   },
   {
-    path: '/status',
-    text: 'Status',
-    icon: <WifiOutlined />
+    path: '/questions',
+    text: 'FAQ',
+    icon: <QuestionCircleOutlined />
+  },
+  {
+    path: '/about',
+    text: 'About',
+    icon: <ReadOutlined />
   }
 ]
 
-export const Navigation = (props: NavigationProps) => {
-  const [_, setLinkPath] = useState('/')
+export const Navigation = ({ children }: NavigationProps) => {
+  const [linkPath, setLinkPath] = useState('/')
   const user = useUserContext()
 
   const getNavItems = (): NavItem[] => {
@@ -69,28 +76,18 @@ export const Navigation = (props: NavigationProps) => {
 
   const navItems = getNavItems()
 
-  const isBrowser = typeof window !== 'undefined'
-
-  const getSelectedItems = (): string[] => {
-    return [navItems.find((item) => isBrowser && window.location.href.includes(item.path))?.path || '/']
-  }
-
   const handleNavSelect = async ({ key }: { key: string }) => {
     if (key === '/auth/logout') {
       await resetCache()
       setAuthToken('')
-      // history.replace('/');
-
       setLinkPath('/')
     }
-
-    // history.push(key);
     setLinkPath(key)
   }
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider breakpoint={'lg'} collapsedWidth={0}>
+      <Sider breakpoint={'lg'} collapsedWidth={0} style={{ zIndex: 2 }}>
         <div
           style={{
             display: 'flex',
@@ -99,16 +96,18 @@ export const Navigation = (props: NavigationProps) => {
             padding: '24px 16px'
           }}
         >
-          <Logo onClick={() => navigate('/')} />
-          <Typography.Title level={5} style={{ color: '#fff', lineHeight: 1 }}>
-            wh2o
-          </Typography.Title>
+          <Logo
+            onClick={() => {
+              setLinkPath('/')
+              navigate('/')
+            }}
+          />
         </div>
         <Menu
           theme="dark"
           mode="inline"
           defaultSelectedKeys={['dashboard']}
-          selectedKeys={getSelectedItems()}
+          selectedKeys={[linkPath]}
           onSelect={handleNavSelect}
         >
           {navItems.map((item) => (
@@ -121,8 +120,17 @@ export const Navigation = (props: NavigationProps) => {
         </Menu>
       </Sider>
       <Layout>
-        <Content style={{ margin: '0 16px 0', overflowY: 'scroll', maxHeight: '100vh' }}>
-          <div style={{ padding: 24, minHeight: 360 }}>{props.children}</div>
+        <Content style={{ margin: '0 16px 0', maxHeight: '100vh' }}>
+          <div
+            style={{
+              padding: 24,
+              minHeight: 360,
+              maxHeight: '100vh',
+              overflowY: 'scroll'
+            }}
+          >
+            {children}
+          </div>
         </Content>
       </Layout>
     </Layout>

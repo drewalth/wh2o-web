@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
+import React, { memo } from 'react'
 
 type LogoProps = {
-  onClick: () => void;
-};
+  onClick: () => void
+}
 
 const Logo = ({ onClick }: LogoProps) => {
   return (
@@ -114,7 +114,7 @@ const Logo = ({ onClick }: LogoProps) => {
         </g>
       </g>
     </svg>
-  );
-};
+  )
+}
 
-export default memo(Logo);
+export default memo(Logo)
