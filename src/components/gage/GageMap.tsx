@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
-import mapboxgl from 'mapbox-gl'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import mapboxgl from '!mapbox-gl'
 
 mapboxgl.accessToken = process.env.GATSBY_MAPBOX_TOKEN || ''
 

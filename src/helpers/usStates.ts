@@ -1,7 +1,7 @@
 export type usState = {
-  name: string;
-  abbreviation: string;
-};
+  name: string
+  abbreviation: string
+}
 
 export const usStates: usState[] = [
   { name: 'ALABAMA', abbreviation: 'AL' },
@@ -62,5 +62,5 @@ export const usStates: usState[] = [
   { name: 'WASHINGTON', abbreviation: 'WA' },
   { name: 'WEST VIRGINIA', abbreviation: 'WV' },
   { name: 'WISCONSIN', abbreviation: 'WI' },
-  { name: 'WYOMING', abbreviation: 'WY' }
-];
+  { name: 'WYOMING', abbreviation: 'WY' },
+]

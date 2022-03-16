@@ -20,7 +20,6 @@ const GageDetail = ({ pageContext: { gage: preloadedData } }: PageContext) => {
 
   useEffect(() => {
     ;(async () => {
-      console.log(preloadedData)
       await loadGageDetail(preloadedData.id)
     })()
   }, [])

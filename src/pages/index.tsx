@@ -1,5 +1,15 @@
 import * as React from 'react'
-import { Alert, Button, Card, Col, Divider, Row, Space, Tag, Typography } from 'antd'
+import {
+  Alert,
+  Button,
+  Card,
+  Col,
+  Divider,
+  Row,
+  Space,
+  Tag,
+  Typography,
+} from 'antd'
 import { GithubOutlined } from '@ant-design/icons'
 // markup
 const IndexPage = () => {
@@ -16,7 +26,9 @@ const IndexPage = () => {
                 <Tag color={'blue'}>Alpha</Tag>
               </div>
             </div>
-            <Typography.Title level={5}>Email & SMS Notifications for USGS River Gages</Typography.Title>
+            <Typography.Title level={5}>
+              Email & SMS Notifications for USGS River Gages
+            </Typography.Title>
             <Divider />
             <Space size={'large'} direction={'vertical'}>
               <Alert
@@ -25,7 +37,12 @@ const IndexPage = () => {
               />
               <Space>
                 <Button
-                  onClick={() => window.open('https://github.com/drewalth/wh2o-docker', '_blank')}
+                  onClick={() =>
+                    window.open(
+                      'https://github.com/drewalth/wh2o-docker',
+                      '_blank',
+                    )
+                  }
                   icon={<GithubOutlined />}
                 >
                   GitHub
