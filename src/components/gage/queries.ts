@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const GAGES_SEARCH = gql(`
 query GagesSearch($gageSearchInput: GageSearchInput!) {
@@ -18,7 +18,7 @@ query GagesSearch($gageSearchInput: GageSearchInput!) {
     limit
   }
 }
-`);
+`)
 
 export const GAGE = gql(`
 query($id: Int!) {
@@ -28,6 +28,8 @@ query($id: Int!) {
     source
     siteId
     state
+    latitude
+    longitude
     metric
     latestReading
     delta
@@ -41,4 +43,4 @@ query($id: Int!) {
     }
   }
 }
-`);
+`)

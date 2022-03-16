@@ -49,7 +49,7 @@ exports.createPages = async function ({ graphql, actions }) {
     })
   }
 
-  if (process.env.NODE_ENV !== 'development') {
+  if (process.env.NODE_ENV === 'development') {
     const mockGages: GagePageData[] = [...Array(10)].map((el, i) => ({
       id: i + 1,
       state: 'co',

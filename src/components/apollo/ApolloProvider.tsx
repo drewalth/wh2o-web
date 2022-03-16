@@ -1,14 +1,14 @@
-import React, {ReactNode} from 'react';
-import {ApolloClient, ApolloProvider as ApolloProviderCore, HttpLink, InMemoryCache} from '@apollo/client';
-import {setContext} from '@apollo/client/link/context';
+import React, { ReactNode } from 'react'
+import { ApolloClient, ApolloProvider as ApolloProviderCore, HttpLink, InMemoryCache } from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
 // import {WebSocketLink} from './WebSocketLink';
 import fetch from 'isomorphic-fetch'
 
 const httpLink = new HttpLink({
-    // @ts-ignore
-    uri: process.env.GATSBY_APOLLO_SERVER,
-    fetch
-});
+  // @ts-ignore
+  uri: process.env.GATSBY_APOLLO_SERVER,
+  fetch
+})
 // const isBrowser = typeof window !== "undefined"
 // let wsLink
 // if (isBrowser) {
@@ -21,7 +21,6 @@ const httpLink = new HttpLink({
 //
 // }
 
-
 // const splitLink = split(
 //     ({query}) => {
 //         const definition = getMainDefinition(query);
@@ -31,26 +30,28 @@ const httpLink = new HttpLink({
 //     httpLink
 // );
 
-const authLink = setContext((_, {headers}) => {
-    const token = localStorage.getItem('wh2o-token');
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('wh2o-token')
 
-    return {
-        headers: {
-            ...headers,
-            authorization: token ? `Bearer ${token}` : ''
-        }
-    };
-});
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : ''
+    }
+  }
+})
 
 const client = new ApolloClient({
-    cache: new InMemoryCache(),
-    link: authLink.concat(httpLink)
-});
+  cache: new InMemoryCache(),
+  link: authLink.concat(httpLink)
+})
+
+export const resetCache = () => client.cache.reset()
 
 type ApolloProviderProps = {
-    children: ReactNode;
-};
+  children: ReactNode
+}
 
-export const ApolloProvider = ({children}: ApolloProviderProps) => (
-    <ApolloProviderCore client={client}>{children}</ApolloProviderCore>
-);
+export const ApolloProvider = ({ children }: ApolloProviderProps) => (
+  <ApolloProviderCore client={client}>{children}</ApolloProviderCore>
+)

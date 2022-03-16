@@ -269,6 +269,12 @@ export interface AddUserGageInput {
     userId: number;
 }
 
+export interface ResetUserPasswordInput {
+    id: number;
+    password: string;
+    token: string;
+}
+
 export interface AuthLoginResponse {
     id: number;
     email: string;
@@ -305,6 +311,9 @@ export interface IMutation {
     updateUser(updateUserInput: UpdateUserInput): User | Promise<User>;
     addUserGage(addUserGageInput: AddUserGageInput): User | Promise<User>;
     removeUser(id: number): Nullable<User> | Promise<Nullable<User>>;
+    forgotPassword(email: string): string | Promise<string>;
+    requestAccess(email: string): string | Promise<string>;
+    resetUserPassword(resetUserPasswordInput: ResetUserPasswordInput): string | Promise<string>;
 }
 
 export interface Country {
@@ -353,6 +362,8 @@ export interface GageReading {
 
 export interface Gage {
     id: number;
+    latitude?: Nullable<number>;
+    longitude?: Nullable<number>;
     name: string;
     source: GageSource;
     siteId: string;
