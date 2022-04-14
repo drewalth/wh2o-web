@@ -123,8 +123,8 @@ export const Alert = (): JSX.Element => {
           >
             <Select>
               {gages.map((gage) => (
-                <Select.Option key={gage.SiteId} value={gage.ID}>
-                  {gage.Name}
+                <Select.Option key={gage.siteId} value={gage.id}>
+                  {gage.name}
                 </Select.Option>
               ))}
             </Select>

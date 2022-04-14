@@ -10,12 +10,26 @@ import {
   Space,
   Typography,
 } from 'antd'
-import { setToken } from '../../lib/token'
-import { useUserContext } from '../user/userContext'
-import { Link, navigate } from 'gatsby'
 import { authColSpan } from './defaults'
+import { Link, useNavigate } from 'react-router-dom'
+import { authLogin } from '../../controllers'
+import { setToken } from '../../lib/token'
+import { useUserContext } from '../../components/User/UserContext'
 
 export const Login = () => {
+  const [form, setForm] = useState({})
+  const { setUser } = useUserContext()
+  const navigate = useNavigate()
+  const handleSubmit = async () => {
+    try {
+      const { user, token } = await authLogin(form)
+      setUser(user)
+      setToken(token)
+      navigate('/')
+    } catch (e) {
+      console.error(e)
+    }
+  }
   return (
     <Row justify={'center'}>
       <Col {...authColSpan}>
@@ -23,20 +37,7 @@ export const Login = () => {
           <Form
             name="basic"
             initialValues={form}
-            onFinish={async () => {
-              await handleLogin({
-                variables: {
-                  authLoginInput: form,
-                },
-              }).then(async ({ data }) => {
-                setAuthToken(data?.login.token || '')
-                await user.decodeJwt()
-                await user.loadUser()
-                // history.replace('/user');
-                await navigate('/user')
-              })
-            }}
-            onFinishFailed={onFinishFailed}
+            onFinish={handleSubmit}
             autoComplete="off"
             onValuesChange={(val) => setForm(Object.assign({}, form, val))}
           >

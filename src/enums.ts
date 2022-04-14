@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-vars */
 
 export enum Endpoints {
-  GAGE = '/gages',
-  ALERT = '/alerts',
+  GAGE = '/gage',
+  ALERT = '/alert',
   GAGE_SOURCES = '/gage-sources',
   SETTINGS = '/user',
   EXPORT = '/export',
   IMPORT = '/import',
   LIB = '/lib',
+  AUTH = '/auth',
 }
 
 export enum AlertInterval {

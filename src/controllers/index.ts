@@ -7,11 +7,14 @@ import {
   UpdateGageDto,
   UpdateAlertDto,
   ExportData,
+  UserConfig,
+  Gage,
+  GageSource,
 } from '../types'
 import { Endpoints } from '../enums'
 
-export const getGages = async () => {
-  return http.get(Endpoints.GAGE).then((res) => res.data)
+export const getGage = async (state: string, id: number): Promise<Gage> => {
+  return http.get(`/gage/${state}/${id}`).then((res) => res.data)
 }
 
 export const updateGage = async (updateGageDto: UpdateGageDto) => {
@@ -34,10 +37,6 @@ export const updateSettings = async (updateSettings: UserConfigDto) => {
     .then((res) => res.data)
 }
 
-export const whoAmI = async () => {
-  return
-}
-
 export const createGage = async (dto: CreateGageDto) => {
   return http
     .post(Endpoints.GAGE, qs.stringify(dto), {
@@ -52,6 +51,27 @@ export const deleteGage = async (id: number) => {
 
 export const getGageSources = async (state: string) => {
   return http.get(Endpoints.GAGE_SOURCES + `/${state}`).then((res) => res.data)
+}
+
+export type GageSearchParams = {
+  searchTerm?: string
+  state: string
+  country: string
+  limit: number
+  offset: number
+  source: GageSource
+}
+
+export const gageSearch = async (
+  input: GageSearchParams,
+): Promise<{ gages: Gage[]; total: number }> => {
+  const params = new URLSearchParams()
+
+  for (const val in input) {
+    params.append(val, input[val])
+  }
+
+  return http.get(`/gage/search?${params}`).then(({ data }) => data)
 }
 
 export const getAlerts = async () => {
@@ -102,4 +122,16 @@ export const getTimezones = () => {
 
 export const getUsStates = () => {
   return http.get(Endpoints.LIB + '/states').then(({ data }) => data)
+}
+
+export const authLogin = async (payload) => {
+  return http
+    .post(Endpoints.AUTH + '/login', qs.stringify(payload), {
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    })
+    .then(({ data }) => data)
+}
+
+export const whoAmI = async (): Promise<UserConfig> => {
+  return http.get('/user/whoami').then(({ data }) => data)
 }

@@ -4,6 +4,7 @@ import { Gage } from '../components/Gage/Gage'
 import { Alert } from '../components/Alert/Alert'
 import { useState } from 'react'
 import AppProvider from '../components/App/AppProvider'
+import { useLocalNavGuard } from '../hooks'
 
 type Tab = '1' | '2'
 
@@ -11,6 +12,7 @@ const { Content, Sider } = Layout
 
 const Account = () => {
   const [selectedTab, setSelectedTab] = useState<Tab>('1')
+  useLocalNavGuard()
 
   return (
     <AppProvider>

@@ -1,30 +1,22 @@
-import React, { useState } from 'react'
-import {
-  Button,
-  Modal,
-  notification,
-  Select,
-  Table,
-  Tooltip,
-  Typography,
-} from 'antd'
-import { DeleteOutlined } from '@ant-design/icons'
+import React from 'react'
+import { Button, Select, Table, Tooltip, Typography } from 'antd'
+import { ArrowRightOutlined } from '@ant-design/icons'
 import { useGagesContext } from '../Provider/GageProvider'
-import { deleteGage, updateGage } from '../../controllers'
+import { updateGage } from '../../controllers'
 import moment from 'moment'
 import { Gage, GageMetric, GageReading } from '../../types'
 import { ReadingSelect } from './ReadingSelect'
+import { useNavigate } from 'react-router-dom'
 
 const GageTable = (): JSX.Element => {
-  const { gages, loadGages } = useGagesContext()
-  const [pendingDelete, setPendingDelete] = useState(0)
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false)
+  const { gages } = useGagesContext()
+  const navigate = useNavigate()
 
   const columns = [
     {
       title: 'Name',
-      dataIndex: 'Name',
-      key: 'Name',
+      dataIndex: 'name',
+      key: 'name',
       render: (name: string) => (
         <Tooltip title={name} placement={'top'}>
           <Typography.Text ellipsis>{name}</Typography.Text>
@@ -33,19 +25,18 @@ const GageTable = (): JSX.Element => {
     },
     {
       title: 'Primary Metric',
-      dataIndex: 'Metric',
-      key: 'Metric',
+      dataIndex: 'metric',
+      key: 'metric',
       render: (metric: GageMetric, gage: Gage) => (
         <Select
           value={metric}
           bordered={false}
           size={'small'}
-          onChange={async (Metric: GageMetric) => {
+          onChange={async (metric: GageMetric) => {
             await updateGage({
               ...gage,
-              Metric,
+              metric,
             })
-            await loadGages()
           }}
         >
           {Object.values(GageMetric).map((m) => (
@@ -58,11 +49,11 @@ const GageTable = (): JSX.Element => {
     },
     {
       title: 'Readings',
-      dataIndex: 'GageReadings',
-      key: 'GageReadings',
+      dataIndex: 'readings',
+      key: 'readings',
       render: (readings: GageReading[]) => (
         <div style={{ minWidth: 150 }}>
-          <ReadingSelect readings={readings} />
+          <ReadingSelect readings={readings || []} />
         </div>
       ),
     },
@@ -73,8 +64,8 @@ const GageTable = (): JSX.Element => {
     // },
     {
       title: 'Updated',
-      dataIndex: 'UpdatedAt',
-      key: 'UpdatedAt',
+      dataIndex: 'updatedAt',
+      key: 'updatedAt',
       render: (val: Date) => {
         if (val) {
           return (
@@ -89,60 +80,23 @@ const GageTable = (): JSX.Element => {
       },
     },
     {
-      dataIndex: 'ID',
-      key: 'ID',
-      render: (val: number) => (
+      dataIndex: 'id',
+      key: 'id',
+      render: (id: number, gage: Gage) => (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
-            onClick={() => intiateDelete(val)}
-            icon={<DeleteOutlined />}
-            danger
+            onClick={() => navigate(`/gage/${gage.state}/${id}`)}
+            icon={<ArrowRightOutlined />}
           />
         </div>
       ),
     },
   ]
 
-  const intiateDelete = async (id: number) => {
-    setPendingDelete(id)
-    setDeleteModalVisible(true)
-  }
-
-  const handleClose = () => {
-    setDeleteModalVisible(false)
-    setPendingDelete(0)
-  }
-
-  const handleOk = async () => {
-    try {
-      await deleteGage(pendingDelete)
-      handleClose()
-      await loadGages()
-      notification.success({
-        message: 'Gage Deleted',
-        placement: 'bottomRight',
-      })
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
   return (
-    <>
-      <div style={{ position: 'relative', width: '100%', overflowX: 'scroll' }}>
-        <Table dataSource={gages || []} columns={columns} />
-      </div>
-      <Modal
-        title="Are you sure?"
-        visible={deleteModalVisible}
-        onOk={handleOk}
-        onCancel={handleClose}
-      >
-        <p>
-          This will remove all associated notifications. This cannot be undone.
-        </p>
-      </Modal>
-    </>
+    <div style={{ position: 'relative', width: '100%', overflowX: 'scroll' }}>
+      <Table dataSource={gages || []} columns={columns} />
+    </div>
   )
 }
 

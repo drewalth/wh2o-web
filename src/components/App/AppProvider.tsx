@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import { GageProvider } from '../Provider/GageProvider'
-import { AlertProvider } from '../Provider/AlertProvider'
+import { UserProvider } from '../User/UserProvider'
 
 type AppProviderProps = {
   children: ReactNode
@@ -8,9 +8,9 @@ type AppProviderProps = {
 
 const AppProvider = ({ children }: AppProviderProps): JSX.Element => {
   return (
-    <GageProvider>
-      <AlertProvider>{children}</AlertProvider>
-    </GageProvider>
+    <UserProvider>
+      <GageProvider>{children}</GageProvider>
+    </UserProvider>
   )
 }
 

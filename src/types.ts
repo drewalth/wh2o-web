@@ -46,18 +46,40 @@ export type UpdateAlertDto = Omit<
 >
 
 export enum GageSource {
-  USGS = 'usgs',
+  USGS = 'USGS',
+  ENVIRONMENT_CANADA = 'ENVIRONMENT_CANADA',
+}
+
+export enum Country {
+  US = 'US',
+  CA = 'CA',
+}
+
+export enum CanadianProvinces {
+  AB = 'AB',
+  BC = 'BC',
+  MB = 'MB',
+  NB = 'NB',
+  NL = 'NL',
+  NS = 'NS',
+  NT = 'NT',
+  NU = 'NU',
+  ON = 'ON',
+  PE = 'PE',
+  QC = 'QC',
+  SK = 'SK',
+  YT = 'YT',
 }
 
 export type GageReading = {
-  ID?: number
-  SiteId: string
-  Value: number
-  Metric: GageMetric
-  GageID: number
-  GageName: string
-  CreatedAt?: Date
-  UpdatedAt?: Date
+  id: number
+  siteId: string
+  value: number
+  metric: GageMetric
+  gageID: number
+  gageName: string
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 export type ExportDataDto = {
@@ -67,18 +89,21 @@ export type ExportDataDto = {
 }
 
 export type Gage = {
-  ID: number
-  Name: string
+  id: number
+  name: string
   source: GageSource
-  SiteId: string
-  Metric: GageMetric
-  Reading: number
-  Readings: GageReading[]
-  Delta: number
-  LastFetch: Date
-  CreatedAt: Date
-  UpdatedAt: Date
-  Alerts?: Alert[]
+  siteId: string
+  metric: GageMetric
+  reading: number
+  state: string
+  country: string
+  latitude?: number
+  longitude?: number
+  readings?: GageReading[]
+  delta: number
+  lastFetch: Date
+  createdAt: Date
+  updatedAt: Date
 }
 
 export type UpdateGageDto = Omit<
@@ -125,6 +150,8 @@ export enum GageMetric {
   CFS = 'CFS',
   FT = 'FT',
   TEMP = 'TEMP',
+  CMS = 'CMS',
+  M = 'M',
 }
 
 export enum USGSGageReadingVariable {

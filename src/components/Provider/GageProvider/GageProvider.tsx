@@ -1,7 +1,12 @@
 import React, { ReactNode, useEffect, useState } from 'react'
-import { GageContext } from './GageContext'
-import { Gage, GageEntry } from '../../../types'
-import { getGages, getGageSources } from '../../../controllers'
+import {
+  DEFAULT_GAGE_SEARCH_PARAMS,
+  DEFAULT_PAGINATION,
+  GageContext,
+  TablePagination,
+} from './GageContext'
+import { Gage, RequestStatus } from '../../../types'
+import { gageSearch, GageSearchParams } from '../../../controllers'
 import { notification } from 'antd'
 
 type GageProviderProps = {
@@ -10,45 +15,47 @@ type GageProviderProps = {
 
 export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
   const [gages, setGages] = useState<Gage[]>([])
-  const [gageSources, setGageSources] = useState<GageEntry[]>([])
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
+  const [pagination, setPagination] =
+    useState<TablePagination>(DEFAULT_PAGINATION)
+  const [searchParams, setSearchParams] = useState<GageSearchParams>(
+    DEFAULT_GAGE_SEARCH_PARAMS,
+  )
 
-  const loadGages = async () => {
-    try {
-      const result = await getGages()
-      setGages(result)
-    } catch (e) {
-      notification.error({
-        message: 'Failed to load gages',
-        placement: 'bottomRight',
-      })
-    }
-  }
-
-  const loadGageSources = async (state: string) => {
-    try {
-      const gages = await getGageSources(state)
-      setGageSources(gages)
-    } catch (e) {
-      notification.error({
-        message: 'Failed to gage sources',
-        placement: 'bottomRight',
-      })
-    }
+  const reset = () => {
+    setGages([])
+    setSearchParams(DEFAULT_GAGE_SEARCH_PARAMS)
+    setPagination(DEFAULT_PAGINATION)
   }
 
   useEffect(() => {
     ;(async () => {
-      await loadGages()
+      try {
+        setRequestStatus('loading')
+        const { gages, total } = await gageSearch(searchParams)
+        setGages(gages)
+        // pagination kinda busted...
+        setPagination({ ...pagination, total })
+        setRequestStatus('success')
+      } catch (e) {
+        setRequestStatus('failure')
+        notification.error({
+          message: 'Failed to load gages',
+          placement: 'bottomRight',
+        })
+      }
     })()
-  }, [])
+  }, [searchParams])
 
   return (
     <GageContext.Provider
       value={{
         gages,
-        gageSources,
-        loadGageSources,
-        loadGages,
+        requestStatus,
+        setSearchParams,
+        searchParams,
+        pagination,
+        reset,
       }}
     >
       {children}

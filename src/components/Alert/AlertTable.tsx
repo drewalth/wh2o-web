@@ -88,9 +88,9 @@ export const AlertTable = (): JSX.Element => {
               <>
                 <Typography.Text type={'secondary'}>when</Typography.Text>
                 <span>&nbsp;</span>
-                <Tooltip title={alert?.Gage?.Name || 'Gage Name'}>
+                <Tooltip title={alert?.Gage?.name || 'Gage Name'}>
                   <Typography.Text ellipsis>
-                    {alert?.Gage?.Name || 'Gage Name'}
+                    {alert?.Gage?.name || 'Gage Name'}
                   </Typography.Text>
                 </Tooltip>
                 <span>&nbsp;</span>

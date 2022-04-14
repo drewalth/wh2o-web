@@ -11,9 +11,9 @@ export const ReadingSelect = ({
 }: ReadingSelectProps): JSX.Element => {
   const [activeMetric, setAcitveMetric] = useState<GageMetric>(GageMetric.CFS)
   const [reading, setReading] = useState<number>()
-  const metrics = Array.from(new Set(readings?.map((r) => r.Metric)))
+  const metrics = Array.from(new Set(readings?.map((r) => r.metric)))
   useEffect(() => {
-    const val = readings?.filter((r) => r.Metric === activeMetric)[0]?.Value
+    const val = readings?.filter((r) => r.metric === activeMetric)[0]?.value
 
     setReading(val)
   }, [activeMetric, readings])

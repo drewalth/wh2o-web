@@ -1,0 +1,24 @@
+.navigation {
+  .root {
+    min-height: 100vh;
+  }
+  .sider {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: 24px 16px;
+  }
+  .content-wrapper {
+    margin: 24px 16px 0;
+    &.home {
+      margin: 0;
+    }
+  }
+  .content-inner {
+    padding: 24px;
+    min-height: 360px;
+    &.home {
+      padding: 0;
+    }
+  }
+}

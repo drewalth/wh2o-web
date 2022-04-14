@@ -5,11 +5,14 @@ import 'antd/dist/antd.css'
 import {
   DashboardOutlined,
   SettingOutlined,
+  AreaChartOutlined,
   ExportOutlined,
-  GithubOutlined,
+  ImportOutlined,
 } from '@ant-design/icons'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Footer } from 'antd/lib/layout/layout'
+import classNames from 'classnames'
+import { useUserContext } from '../User/UserContext'
+import { UserConfig } from '../../types'
 
 type NavigationProps = {
   children: ReactNode
@@ -17,27 +20,58 @@ type NavigationProps = {
 
 const { Content, Sider } = Layout
 
-export const navItems = [
+export type NavItem = {
+  path: string
+  text: string
+  icon: ReactNode
+}
+
+const baseNavItems: NavItem[] = [
   {
-    path: '/',
-    text: 'Dashboard',
-    icon: <DashboardOutlined />,
-  },
-  {
-    path: '/exporter',
-    text: 'Export',
-    icon: <ExportOutlined />,
-  },
-  {
-    path: '/settings',
-    text: 'Settings',
-    icon: <SettingOutlined />,
+    path: '/gage',
+    text: 'Gages',
+    icon: <AreaChartOutlined />,
   },
 ]
+
+const getNavItems = (user: UserConfig | undefined): NavItem[] => {
+  if (!!user) {
+    return [
+      {
+        path: '/',
+        text: 'Dashboard',
+        icon: <DashboardOutlined />,
+      },
+      ...baseNavItems,
+      {
+        path: '/settings',
+        text: 'Settings',
+        icon: <SettingOutlined />,
+      },
+      {
+        path: '/auth/logout',
+        text: 'Sign Out',
+        icon: <ExportOutlined />,
+      },
+    ]
+  }
+
+  return [
+    ...baseNavItems,
+    {
+      path: '/auth/login',
+      text: 'Sign In',
+      icon: <ImportOutlined />,
+    },
+  ]
+}
 
 export const Navigation = ({ children }: NavigationProps) => {
   const navigate = useNavigate()
   const location = useLocation()
+  const { user } = useUserContext()
+
+  const navItems = getNavItems(user)
 
   const getSelectedItems = (): string[] => {
     return [
@@ -45,17 +79,22 @@ export const Navigation = ({ children }: NavigationProps) => {
     ]
   }
 
+  const currentPath = location.pathname
+
+  const contentWrapperClasses = classNames(
+    'content-wrapper',
+    currentPath === '/' ? 'home' : '',
+  )
+  const contentInnerClasses = classNames(
+    'site-layout-background',
+    'content-inner',
+    currentPath === '/' ? 'home' : '',
+  )
+
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: '100vh' }} className={'navigation'}>
       <Sider breakpoint="lg" collapsedWidth="0">
-        <div
-          style={{
-            display: 'flex',
-            flexFlow: 'row nowrap',
-            alignItems: 'center',
-            padding: '24px 16px',
-          }}
-        >
+        <div className={'sider'}>
           <Logo onClick={() => navigate('/', { replace: false })} />
           <Typography.Title level={5} style={{ color: '#fff', lineHeight: 1 }}>
             wh2o
@@ -76,26 +115,9 @@ export const Navigation = ({ children }: NavigationProps) => {
         </Menu>
       </Sider>
       <Layout>
-        <Content style={{ margin: '24px 16px 0' }}>
-          <div
-            className="site-layout-background"
-            style={{ padding: 24, minHeight: 360 }}
-          >
-            {children}
-          </div>
+        <Content className={contentWrapperClasses}>
+          <div className={contentInnerClasses}>{children}</div>
         </Content>
-        <Footer
-          style={{ display: 'flex', justifyContent: 'center', fontSize: 24 }}
-        >
-          <a
-            style={{ color: '#000' }}
-            href="https://github.com/drewalth/wh2o-next"
-            target={'_blank'}
-            rel={'noreferrer'}
-          >
-            <GithubOutlined />
-          </a>
-        </Footer>
       </Layout>
     </Layout>
   )

@@ -1,25 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import GageTable from './GageTable'
-import { AutoComplete, Button, Form, Modal, notification, Select } from 'antd'
-import { CreateGageDto, GageEntry, GageMetric } from '../../types'
+import { Form, Input, Select } from 'antd'
 import { useGagesContext } from '../Provider/GageProvider'
-import { createGage, getUsStates } from '../../controllers'
-
-const defaultForm: CreateGageDto = {
-  Name: '',
-  SiteId: '',
-  Metric: GageMetric.CFS,
-}
+import { getUsStates } from '../../controllers'
+import { Country, GageSource } from '../../types'
 
 export const Gage = (): JSX.Element => {
   const [usStates, setUsStates] = useState<
     { name: string; abbreviation: string }[]
   >([])
-  const [selectedState, setSelectedState] = useState('AL')
-  const [createModalVisible, setCreateModalVisible] = useState(false)
-  const [createForm, setCreateForm] = useState<CreateGageDto>(defaultForm)
-  const { gageSources, loadGageSources, gages, loadGages } = useGagesContext()
-  const [options, setOptions] = useState<{ value: string; label: string }[]>([])
+
+  const { searchParams, setSearchParams } = useGagesContext()
+
+  // const getGageSourceOptions = (): GageSource[] => {
+  //   if (searchParams.country === Country.CA) {
+  //     return [GageSource.ENVIRONMENT_CANADA]
+  //   }
+  //
+  //   return [GageSource.USGS]
+  // }
+  //
+  // const getStateOptions = () => {
+  //   if (searchParams.country === Country.CA) {
+  //     return Object.values(CanadianProvinces)
+  //   }
+  //
+  //   return usStates.length > 0 ? usStates : []
+  // }
 
   useEffect(() => {
     ;(async () => {
@@ -28,114 +35,52 @@ export const Gage = (): JSX.Element => {
     })()
   }, [])
 
-  useEffect(() => {
-    ;(async function () {
-      await loadGageSources(selectedState)
-    })()
-  }, [selectedState])
-
-  const gagePreviouslyAdded = (entry: GageEntry): boolean => {
-    const existingGageNames = gages.map((g) => g.Name)
-
-    return existingGageNames.includes(entry.gageName)
-  }
-
-  const onSearch = (searchText: string) => {
-    const vals = gageSources?.filter(
-      (g) =>
-        g.gageName
-          .toLocaleLowerCase()
-          .includes(searchText.toLocaleLowerCase()) && !gagePreviouslyAdded(g),
-    )
-
-    if (vals.length) {
-      setOptions(
-        vals.map((g) => ({
-          value: g.siteId,
-          label: g.gageName,
-        })),
-      )
-    }
-  }
-
-  const handleClose = () => {
-    setCreateForm(defaultForm)
-    setCreateModalVisible(false)
-  }
-
-  const handleOk = async () => {
-    try {
-      const gageName = gageSources.find(
-        (g) => g.siteId === createForm.SiteId,
-      )?.gageName
-
-      await createGage({
-        Name: gageName || 'Untitled',
-        SiteId: createForm.SiteId,
-        Metric: GageMetric.CFS,
-      })
-      await loadGages()
-      notification.success({
-        message: 'Gage Created',
-        placement: 'bottomRight',
-      })
-      handleClose()
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
   return (
     <>
-      <Modal
-        destroyOnClose
-        visible={createModalVisible}
-        onOk={handleOk}
-        onCancel={handleClose}
+      <Form
+        layout={'inline'}
+        initialValues={searchParams}
+        onValuesChange={(val) => {
+          setSearchParams(Object.assign({}, searchParams, val))
+        }}
+        wrapperCol={{ span: 24 }}
       >
-        <Form
-          wrapperCol={{
-            span: 23,
-          }}
-          layout={'vertical'}
-          onValuesChange={(val) => {
-            setCreateForm(Object.assign({}, createForm, val))
-          }}
-          initialValues={createForm}
-        >
-          <Form.Item label={'State'}>
-            <Select
-              defaultValue={'AL'}
-              onSelect={(val: string) => setSelectedState(val)}
-            >
-              {usStates.map((val, index) => (
-                <Select.Option value={val.abbreviation} key={index}>
-                  {val.name}
+        <Form.Item name={'searchTerm'}>
+          <Input placeholder={'Gage Name'} />
+        </Form.Item>
+        <Form.Item name={'state'}>
+          <Select>
+            {usStates.length > 0 &&
+              usStates.map((state) => (
+                <Select.Option
+                  key={state.abbreviation}
+                  value={state.abbreviation}
+                >
+                  {state.name}
                 </Select.Option>
               ))}
-            </Select>
-          </Form.Item>
-          <Form.Item name={'SiteId'} label={'Gage Name'}>
-            <AutoComplete options={options} onSearch={onSearch} />
-          </Form.Item>
-        </Form>
-      </Modal>
-      <div
-        style={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          marginBottom: 24,
-        }}
-      >
-        <Button
-          type={'primary'}
-          disabled={gages.length >= 15}
-          onClick={() => setCreateModalVisible(true)}
-        >
-          Add Gage
-        </Button>
-      </div>
+          </Select>
+        </Form.Item>
+        <Form.Item name={'source'}>
+          <Select>
+            {Object.values(GageSource).map((source) => (
+              <Select.Option key={source} value={source}>
+                {source}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item name={'country'}>
+          <Select>
+            {Object.values(Country).map((country) => (
+              <Select.Option key={country} value={country}>
+                {country}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+      </Form>
+      <div className={'mb-2'} />
       <GageTable />
     </>
   )

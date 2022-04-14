@@ -1,0 +1,6 @@
+.map-marker {
+    height: 2rem;
+    width: 2rem;
+    background-color: red;
+    border-radius: 100px;
+}
