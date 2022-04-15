@@ -12,17 +12,17 @@ export enum Endpoints {
 }
 
 export enum AlertInterval {
-  DAILY = 'daily',
-  IMMEDIATE = 'immediate',
+  DAILY = 'DAILY',
+  IMMEDIATE = 'IMMEDIATE',
 }
 
 export enum AlertCriteria {
-  ABOVE = 'above',
-  BELOW = 'below',
-  BETWEEN = 'between',
+  ABOVE = 'ABOVE',
+  BELOW = 'BELOW',
+  BETWEEN = 'BETWEEN',
 }
 
 export enum AlertChannel {
-  EMAIL = 'email',
-  SMS = 'sms',
+  EMAIL = 'EMAIL',
+  SMS = 'SMS',
 }

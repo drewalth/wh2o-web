@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react'
 import { UserContext } from './UserContext'
-import { RequestStatus, UserConfig } from '../../types'
+import { Alert, RequestStatus, User } from '../../types'
 import { whoAmI } from '../../controllers'
 
 type UserProviderProps = {
@@ -8,7 +8,7 @@ type UserProviderProps = {
 }
 
 export const UserProvider = ({ children }: UserProviderProps) => {
-  const [user, setUser] = useState<UserConfig>()
+  const [user, setUser] = useState<User>()
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
 
   useEffect(() => {
@@ -24,11 +24,21 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     })()
   }, [])
 
+  const appendUserAlerts = (alert: Alert) => {
+    if (!user) return
+
+    setUser({
+      ...user,
+      alerts: [...user.alerts, alert],
+    })
+  }
+
   return (
     <UserContext.Provider
       value={{
         user,
-        setUser: (user: UserConfig) => {
+        appendUserAlerts,
+        setUser: (user: User) => {
           setUser(user)
         },
         requestStatus,

@@ -40,6 +40,7 @@ export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
     ;(async () => {
       try {
         setRequestStatus('loading')
+        // @todo debounce
         const { gages, total } = await gageSearch(searchParams)
         setGages(gages)
         // pagination kinda busted...

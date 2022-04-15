@@ -8,32 +8,38 @@ import {
   notification,
   Select,
   TimePicker,
+  Tooltip,
 } from 'antd'
 import { CreateAlertDto, GageMetric } from '../../../types'
 import { AlertChannel, AlertCriteria, AlertInterval } from '../../../enums'
-import { useGagesContext } from '../../Provider/GageProvider'
 import { createAlert } from '../../../controllers'
-import { useAlertsContext } from '../../Provider/AlertProvider'
 import moment from 'moment'
+import { useUserContext } from '../UserContext'
+
+const defaultCreateForm: CreateAlertDto = {
+  name: '',
+  value: 1.0,
+  active: true,
+  criteria: AlertCriteria.ABOVE,
+  channel: AlertChannel.EMAIL,
+  interval: AlertInterval.DAILY,
+  notifyTime: undefined,
+  metric: GageMetric.CFS,
+  minimum: 1.0,
+  maximum: 1.0,
+  userId: 0,
+  gageId: 1,
+}
 
 export const Alert = (): JSX.Element => {
-  const { gages } = useGagesContext()
-  const { loadAlerts } = useAlertsContext()
+  const { user, appendUserAlerts } = useUserContext()
 
-  const defaultCreateForm: CreateAlertDto = {
-    Name: '',
-    Value: 1.0,
-    Active: true,
-    Criteria: AlertCriteria.ABOVE,
-    Channel: AlertChannel.EMAIL,
-    Interval: AlertInterval.DAILY,
-    NotifyTime: undefined,
-    NextSend: undefined,
-    Metric: GageMetric.CFS,
-    Minimum: 1.0,
-    Maximum: 1.0,
-    UserID: 1,
-  }
+  const userUnverified = user && !user.verified
+  const userHasAlertLimit = user && user.verified && user.alerts.length >= 15
+  const addTooltipMessage = userUnverified
+    ? 'Please verify your account'
+    : 'Maximum number of alerts already created'
+  const addAlertButtonDisabled = userUnverified || userHasAlertLimit
 
   const [modalVisible, setModalVisible] = useState(false)
   const [createForm, setCreateForm] =
@@ -41,15 +47,18 @@ export const Alert = (): JSX.Element => {
 
   const handleOk = async () => {
     try {
-      const NotifyTime = moment(createForm.NotifyTime).format(
+      if (!user) return
+
+      const notifyTime = moment(createForm.notifyTime).format(
         'YYYY-MM-DDTHH:mm:ss',
       )
-      await createAlert({
+      const result = await createAlert({
         ...createForm,
-        Value: Number(createForm.Value),
-        NotifyTime,
+        value: Number(createForm.value),
+        userId: user.id,
+        notifyTime,
       })
-      await loadAlerts()
+      appendUserAlerts(result)
       notification.success({
         message: 'Alert Created',
         placement: 'bottomRight',
@@ -87,11 +96,11 @@ export const Alert = (): JSX.Element => {
           }
           initialValues={defaultCreateForm}
         >
-          <Form.Item name={'Name'} label={'Name'}>
+          <Form.Item name={'name'} label={'Name'}>
             <Input />
           </Form.Item>
 
-          <Form.Item name={'Interval'} label={'Interval'}>
+          <Form.Item name={'interval'} label={'Interval'}>
             <Select>
               {Object.values(AlertInterval).map((interval) => (
                 <Select.Option key={interval} value={interval}>
@@ -100,7 +109,7 @@ export const Alert = (): JSX.Element => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name={'Channel'} label={'Channel'}>
+          <Form.Item name={'channel'} label={'Channel'}>
             <Select>
               {Object.values(AlertChannel).map((el) => (
                 <Select.Option
@@ -108,7 +117,7 @@ export const Alert = (): JSX.Element => {
                   value={el}
                   disabled={
                     el === AlertChannel.SMS &&
-                    createForm.Interval === AlertInterval.DAILY
+                    createForm.interval === AlertInterval.DAILY
                   }
                 >
                   {el}
@@ -117,12 +126,12 @@ export const Alert = (): JSX.Element => {
             </Select>
           </Form.Item>
           <Form.Item
-            name={'GageID'}
+            name={'gageID'}
             label={'Gage'}
-            hidden={createForm.Interval === AlertInterval.DAILY}
+            hidden={createForm.interval === AlertInterval.DAILY}
           >
             <Select>
-              {gages.map((gage) => (
+              {user?.gages.map((gage) => (
                 <Select.Option key={gage.siteId} value={gage.id}>
                   {gage.name}
                 </Select.Option>
@@ -130,16 +139,16 @@ export const Alert = (): JSX.Element => {
             </Select>
           </Form.Item>
           <Form.Item
-            name={'NotifyTime'}
+            name={'notifyTime'}
             label={'Time'}
-            hidden={createForm.Interval === AlertInterval.IMMEDIATE}
+            hidden={createForm.interval === AlertInterval.IMMEDIATE}
           >
             <TimePicker use12Hours format="h:mm a" minuteStep={5} />
           </Form.Item>
           <Form.Item
-            name={'Criteria'}
+            name={'criteria'}
             label={'Criteria'}
-            hidden={createForm.Interval === 'daily'}
+            hidden={createForm.interval === 'DAILY'}
           >
             <Select>
               {Object.values(AlertCriteria).map((el) => (
@@ -150,39 +159,39 @@ export const Alert = (): JSX.Element => {
             </Select>
           </Form.Item>
           <Form.Item
-            name={'Value'}
+            name={'value'}
             label={'Value'}
             hidden={
-              createForm.Interval === 'daily' ||
-              createForm.Criteria === 'between'
+              createForm.interval === 'DAILY' ||
+              createForm.criteria === 'BETWEEN'
             }
           >
             <Input type={'number'} />
           </Form.Item>
           <Form.Item
-            name={'Minimum'}
+            name={'minimum'}
             label={'Minimum'}
             hidden={
-              createForm.Interval === 'daily' ||
-              createForm.Criteria !== 'between'
+              createForm.interval === 'DAILY' ||
+              createForm.criteria !== 'BETWEEN'
             }
           >
-            <Input type={'number'} max={createForm.Maximum} />
+            <Input type={'number'} max={createForm.maximum} />
           </Form.Item>
           <Form.Item
-            name={'Maximum'}
+            name={'maximum'}
             label={'Maximum'}
             hidden={
-              createForm.Interval === 'daily' ||
-              createForm.Criteria !== 'between'
+              createForm.interval === 'DAILY' ||
+              createForm.criteria !== 'BETWEEN'
             }
           >
-            <Input type={'number'} min={createForm.Minimum} />
+            <Input type={'number'} min={createForm.minimum} />
           </Form.Item>
           <Form.Item
-            name={'Metric'}
+            name={'metric'}
             label={'Metric'}
-            hidden={createForm.Interval === 'daily'}
+            hidden={createForm.interval === 'DAILY'}
           >
             <Select>
               {Object.values(GageMetric).map((el) => (
@@ -201,13 +210,17 @@ export const Alert = (): JSX.Element => {
           marginBottom: 24,
         }}
       >
-        <Button
-          disabled={!gages.length}
-          type={'primary'}
-          onClick={() => setModalVisible(true)}
-        >
-          Add Alert
-        </Button>
+        {addAlertButtonDisabled ? (
+          <Tooltip title={addTooltipMessage} placement={'top'}>
+            <Button type={'primary'} disabled={addAlertButtonDisabled}>
+              Add Alert
+            </Button>
+          </Tooltip>
+        ) : (
+          <Button type={'primary'} onClick={() => setModalVisible(true)}>
+            Add Alert
+          </Button>
+        )}
       </div>
       <AlertTable />
     </>

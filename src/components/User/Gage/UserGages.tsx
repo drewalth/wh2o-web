@@ -1,21 +1,32 @@
 import React, { useState } from 'react'
-import { usStates } from '../../../lib'
+import { canadianProvinces, StateEntry, usStates } from '../../../lib'
 import { AutoComplete, Button, Form, Modal, notification, Select } from 'antd'
-import { CreateGageDto, GageMetric } from '../../../types'
+import { Country, GageSource } from '../../../types'
 import { useGagesContext } from '../../Provider/GageProvider'
-import { createGage } from '../../../controllers'
+import { addUserGage } from '../../../controllers'
+import { UserGageTable } from './UserGageTable'
+import { useUserContext } from '../UserContext'
 
-const defaultForm: CreateGageDto = {
-  Name: '',
-  SiteId: '',
-  Metric: GageMetric.CFS,
-}
+// const defaultForm: CreateGageDto = {
+//   Name: '',
+//   SiteId: '',
+//   Metric: GageMetric.CFS,
+// }
 
 export const UserGages = (): JSX.Element => {
   const [createModalVisible, setCreateModalVisible] = useState(false)
-  const [createForm, setCreateForm] = useState<CreateGageDto>(defaultForm)
+  const [selectedGageSiteId, setSelectedGageSiteId] = useState('')
   const { searchParams, gages, setSearchParams } = useGagesContext()
+  const { user } = useUserContext()
   const [options, setOptions] = useState<{ value: string; label: string }[]>([])
+
+  const stateOptions: StateEntry[] =
+    searchParams.country === Country.CA ? canadianProvinces : usStates
+
+  const sourceOptions: GageSource[] =
+    searchParams.country === Country.CA
+      ? [GageSource.ENVIRONMENT_CANADA]
+      : [GageSource.USGS]
 
   const onSearch = (searchText: string) => {
     const vals = gages?.filter((g) =>
@@ -33,19 +44,22 @@ export const UserGages = (): JSX.Element => {
   }
 
   const handleClose = () => {
-    setCreateForm(defaultForm)
+    // setCreateForm(defaultForm)
     setCreateModalVisible(false)
   }
 
   const handleOk = async () => {
     try {
-      const gageName = gages.find((g) => g.siteId === createForm.SiteId)?.name
+      if (!user || !selectedGageSiteId) return
 
-      await createGage({
-        Name: gageName || 'Untitled',
-        SiteId: createForm.SiteId,
-        Metric: GageMetric.CFS,
-      })
+      const selectedGageId = gages.find((g) => g.siteId === selectedGageSiteId)
+
+      if (!selectedGageId) {
+        throw new Error('whoops')
+      }
+
+      await addUserGage(selectedGageId.id, user.id)
+
       notification.success({
         message: 'Gage Created',
         placement: 'bottomRight',
@@ -74,9 +88,27 @@ export const UserGages = (): JSX.Element => {
           }}
           initialValues={searchParams}
         >
+          <Form.Item label={'Country'} name={'country'}>
+            <Select>
+              {Object.values(Country).map((val, index) => (
+                <Select.Option value={val} key={index}>
+                  {val}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item label={'Source'} name={'source'}>
+            <Select>
+              {sourceOptions.map((val, index) => (
+                <Select.Option value={val} key={index}>
+                  {val}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
           <Form.Item label={'State'} name={'state'}>
             <Select>
-              {usStates.map((val, index) => (
+              {stateOptions.map((val, index) => (
                 <Select.Option value={val.abbreviation} key={index}>
                   {val.name}
                 </Select.Option>
@@ -84,7 +116,11 @@ export const UserGages = (): JSX.Element => {
             </Select>
           </Form.Item>
           <Form.Item name={'SiteId'} label={'Gage Name'}>
-            <AutoComplete options={options} onSearch={onSearch} />
+            <AutoComplete
+              options={options}
+              onSearch={onSearch}
+              onSelect={(val) => setSelectedGageSiteId(val)}
+            />
           </Form.Item>
         </Form>
       </Modal>
@@ -104,8 +140,7 @@ export const UserGages = (): JSX.Element => {
           Add Gage
         </Button>
       </div>
-      <div>Table</div>
-      {/*<GageTable />*/}
+      <UserGageTable />
     </>
   )
 }

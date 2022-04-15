@@ -57,11 +57,6 @@ const GageTable = (): JSX.Element => {
         </div>
       ),
     },
-    // {
-    //   title: 'Delta',
-    //   dataIndex: 'delta',
-    //   key: 'delta',
-    // },
     {
       title: 'Updated',
       dataIndex: 'updatedAt',

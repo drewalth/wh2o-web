@@ -1,11 +1,12 @@
 import { createContext, useContext } from 'react'
-import { RequestStatus, UserConfig } from '../../types'
+import { Alert, RequestStatus, User } from '../../types'
 
 export type UserContextData = {
-  user?: UserConfig
+  user?: User
   requestStatus: RequestStatus
-  setUser: (user: UserConfig) => void
+  setUser: (user: User) => void
   reset: () => void
+  appendUserAlerts: (alert: Alert) => void
 }
 
 export const UserContext = createContext({} as UserContextData)

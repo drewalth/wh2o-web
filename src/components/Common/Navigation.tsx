@@ -4,7 +4,7 @@ import { Layout, Menu, Typography } from 'antd'
 import 'antd/dist/antd.css'
 import {
   DashboardOutlined,
-  SettingOutlined,
+  UserOutlined,
   AreaChartOutlined,
   ExportOutlined,
   ImportOutlined,
@@ -12,7 +12,7 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 import { useUserContext } from '../User/UserContext'
-import { UserConfig } from '../../types'
+import { User } from '../../types'
 
 type NavigationProps = {
   children: ReactNode
@@ -34,7 +34,7 @@ const baseNavItems: NavItem[] = [
   },
 ]
 
-const getNavItems = (user: UserConfig | undefined): NavItem[] => {
+const getNavItems = (user: User | undefined): NavItem[] => {
   if (!!user) {
     return [
       {
@@ -45,8 +45,8 @@ const getNavItems = (user: UserConfig | undefined): NavItem[] => {
       ...baseNavItems,
       {
         path: '/user/settings',
-        text: 'Settings',
-        icon: <SettingOutlined />,
+        text: 'Account',
+        icon: <UserOutlined />,
       },
       {
         path: '/auth/logout',

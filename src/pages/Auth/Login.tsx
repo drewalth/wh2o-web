@@ -25,7 +25,7 @@ export const Login = () => {
       const { user, token } = await authLogin(form)
       setUser(user)
       setToken(token)
-      navigate('/')
+      navigate('/user/dashboard')
     } catch (e) {
       console.error(e)
     }

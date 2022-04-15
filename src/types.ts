@@ -1,48 +1,71 @@
 /* eslint-disable no-unused-vars */
 import { AlertCriteria, AlertInterval, AlertChannel } from './enums'
 
-export type UserConfig = {
-  ID: number
-  Email: string
-  MailgunKey: string
-  MailgunDomain: string
-  Timezone: string
-  TwilioAccountSID: string
-  TwilioAuthToken: string
-  TwilioPhoneNumberTo: string
-  TwilioPhoneNumberFrom: string
+export enum UserRole {
+  GENERAL = 'GENERAL',
+  EDITOR = 'EDITOR',
+  ADMIN = 'ADMIN',
+  SUPERADMIN = 'SUPERADMIN',
 }
 
-export type UserConfigDto = Omit<UserConfig, 'ID'>
+export type User = {
+  id: number
+  email: string
+  name: string
+  telephone: string
+  timezone: string
+  role: UserRole
+  verified: boolean
+  gages: Gage[]
+  alerts: Alert[]
+  createdAt: Date
+  updatedAt: Date
+  deletedAt: Date
+}
+
+export type UserUpdateDto = Omit<
+  User,
+  | 'updatedAt'
+  | 'deletedAt'
+  | 'gages'
+  | 'role'
+  | 'alerts'
+  | 'verified'
+  | 'createdAt'
+>
+
+export type UserCreateDto = Omit<UserUpdateDto, 'id'> & {
+  password: string
+}
 
 export type Alert = {
-  ID: number
-  Name: string
-  Active: boolean
-  Criteria: AlertCriteria
-  Interval: AlertInterval
-  Channel: AlertChannel
-  Metric: GageMetric
-  Minimum?: number
-  Maximum?: number
-  Value: number
-  GageID: number
-  UserID: number
-  NotifyTime?: string
-  NextSend?: Date
-  UpdatedAt: Date
-  CreatedAt: Date
-  Gage: Gage
+  id: number
+  name: string
+  active: boolean
+  criteria: AlertCriteria
+  interval: AlertInterval
+  channel: AlertChannel
+  metric: GageMetric
+  minimum?: number
+  maximum?: number
+  value: number
+  gageId: number
+  userId: number
+  notifyTime?: string
+  lastSent?: Date
+  updatedAt?: Date
+  createdAt: Date
+  gage: Gage
 }
 
 export type CreateAlertDto = Omit<
   Alert,
-  'CreatedAt' | 'UpdatedAt' | 'ID' | 'GageID' | 'Gage'
+  'createdAt' | 'updatedAt' | 'id' | 'gage' | 'lastSent'
 >
 
 export type UpdateAlertDto = Omit<
   Alert,
-  'CreatedAt' | 'NextSend' | 'ID' | 'Gage'
+  'createdAt' | 'nextSend' | 'id' | 'gage'
 >
 
 export enum GageSource {
@@ -95,12 +118,6 @@ export type GageReading = {
   updatedAt?: Date
 }
 
-export type ExportDataDto = {
-  gages: boolean
-  alerts: boolean
-  settings: boolean
-}
-
 export type Gage = {
   id: number
   name: string
@@ -116,7 +133,7 @@ export type Gage = {
   delta: number
   lastFetch: Date
   createdAt: Date
-  updatedAt: Date
+  updatedAt?: Date
 }
 
 export type UpdateGageDto = Omit<
@@ -165,125 +182,4 @@ export enum GageMetric {
   TEMP = 'TEMP',
   CMS = 'CMS',
   M = 'M',
-}
-
-export enum USGSGageReadingVariable {
-  CFS = '00060',
-  FT = '00065',
-  DEG_CELCIUS = '00010',
-}
-
-export type USGSGageUnitCode = 'ft3/s' | 'ft' | 'deg C'
-
-export type USGSGageReadingValue = {
-  value: {
-    value: string
-    qualifiers: string[]
-    dateTime: string
-  }[]
-  qualifier: {
-    qualifierCode: string
-    qualifierDescription: string
-    qualifierID: number
-    network: string
-    vocabulary: string
-  }[]
-  qualityControlLevel: unknown[]
-  method: {
-    methodDescription: string
-    methodID: number
-  }[]
-  source: unknown[]
-  offset: unknown[]
-  sample: unknown[]
-  censorCode: unknown[]
-}
-
-export type USGSTimeSeries = {
-  sourceInfo: {
-    siteName: string
-    siteCode: {
-      value: string
-      network: string
-      agencyCode: string
-    }[]
-    timeZoneInfo: {
-      defaultTimeZone: {
-        zoneOffset: string
-        zoneAbbreviation: string
-      }
-      daylightSavingsTimeZone: {
-        zoneOffset: string
-        zoneAbbreviation: string
-      }
-      siteUsesDaylightSavingsTime: boolean
-    }
-    geoLocation: {
-      geogLocation: {
-        srs: string
-        latitude: number
-        longitude: number
-      }
-      localSiteXY: unknown[]
-    }
-    note: unknown[]
-    siteType: unknown[]
-    siteProperty: {
-      name: string
-      value: string
-    }[]
-  }
-  variable: {
-    variableCode: {
-      value: USGSGageReadingVariable
-      network: string
-      vocabulary: string
-      variableID: number
-      default: boolean
-    }[]
-    variableName: string
-    variableDescription: string
-    valueType: string
-    unit: {
-      unitCode: USGSGageUnitCode
-    }
-    options: {
-      option: {
-        name: string
-        optionCode: string
-      }[]
-    }
-    note: unknown[]
-    noDataValue: number
-    variableProperty: unknown[]
-    oid: string
-  }
-  values: USGSGageReadingValue[]
-  name: string
-}
-
-export type USGSGageData = {
-  name: string
-  declaredType: string
-  scope: string
-  value: {
-    queryInfo: {
-      queryURL: string
-      criteria: {
-        locationParam: string
-        variableParam: string
-        parameter: unknown[]
-      }
-      note: { value: string; title: string }[]
-    }
-    timeSeries: USGSTimeSeries[]
-  }
-  nil: boolean
-  globalScope: boolean
-  typeSubstituted: boolean
-}
-
-export type ExportData = {
-  gages: Gage[]
-  alerts: Alert[]
 }

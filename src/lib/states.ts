@@ -1,4 +1,4 @@
-type StateEntry = { name: string; abbreviation: string }
+export type StateEntry = { name: string; abbreviation: string }
 
 export const usStates: StateEntry[] = [
   {
