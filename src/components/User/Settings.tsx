@@ -19,9 +19,11 @@ import debounce from 'lodash.debounce'
 import { useLocalNavGuard } from '../../hooks'
 import { useUserContext } from './UserContext'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const Settings = () => {
   useLocalNavGuard()
+  const { t } = useTranslation()
   const { user } = useUserContext()
   const [deleteModalVisible, setDeleteModalVisible] = useState(false)
   const [deleteConfirmInput, setDeleteConfirmInput] = useState('')
@@ -88,19 +90,19 @@ const Settings = () => {
     <>
       <Row justify={'center'}>
         <Col span={24} sm={20} md={16} lg={16} xl={10}>
-          <Card title={'Account'}>
+          <Card title={t('menu.profile')}>
             <Form
               initialValues={user}
               onValuesChange={handleValueChange}
               layout={'vertical'}
             >
-              <Form.Item name={'name'} label={'Name'}>
+              <Form.Item name={'name'} label={t('register.name')}>
                 <Input />
               </Form.Item>
-              <Form.Item name={'email'} label={'Email'}>
+              <Form.Item name={'email'} label={t('register.email')}>
                 <Input />
               </Form.Item>
-              <Form.Item name={'timezone'} label={'Timezone'}>
+              <Form.Item name={'timezone'} label={t('register.timezone')}>
                 <Select>
                   {timezones.map((tz) => (
                     <Select.Option value={tz} key={tz}>
@@ -109,7 +111,7 @@ const Settings = () => {
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item name={'telephone'} label={'Telephone'}>
+              <Form.Item name={'telephone'} label={t('register.telephone')}>
                 <Input />
               </Form.Item>
             </Form>
@@ -119,7 +121,7 @@ const Settings = () => {
               danger
               onClick={() => setDeleteModalVisible(true)}
             >
-              Delete Account
+              {t('usermenu.delete')}
             </Button>
           </Card>
         </Col>

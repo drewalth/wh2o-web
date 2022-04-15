@@ -13,6 +13,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 import { useUserContext } from '../User/UserContext'
 import { User } from '../../types'
+import { useTranslation } from 'react-i18next'
 
 type NavigationProps = {
   children: ReactNode
@@ -26,50 +27,51 @@ export type NavItem = {
   icon: ReactNode
 }
 
-const baseNavItems: NavItem[] = [
-  {
-    path: '/gage',
-    text: 'Gages',
-    icon: <AreaChartOutlined />,
-  },
-]
-
-const getNavItems = (user: User | undefined): NavItem[] => {
-  if (!!user) {
-    return [
-      {
-        path: '/user/dashboard',
-        text: 'Dashboard',
-        icon: <DashboardOutlined />,
-      },
-      ...baseNavItems,
-      {
-        path: '/user/settings',
-        text: 'Account',
-        icon: <UserOutlined />,
-      },
-      {
-        path: '/auth/logout',
-        text: 'Sign Out',
-        icon: <ExportOutlined />,
-      },
-    ]
-  }
-
-  return [
-    ...baseNavItems,
-    {
-      path: '/auth/login',
-      text: 'Sign In',
-      icon: <ImportOutlined />,
-    },
-  ]
-}
-
 export const Navigation = ({ children }: NavigationProps) => {
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useUserContext()
+  const { t } = useTranslation()
+
+  const baseNavItems: NavItem[] = [
+    {
+      path: '/gage',
+      text: 'Gages',
+      icon: <AreaChartOutlined />,
+    },
+  ]
+
+  const getNavItems = (user: User | undefined): NavItem[] => {
+    if (!!user) {
+      return [
+        {
+          path: '/user/dashboard',
+          text: t('menu.dashboard'),
+          icon: <DashboardOutlined />,
+        },
+        ...baseNavItems,
+        {
+          path: '/user/settings',
+          text: t('menu.profile'),
+          icon: <UserOutlined />,
+        },
+        {
+          path: '/auth/logout',
+          text: t('usermenu.signout'),
+          icon: <ExportOutlined />,
+        },
+      ]
+    }
+
+    return [
+      ...baseNavItems,
+      {
+        path: '/auth/login',
+        text: t('usermenu.signin'),
+        icon: <ImportOutlined />,
+      },
+    ]
+  }
 
   const navItems = getNavItems(user)
 
