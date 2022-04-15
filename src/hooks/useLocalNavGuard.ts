@@ -8,12 +8,12 @@ import { useEffect } from 'react'
  * check to see if user is logged in, if not redirect.
  */
 export const useLocalNavGuard = (redirectPath = '/auth/unauthorized') => {
-  const { user } = useUserContext()
+  const { user, requestStatus } = useUserContext()
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!user) {
+    if (!user && requestStatus !== 'loading') {
       navigate(redirectPath, { replace: true })
     }
-  }, [])
+  }, [requestStatus])
 }

@@ -9,7 +9,7 @@ import { ReadingSelect } from './ReadingSelect'
 import { useNavigate } from 'react-router-dom'
 
 const GageTable = (): JSX.Element => {
-  const { gages } = useGagesContext()
+  const { gages, pagination, setSearchParams, searchParams } = useGagesContext()
   const navigate = useNavigate()
 
   const columns = [
@@ -95,7 +95,23 @@ const GageTable = (): JSX.Element => {
 
   return (
     <div style={{ position: 'relative', width: '100%', overflowX: 'scroll' }}>
-      <Table dataSource={gages || []} columns={columns} />
+      <Table
+        dataSource={gages || []}
+        columns={columns}
+        pagination={{
+          total: pagination.total,
+          showSizeChanger: true,
+          pageSize: pagination.limit,
+          pageSizeOptions: [10, 25, 50],
+          onChange: (page, pageSize) => {
+            setSearchParams({
+              ...searchParams,
+              limit: pageSize,
+              offset: page === 1 ? 0 : (page - 1) * pagination.limit,
+            })
+          },
+        }}
+      />
     </div>
   )
 }

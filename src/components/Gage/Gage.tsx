@@ -1,39 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import GageTable from './GageTable'
 import { Form, Input, Select } from 'antd'
 import { useGagesContext } from '../Provider/GageProvider'
-import { getUsStates } from '../../controllers'
 import { Country, GageSource } from '../../types'
+import { usStates, canadianProvinces } from '../../lib/states'
 
+/**
+ *
+ * @todo fix source and state options inputs to reflect currently selected country
+ */
 export const Gage = (): JSX.Element => {
-  const [usStates, setUsStates] = useState<
-    { name: string; abbreviation: string }[]
-  >([])
-
   const { searchParams, setSearchParams } = useGagesContext()
 
-  // const getGageSourceOptions = (): GageSource[] => {
-  //   if (searchParams.country === Country.CA) {
-  //     return [GageSource.ENVIRONMENT_CANADA]
-  //   }
-  //
-  //   return [GageSource.USGS]
-  // }
-  //
-  // const getStateOptions = () => {
-  //   if (searchParams.country === Country.CA) {
-  //     return Object.values(CanadianProvinces)
-  //   }
-  //
-  //   return usStates.length > 0 ? usStates : []
-  // }
+  const stateOptions =
+    searchParams.country === Country.CA ? canadianProvinces : usStates
 
-  useEffect(() => {
-    ;(async () => {
-      const result = await getUsStates()
-      setUsStates(result)
-    })()
-  }, [])
+  const sourceOptions =
+    searchParams.country === Country.CA
+      ? [GageSource.ENVIRONMENT_CANADA]
+      : [GageSource.USGS]
 
   return (
     <>
@@ -41,6 +26,36 @@ export const Gage = (): JSX.Element => {
         layout={'inline'}
         initialValues={searchParams}
         onValuesChange={(val) => {
+          if (
+            searchParams.country === Country.US &&
+            val.country === Country.CA
+          ) {
+            setSearchParams(
+              Object.assign({}, searchParams, {
+                ...val,
+                source: GageSource.ENVIRONMENT_CANADA,
+                state: 'BC',
+              }),
+            )
+
+            return
+          }
+
+          if (
+            searchParams.country === Country.CA &&
+            val.country === Country.US
+          ) {
+            setSearchParams(
+              Object.assign({}, searchParams, {
+                ...val,
+                source: GageSource.USGS,
+                state: 'AL',
+              }),
+            )
+
+            return
+          }
+
           setSearchParams(Object.assign({}, searchParams, val))
         }}
         wrapperCol={{ span: 24 }}
@@ -50,20 +65,19 @@ export const Gage = (): JSX.Element => {
         </Form.Item>
         <Form.Item name={'state'}>
           <Select>
-            {usStates.length > 0 &&
-              usStates.map((state) => (
-                <Select.Option
-                  key={state.abbreviation}
-                  value={state.abbreviation}
-                >
-                  {state.name}
-                </Select.Option>
-              ))}
+            {stateOptions.map((state) => (
+              <Select.Option
+                key={state.abbreviation}
+                value={state.abbreviation}
+              >
+                {state.name}
+              </Select.Option>
+            ))}
           </Select>
         </Form.Item>
         <Form.Item name={'source'}>
           <Select>
-            {Object.values(GageSource).map((source) => (
+            {sourceOptions.map((source) => (
               <Select.Option key={source} value={source}>
                 {source}
               </Select.Option>

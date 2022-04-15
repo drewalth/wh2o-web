@@ -20,9 +20,9 @@ function App() {
       <AppProvider>
         <Navigation>
           <Routes>
-            <Route path="/settings" element={<Settings />} />
+            <Route path="/user/settings" element={<Settings />} />
+            <Route path="/user/dashboard" element={<Account />} />
             <Route path="/exporter" element={<Exporter />} />
-            <Route path="/account" element={<Account />} />
             <Route path="/gage" element={<Gage />} />
             <Route path="/gage/:state/:id" element={<GageDetail />} />
             <Route path="/auth/login" element={<Login />} />

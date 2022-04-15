@@ -9,11 +9,11 @@ import {
   Select,
   TimePicker,
 } from 'antd'
-import { CreateAlertDto, GageMetric } from '../../types'
-import { AlertChannel, AlertCriteria, AlertInterval } from '../../enums'
-import { useGagesContext } from '../Provider/GageProvider'
-import { createAlert } from '../../controllers'
-import { useAlertsContext } from '../Provider/AlertProvider'
+import { CreateAlertDto, GageMetric } from '../../../types'
+import { AlertChannel, AlertCriteria, AlertInterval } from '../../../enums'
+import { useGagesContext } from '../../Provider/GageProvider'
+import { createAlert } from '../../../controllers'
+import { useAlertsContext } from '../../Provider/AlertProvider'
 import moment from 'moment'
 
 export const Alert = (): JSX.Element => {

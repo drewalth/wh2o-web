@@ -38,13 +38,13 @@ const getNavItems = (user: UserConfig | undefined): NavItem[] => {
   if (!!user) {
     return [
       {
-        path: '/',
+        path: '/user/dashboard',
         text: 'Dashboard',
         icon: <DashboardOutlined />,
       },
       ...baseNavItems,
       {
-        path: '/settings',
+        path: '/user/settings',
         text: 'Settings',
         icon: <SettingOutlined />,
       },

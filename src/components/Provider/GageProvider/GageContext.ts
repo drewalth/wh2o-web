@@ -1,26 +1,26 @@
 import { createContext, useContext } from 'react'
-import { Country, Gage, GageSource, RequestStatus } from '../../../types'
-import { GageSearchParams } from '../../../controllers'
-
-export const DEFAULT_GAGE_SEARCH_PARAMS: GageSearchParams = {
-  state: 'AL',
-  offset: 0,
-  limit: 25,
-  country: Country.US,
-  searchTerm: '',
-  source: GageSource.USGS,
-}
+import {
+  Country,
+  Gage,
+  GageSource,
+  RequestStatus,
+  TablePagination,
+  GageSearchParams,
+} from '../../../types'
 
 export const DEFAULT_PAGINATION: TablePagination = {
   total: 0,
   offset: 0,
-  limit: 0,
+  limit: 10,
 }
 
-export type TablePagination = {
-  total: number
-  offset: number
-  limit: number
+export const DEFAULT_GAGE_SEARCH_PARAMS: GageSearchParams = {
+  state: 'AL',
+  offset: DEFAULT_PAGINATION.offset,
+  limit: DEFAULT_PAGINATION.limit,
+  country: Country.US,
+  searchTerm: '',
+  source: GageSource.USGS,
 }
 
 type GageContextData = {

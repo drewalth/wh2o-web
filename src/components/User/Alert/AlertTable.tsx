@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAlertsContext } from '../Provider/AlertProvider'
+import { useAlertsContext } from '../../Provider/AlertProvider'
 import {
   Button,
   notification,
@@ -9,11 +9,11 @@ import {
   Typography,
   Switch,
 } from 'antd'
-import { Alert } from '../../types'
+import { Alert } from '../../../types'
 import { DeleteOutlined } from '@ant-design/icons'
-import { deleteAlert, updateAlert } from '../../controllers'
+import { deleteAlert, updateAlert } from '../../../controllers'
 import moment from 'moment'
-import { AlertInterval } from '../../enums'
+import { AlertInterval } from '../../../enums'
 
 export const AlertTable = (): JSX.Element => {
   const { alerts, loadAlerts } = useAlertsContext()

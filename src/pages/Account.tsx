@@ -1,10 +1,8 @@
-import { Navigation } from '../components/Common/Navigation'
 import { Layout, Menu } from 'antd'
-import { Gage } from '../components/Gage/Gage'
-import { Alert } from '../components/Alert/Alert'
+import { Alert } from '../components/User/Alert/Alert'
 import { useState } from 'react'
-import AppProvider from '../components/App/AppProvider'
 import { useLocalNavGuard } from '../hooks'
+import { UserGages } from '../components/User/Gage/UserGages'
 
 type Tab = '1' | '2'
 
@@ -15,31 +13,27 @@ const Account = () => {
   useLocalNavGuard()
 
   return (
-    <AppProvider>
-      <Navigation>
-        <Layout
-          className="site-layout-background"
-          style={{ padding: '0', background: '#fff' }}
+    <Layout
+      className="site-layout-background"
+      style={{ padding: '0', background: '#fff' }}
+    >
+      <Sider width={200}>
+        <Menu
+          mode="inline"
+          defaultSelectedKeys={['1']}
+          defaultOpenKeys={['sub1']}
+          style={{ height: '100%' }}
+          onSelect={({ key }) => setSelectedTab(key as Tab)}
         >
-          <Sider width={200}>
-            <Menu
-              mode="inline"
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
-              style={{ height: '100%' }}
-              onSelect={({ key }) => setSelectedTab(key as Tab)}
-            >
-              <Menu.Item key="1">Gages</Menu.Item>
-              <Menu.Item key="2">Alerts</Menu.Item>
-            </Menu>
-          </Sider>
-          <Content style={{ padding: '24px', minHeight: 500 }}>
-            {selectedTab === '1' && <Gage />}
-            {selectedTab === '2' && <Alert />}
-          </Content>
-        </Layout>
-      </Navigation>
-    </AppProvider>
+          <Menu.Item key="1">Gages</Menu.Item>
+          <Menu.Item key="2">Alerts</Menu.Item>
+        </Menu>
+      </Sider>
+      <Content style={{ padding: '24px', minHeight: 500 }}>
+        {selectedTab === '1' && <UserGages />}
+        {selectedTab === '2' && <Alert />}
+      </Content>
+    </Layout>
   )
 }
 

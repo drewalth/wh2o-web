@@ -2,32 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a1c21490-e9e0-4e3b-ad87-3412f5592323" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.eslintrc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Alert/Alert.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Alert/Alert.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Alert/AlertTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Alert/AlertTable.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App/AppProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App/AppProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Alert/Alert.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/User/Alert/Alert.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Alert/AlertTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/User/Alert/AlertTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/App/App.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Common/Navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Common/Navigation.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Dashboard/Dashboard.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Gage/Gage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Gage/Gage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Gage/GageTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Gage/GageTable.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Gage/ReadingSelect.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Gage/ReadingSelect.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Provider/GageProvider/GageContext.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Provider/GageProvider/GageContext.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Provider/GageProvider/GageProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Provider/GageProvider/GageProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/User/UserContext.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/User/UserContext.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/User/UserGages.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/User/Gage/UserGages.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/enums.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/enums.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/http.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/http.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/token.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/token.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/useLocalNavGuard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useLocalNavGuard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Account.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Account.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Auth/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Auth/Login.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Home/Hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home/Hero.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Auth/Unauthorized.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Auth/Unauthorized.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Settings.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Settings.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,8 +32,8 @@
       <list>
         <option value="SCSS File" />
         <option value="TypeScript JSX File" />
-        <option value="TypeScript File" />
         <option value="CSS File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -77,6 +70,8 @@
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/User/Gage" />
+      <recent name="$PROJECT_DIR$/src/components/User" />
       <recent name="$PROJECT_DIR$/src/assets/" />
       <recent name="$PROJECT_DIR$/src/pages/Home" />
       <recent name="$PROJECT_DIR$/src/components" />
@@ -100,7 +95,7 @@
       <workItem from="1649865907617" duration="13024000" />
       <workItem from="1649903342255" duration="26000" />
       <workItem from="1649911739418" duration="254000" />
-      <workItem from="1649973989579" duration="2876000" />
+      <workItem from="1649973989579" duration="9260000" />
     </task>
     <servers />
   </component>

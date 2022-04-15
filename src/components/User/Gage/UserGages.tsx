@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-// import GageTable from './GageTable'
+import React, { useState } from 'react'
+import { usStates } from '../../../lib'
 import { AutoComplete, Button, Form, Modal, notification, Select } from 'antd'
-import { CreateGageDto, GageMetric } from '../../types'
-import { useGagesContext } from '../Provider/GageProvider'
-import { createGage, getUsStates } from '../../controllers'
+import { CreateGageDto, GageMetric } from '../../../types'
+import { useGagesContext } from '../../Provider/GageProvider'
+import { createGage } from '../../../controllers'
 
 const defaultForm: CreateGageDto = {
   Name: '',
@@ -11,21 +11,11 @@ const defaultForm: CreateGageDto = {
   Metric: GageMetric.CFS,
 }
 
-export const Gage = (): JSX.Element => {
-  const [usStates, setUsStates] = useState<
-    { name: string; abbreviation: string }[]
-  >([])
+export const UserGages = (): JSX.Element => {
   const [createModalVisible, setCreateModalVisible] = useState(false)
   const [createForm, setCreateForm] = useState<CreateGageDto>(defaultForm)
   const { searchParams, gages, setSearchParams } = useGagesContext()
   const [options, setOptions] = useState<{ value: string; label: string }[]>([])
-
-  useEffect(() => {
-    ;(async () => {
-      const result = await getUsStates()
-      setUsStates(result)
-    })()
-  }, [])
 
   const onSearch = (searchText: string) => {
     const vals = gages?.filter((g) =>
@@ -114,6 +104,7 @@ export const Gage = (): JSX.Element => {
           Add Gage
         </Button>
       </div>
+      <div>Table</div>
       {/*<GageTable />*/}
     </>
   )

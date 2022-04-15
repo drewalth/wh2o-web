@@ -3,10 +3,14 @@ import {
   DEFAULT_GAGE_SEARCH_PARAMS,
   DEFAULT_PAGINATION,
   GageContext,
-  TablePagination,
 } from './GageContext'
-import { Gage, RequestStatus } from '../../../types'
-import { gageSearch, GageSearchParams } from '../../../controllers'
+import {
+  Gage,
+  GageSearchParams,
+  RequestStatus,
+  TablePagination,
+} from '../../../types'
+import { gageSearch } from '../../../controllers'
 import { notification } from 'antd'
 
 type GageProviderProps = {
@@ -27,6 +31,10 @@ export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
     setSearchParams(DEFAULT_GAGE_SEARCH_PARAMS)
     setPagination(DEFAULT_PAGINATION)
   }
+
+  useEffect(() => {
+    console.log('pagination', pagination)
+  }, [pagination])
 
   useEffect(() => {
     ;(async () => {

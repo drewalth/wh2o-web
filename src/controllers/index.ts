@@ -9,7 +9,7 @@ import {
   ExportData,
   UserConfig,
   Gage,
-  GageSource,
+  GageSearchParams,
 } from '../types'
 import { Endpoints } from '../enums'
 
@@ -51,15 +51,6 @@ export const deleteGage = async (id: number) => {
 
 export const getGageSources = async (state: string) => {
   return http.get(Endpoints.GAGE_SOURCES + `/${state}`).then((res) => res.data)
-}
-
-export type GageSearchParams = {
-  searchTerm?: string
-  state: string
-  country: string
-  limit: number
-  offset: number
-  source: GageSource
 }
 
 export const gageSearch = async (
@@ -114,14 +105,6 @@ export const importData = async (data: ExportData) => {
       },
     })
     .then(({ data }) => data)
-}
-
-export const getTimezones = () => {
-  return http.get(Endpoints.LIB + '/tz').then(({ data }) => data)
-}
-
-export const getUsStates = () => {
-  return http.get(Endpoints.LIB + '/states').then(({ data }) => data)
 }
 
 export const authLogin = async (payload) => {
