@@ -15,7 +15,7 @@ export const useLocalNavGuard = (redirectPath = '/auth/unauthorized') => {
     if (!user && requestStatus !== 'loading') {
       navigate(redirectPath, { replace: true })
     }
-    if (requestStatus === 'failure') {
+    if (requestStatus === 'failure' && !user) {
       navigate('/five-hundred', { replace: true })
     }
   }, [requestStatus])

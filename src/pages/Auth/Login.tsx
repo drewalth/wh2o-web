@@ -25,6 +25,7 @@ export const Login = () => {
       const { user, token } = await authLogin(form)
       setUser(user)
       setToken(token)
+      await new Promise((resolve) => setTimeout(resolve, 500))
       navigate('/user/dashboard')
     } catch (e) {
       console.error(e)

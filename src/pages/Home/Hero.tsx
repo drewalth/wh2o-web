@@ -1,6 +1,7 @@
 import React from 'react'
-import { Card, Col, Row, Tag, Typography } from 'antd'
+import { Button, Card, Col, Popover, Row, Tag, Typography } from 'antd'
 import cover from '../../assets/john-huisjen-cover.jpeg'
+import { CameraOutlined } from '@ant-design/icons'
 
 export const Hero = () => {
   return (
@@ -26,6 +27,26 @@ export const Hero = () => {
           </Card>
         </Col>
       </Row>
+      <div style={{ position: 'fixed', bottom: 16, right: 16 }}>
+        <Popover
+          placement={'topLeft'}
+          content={
+            <div>
+              <Typography.Title
+                level={5}
+                style={{ lineHeight: 1, margin: 0, padding: 0 }}
+              >
+                John Huisjen
+              </Typography.Title>
+              <Typography.Text>W. Branch Penobscot, ME, USA</Typography.Text>
+            </div>
+          }
+        >
+          <Button size={'middle'} shape={'circle'}>
+            <CameraOutlined />
+          </Button>
+        </Popover>
+      </div>
     </div>
   )
 }
