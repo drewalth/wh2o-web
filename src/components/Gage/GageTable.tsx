@@ -1,10 +1,9 @@
 import React from 'react'
-import { Button, Select, Table, Tooltip, Typography } from 'antd'
+import { Button, Table, Tooltip, Typography } from 'antd'
 import { ArrowRightOutlined } from '@ant-design/icons'
 import { useGagesContext } from '../Provider/GageProvider'
-import { updateGage } from '../../controllers'
 import moment from 'moment'
-import { Gage, GageMetric, GageReading } from '../../types'
+import { Gage, GageReading } from '../../types'
 import { ReadingSelect } from './ReadingSelect'
 import { useNavigate } from 'react-router-dom'
 
@@ -21,30 +20,6 @@ const GageTable = (): JSX.Element => {
         <Tooltip title={name} placement={'top'}>
           <Typography.Text ellipsis>{name}</Typography.Text>
         </Tooltip>
-      ),
-    },
-    {
-      title: 'Primary Metric',
-      dataIndex: 'metric',
-      key: 'metric',
-      render: (metric: GageMetric, gage: Gage) => (
-        <Select
-          value={metric}
-          bordered={false}
-          size={'small'}
-          onChange={async (metric: GageMetric) => {
-            await updateGage({
-              ...gage,
-              metric,
-            })
-          }}
-        >
-          {Object.values(GageMetric).map((m) => (
-            <Select.Option value={m} key={m}>
-              {m}
-            </Select.Option>
-          ))}
-        </Select>
       ),
     },
     {

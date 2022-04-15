@@ -1,18 +1,63 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Col, Divider, PageHeader, Row, Statistic } from 'antd'
+import {
+  Card,
+  Col,
+  Divider,
+  PageHeader,
+  Row,
+  Statistic,
+  Button,
+  notification,
+} from 'antd'
 import { GageReadingsChart } from './GageReadingsChart'
 import moment from 'moment'
 import { GageMap } from './GageMap'
 import { Gage, RequestStatus } from '../../types'
-import { getGage } from '../../controllers'
+import { addUserGage, getGage, removeUserGage } from '../../controllers'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useUserContext } from '../User/UserContext'
+
+type BookmarkButtonProps = {
+  text: string
+  onClick: () => void
+}
 
 export const GageDetail = () => {
-  // const { user } = useUserContext()
+  const { user, reload } = useUserContext()
   const [gage, setGage] = useState<Gage>()
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
   const navigate = useNavigate()
   const { id: gageId, state: gageState } = useParams()
+
+  const bookMarkButtonProps: BookmarkButtonProps = (() => {
+    if (!user || !gage)
+      return {
+        text: '',
+        onClick: () => {},
+      }
+    const exists = user.gages.find((g) => g.id === gage.id)
+
+    return {
+      text: !!exists ? 'Remove Bookmark' : 'Add Bookmark',
+      onClick: async () => {
+        try {
+          const fn = !!exists ? removeUserGage : addUserGage
+          await fn(gage.id, user.id)
+
+          notification.success({
+            message: !!exists ? 'Bookmark removed' : 'Bookmark added',
+            placement: 'bottomRight',
+          })
+          await reload()
+        } catch (e) {
+          notification.error({
+            message: 'Something went wrong',
+            placement: 'bottomRight',
+          })
+        }
+      },
+    }
+  })()
 
   useEffect(() => {
     ;(async () => {
@@ -44,9 +89,7 @@ export const GageDetail = () => {
       }}
     >
       <div>
-        {gage.latitude && gage.longitude && (
-          <GageMap latitude={gage.latitude} longitude={gage.longitude} />
-        )}
+        <GageMap latitude={gage.latitude} longitude={gage.longitude} />
       </div>
       <Row
         align={'top'}
@@ -65,15 +108,11 @@ export const GageDetail = () => {
             onBack={() => navigate('/gage')}
             extra={
               <>
-                {/*{userData && (*/}
-                {/*  <Button*/}
-                {/*    onClick={async () => {*/}
-                {/*      await addUserGage(gage.id)*/}
-                {/*    }}*/}
-                {/*  >*/}
-                {/*    Bookmark*/}
-                {/*  </Button>*/}
-                {/*)}*/}
+                {!!user && (
+                  <Button onClick={bookMarkButtonProps.onClick}>
+                    {bookMarkButtonProps.text}
+                  </Button>
+                )}
               </>
             }
           />
@@ -105,7 +144,11 @@ export const GageDetail = () => {
                 <Statistic
                   title={'last fetched'}
                   loading={requestStatus === 'loading'}
-                  value={moment(gage?.updatedAt).format('l hh:mm a') || '-'}
+                  value={
+                    gage.updatedAt
+                      ? moment(gage?.updatedAt).format('l hh:mm a')
+                      : '-'
+                  }
                 />
               </Col>
               <Col span={12}>

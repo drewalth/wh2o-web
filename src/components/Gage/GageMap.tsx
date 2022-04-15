@@ -2,21 +2,22 @@ import React, { useEffect, useRef } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import './gage-map.css'
+import { Typography } from 'antd'
 
 const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN
 
 mapboxgl.accessToken = mapboxToken
 
 export type GageMapProps = {
-  latitude: number
-  longitude: number
+  latitude?: number
+  longitude?: number
 }
 
 export const GageMap = ({ latitude, longitude }: GageMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!mapboxToken || !mapRef.current) return
+    if (!mapboxToken || !mapRef.current || !longitude || !latitude) return
 
     const map = new mapboxgl.Map({
       container: mapRef.current,
@@ -28,7 +29,30 @@ export const GageMap = ({ latitude, longitude }: GageMapProps) => {
     el.className = 'map-marker'
     document.body.appendChild(el)
     new mapboxgl.Marker(el).setLngLat([longitude, latitude]).addTo(map)
+
+    return () => {
+      map.remove()
+    }
   }, [])
+
+  if (!latitude || !longitude) {
+    return (
+      <div
+        style={{
+          height: 'calc(100vh - 72px)',
+          position: 'absolute',
+          zIndex: 1,
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#ccc',
+        }}
+      >
+        <Typography.Text>No geospatial data available</Typography.Text>
+      </div>
+    )
+  }
 
   return (
     <div

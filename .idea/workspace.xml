@@ -3,9 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="a1c21490-e9e0-4e3b-ad87-3412f5592323" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/useLocalNavGuard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useLocalNavGuard.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Auth/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Auth/Login.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Home/Hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home/Hero.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Gage/GageDetail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Gage/GageDetail.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Gage/GageMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Gage/GageMap.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Gage/GageTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Gage/GageTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/User/UserContext.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/User/UserContext.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/User/UserProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/User/UserProvider.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
