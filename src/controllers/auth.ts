@@ -1,11 +1,10 @@
-import { http } from '../lib'
+import { checkResponse, http } from '../lib'
 import { Endpoints } from '../enums'
-import * as qs from 'qs'
 
 export const authLogin = async (payload) => {
   return http
-    .post(Endpoints.AUTH + '/login', qs.stringify(payload), {
-      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    .post(Endpoints.AUTH + '/login', {
+      body: JSON.stringify(payload),
     })
-    .then(({ data }) => data)
+    .then((res) => checkResponse(res))
 }

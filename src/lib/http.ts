@@ -1,25 +1,69 @@
-import axios, { AxiosRequestConfig } from 'axios'
 import { getToken } from './token'
-/**
- * Use fallback baseURL for local development
- */
-const config: AxiosRequestConfig = {
-  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000/api',
-  headers: {
-    Accept: '*/*',
-  },
-}
 
-const http = axios.create(config)
+const baseUrl =
+  process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000/api'
 
-http.interceptors.request.use((request) => {
+const getHeaders = () => {
+  const defaultHeaders = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }
+
   const token = getToken()
 
   if (token) {
-    // @ts-ignore
-    request.headers['Authorization'] = `Bearer ${token}`
+    defaultHeaders.headers = {
+      ...defaultHeaders.headers,
+      // @ts-ignore
+      Authorization: `Bearer ${token}`,
+    }
   }
-  return request
-})
+  return defaultHeaders
+}
+
+const get = (url: string, options?: RequestInit) => {
+  return fetch(baseUrl + url, {
+    method: 'GET',
+    ...getHeaders(),
+    ...options,
+  } as RequestInit)
+}
+
+const post = (url: string, options?: RequestInit) => {
+  return fetch(baseUrl + url, {
+    method: 'POST',
+    ...getHeaders(),
+    ...options,
+  } as RequestInit)
+}
+
+const put = (url: string, options?: RequestInit) => {
+  return fetch(baseUrl + url, {
+    method: 'PUT',
+    ...getHeaders(),
+    ...options,
+  } as RequestInit)
+}
+
+const http = {
+  get,
+  post,
+  put,
+  delete: (url: string, options?: RequestInit) => {
+    return fetch(baseUrl + url, {
+      method: 'DELETE',
+      ...getHeaders(),
+      ...options,
+    } as RequestInit)
+  },
+}
+
+export const checkResponse = (res: Response) => {
+  if (!res.ok) {
+    throw new Error('Request Failed')
+  }
+  return res.json()
+}
 
 export default http

@@ -39,7 +39,7 @@ export const GageMap = ({ latitude, longitude }: GageMapProps) => {
     return (
       <div
         style={{
-          height: 'calc(100vh - 72px)',
+          height: '40vh',
           position: 'absolute',
           zIndex: 1,
           width: '100%',
@@ -57,9 +57,7 @@ export const GageMap = ({ latitude, longitude }: GageMapProps) => {
   return (
     <div
       style={{
-        height: 'calc(100vh - 72px)',
-        position: 'absolute',
-        zIndex: 1,
+        height: '40vh',
         width: '100%',
       }}
       ref={mapRef}

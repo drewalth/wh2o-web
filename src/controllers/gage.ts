@@ -1,18 +1,15 @@
-import { Gage, GageSearchParams, UpdateGageDto } from '../types'
-import { http } from '../lib'
+import { CreateGageDto, Gage, GageSearchParams, UpdateGageDto } from '../types'
+import { http, checkResponse } from '../lib'
 import { Endpoints } from '../enums'
-import * as qs from 'qs'
 
 export const getGage = async (state: string, id: number): Promise<Gage> => {
-  return http.get(`/gage/${state}/${id}`).then((res) => res.data)
+  return http.get(`/gage/${state}/${id}`).then((res) => checkResponse(res))
 }
 
 export const updateGage = async (updateGageDto: UpdateGageDto) => {
   return http
-    .put(Endpoints.GAGE, qs.stringify(updateGageDto), {
-      headers: { 'content-type': 'application/x-www-form-urlencoded' },
-    })
-    .then(({ data }) => data)
+    .put(Endpoints.GAGE, { body: JSON.stringify(updateGageDto) })
+    .then((res) => checkResponse(res))
 }
 
 export const gageSearch = async (
@@ -24,5 +21,7 @@ export const gageSearch = async (
     params.append(val, input[val])
   }
 
-  return http.get(`/gage/search?${params}`).then(({ data }) => data)
+  return http.get(`/gage/search?${params}`).then((res) => checkResponse(res))
 }
+
+export const createGage = async (createGageDto: CreateGageDto) => {}

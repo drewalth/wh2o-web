@@ -1,15 +1,16 @@
 import React from 'react'
-import { GageReading } from '../../../types'
+import { Gage, GageReading } from '../../../types'
 import { Button, Table, Tooltip, Typography } from 'antd'
 import { ReadingSelect } from '../../Gage/ReadingSelect'
 import moment from 'moment'
-import { DeleteOutlined } from '@ant-design/icons'
+import { ArrowRightOutlined, DeleteOutlined } from '@ant-design/icons'
 import { removeUserGage } from '../../../controllers'
 import { useUserContext } from '../UserContext'
+import { useNavigate } from 'react-router-dom'
 
 export const UserGageTable = () => {
   const { user } = useUserContext()
-
+  const navigate = useNavigate()
   const columns = [
     {
       title: 'Name',
@@ -51,15 +52,21 @@ export const UserGageTable = () => {
     {
       dataIndex: 'id',
       key: 'id',
-      render: (gageId: number) => (
+      render: (id: number, gage: Gage) => (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
             danger
             size={'small'}
-            onClick={() => removeUserGage(gageId, user?.id || 0)}
+            onClick={() => removeUserGage(id, user?.id || 0)}
+            style={{ marginRight: 8 }}
           >
             <DeleteOutlined />
           </Button>
+          <Button
+            size={'small'}
+            onClick={() => navigate(`/gage/${gage.state}/${id}`)}
+            icon={<ArrowRightOutlined />}
+          />
         </div>
       ),
     },

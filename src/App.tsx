@@ -13,6 +13,7 @@ import { Logout } from './pages/Auth/Logout'
 import { Unauthorized } from './pages/Auth/Unauthorized'
 import { GageDetail } from './components/Gage/GageDetail'
 import { FiveHundred } from './pages/Auth/FiveHundred'
+import { Admin } from './pages/Admin/Admin'
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/auth/verify" element={<Login />} />
             <Route path="/auth/unauthorized" element={<Unauthorized />} />
             <Route path="/five-hundred" element={<FiveHundred />} />
+            <Route path="/admin" element={<Admin />} />
             <Route index element={<Home />} />
           </Routes>
         </Navigation>

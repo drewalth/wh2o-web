@@ -55,6 +55,7 @@ const GageTable = (): JSX.Element => {
       render: (id: number, gage: Gage) => (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
+            size={'small'}
             onClick={() => navigate(`/gage/${gage.state}/${id}`)}
             icon={<ArrowRightOutlined />}
           />

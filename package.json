@@ -5,12 +5,10 @@
   "dependencies": {
     "@ant-design/icons": "4.7.0",
     "antd": "4.19.3",
-    "axios": "0.26.1",
     "classnames": "2.3.1",
     "lodash.debounce": "4.0.8",
     "luxon": "2.3.1",
     "mapbox-gl": "2.8.1",
-    "qs": "6.10.3",
     "react": "^17.0.2",
     "react-apexcharts": "1.4.0",
     "react-dom": "^17.0.2",

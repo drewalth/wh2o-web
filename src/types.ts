@@ -1,6 +1,18 @@
 /* eslint-disable no-unused-vars */
 import { AlertCriteria, AlertInterval, AlertChannel } from './enums'
 
+export type FlowRange = {
+  id: number
+  name: string
+  description: string
+  minimum: number
+  maximum: number
+  metric: GageMetric
+  gageId: number
+  createdAt: Date
+  updatedAt: Date
+}
+
 export enum UserRole {
   GENERAL = 'GENERAL',
   EDITOR = 'EDITOR',
@@ -121,6 +133,7 @@ export type GageReading = {
 export type Gage = {
   id: number
   name: string
+  description: string
   source: GageSource
   siteId: string
   metric: GageMetric
@@ -131,6 +144,7 @@ export type Gage = {
   longitude?: number
   readings?: GageReading[]
   delta: number
+  flowRanges?: FlowRange[]
   lastFetch: Date
   createdAt: Date
   updatedAt?: Date
@@ -141,11 +155,16 @@ export type UpdateGageDto = Omit<
   'ID' | 'Alerts' | 'UpdatedAt' | 'LastFetch' | 'CreatedAt'
 >
 
-export interface CreateGageDto {
-  Name: string
-  SiteId: string
-  Metric: GageMetric
-}
+export type CreateGageDto = Omit<
+  Gage,
+  | 'id'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'readings'
+  | 'reading'
+  | 'lastFetch'
+  | 'delta'
+>
 
 export interface GageUpdateDTO {
   latitude: number

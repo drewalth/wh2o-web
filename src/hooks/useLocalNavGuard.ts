@@ -1,22 +1,39 @@
 import { useUserContext } from '../components/User/UserContext'
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
 
+export type UseLocalNavGuardOptions = {
+  redirectPath?: string
+  checkIsAdmin?: boolean
+}
+
+const defaultOptions: UseLocalNavGuardOptions = {
+  redirectPath: '/auth/unauthorized',
+  checkIsAdmin: false,
+}
 /**
  * useLocalNavGuard
  *
  * check to see if user is logged in, if not redirect.
  */
-export const useLocalNavGuard = (redirectPath = '/auth/unauthorized') => {
+export const useLocalNavGuard = (input?: UseLocalNavGuardOptions) => {
+  const options = { ...defaultOptions, ...input }
+  const { redirectPath, checkIsAdmin } = options
   const { user, requestStatus } = useUserContext()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (!user && requestStatus !== 'loading') {
+  useLayoutEffect(() => {
+    if (!user && requestStatus !== 'loading' && !!redirectPath) {
       navigate(redirectPath, { replace: true })
     }
     if (requestStatus === 'failure' && !user) {
       navigate('/five-hundred', { replace: true })
+    }
+
+    if (user && requestStatus === 'success' && checkIsAdmin && !!redirectPath) {
+      if (!['ADMIN', 'SUPERADMIN'].includes(user.role)) {
+        navigate(redirectPath, { replace: true })
+      }
     }
   }, [requestStatus])
 }

@@ -7,12 +7,6 @@ import { addUserGage } from '../../../controllers'
 import { UserGageTable } from './UserGageTable'
 import { useUserContext } from '../UserContext'
 
-// const defaultForm: CreateGageDto = {
-//   Name: '',
-//   SiteId: '',
-//   Metric: GageMetric.CFS,
-// }
-
 export const UserGages = (): JSX.Element => {
   const [createModalVisible, setCreateModalVisible] = useState(false)
   const [selectedGageSiteId, setSelectedGageSiteId] = useState('')
@@ -44,7 +38,6 @@ export const UserGages = (): JSX.Element => {
   }
 
   const handleClose = () => {
-    // setCreateForm(defaultForm)
     setCreateModalVisible(false)
   }
 
@@ -55,7 +48,8 @@ export const UserGages = (): JSX.Element => {
       const selectedGageId = gages.find((g) => g.siteId === selectedGageSiteId)
 
       if (!selectedGageId) {
-        throw new Error('whoops')
+        console.error('no selected gage')
+        return
       }
 
       await addUserGage(selectedGageId.id, user.id)

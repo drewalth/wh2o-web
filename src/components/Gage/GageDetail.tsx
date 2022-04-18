@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { CSSProperties, useEffect, useState } from 'react'
 import {
   Card,
   Col,
@@ -8,6 +8,7 @@ import {
   Statistic,
   Button,
   notification,
+  Typography,
 } from 'antd'
 import { GageReadingsChart } from './GageReadingsChart'
 import moment from 'moment'
@@ -16,10 +17,15 @@ import { Gage, RequestStatus } from '../../types'
 import { addUserGage, getGage, removeUserGage } from '../../controllers'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useUserContext } from '../User/UserContext'
+import { FlowRangeTable } from './FlowRangeTable'
 
 type BookmarkButtonProps = {
   text: string
   onClick: () => void
+}
+
+const whiteBg: CSSProperties = {
+  backgroundColor: '#fff',
 }
 
 export const GageDetail = () => {
@@ -79,28 +85,13 @@ export const GageDetail = () => {
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexFlow: 'column nowrap',
-        justifyContent: 'space-between',
-        height: 'calc(100vh - 72px)',
-        position: 'relative',
-      }}
-    >
-      <div>
-        <GageMap latitude={gage.latitude} longitude={gage.longitude} />
-      </div>
-      <Row
-        align={'top'}
-        style={{
-          backgroundColor: '#fff',
-          zIndex: 2,
-          position: 'absolute',
-          bottom: 0,
-          width: '100%',
-        }}
-      >
+    <>
+      <Row>
+        <Col span={24}>
+          <GageMap latitude={gage.latitude} longitude={gage.longitude} />
+        </Col>
+      </Row>
+      <Row style={{ ...whiteBg }}>
         <Col span={24}>
           <PageHeader
             title={gage?.name || ''}
@@ -118,6 +109,8 @@ export const GageDetail = () => {
           />
           <Divider style={{ margin: 0 }} />
         </Col>
+      </Row>
+      <Row style={{ ...whiteBg }}>
         <Col span={24} md={24} lg={12} style={{ height: '100%' }}>
           <Card style={{ border: 0, paddingTop: 16 }}>
             <Row gutter={24} style={{ marginBottom: 24 }}>
@@ -181,6 +174,20 @@ export const GageDetail = () => {
           )}
         </Col>
       </Row>
-    </div>
+      <Row style={{ ...whiteBg }}>
+        <Col span={24} md={24} lg={12}>
+          <Card style={{ border: 0 }} title={'Description'}>
+            <Typography.Text>
+              {gage.description || 'No description available.'}
+            </Typography.Text>
+          </Card>
+        </Col>
+      </Row>
+      <Row style={{ ...whiteBg }}>
+        <Col span={24} md={24}>
+          <FlowRangeTable flowRanges={gage.flowRanges || []} />
+        </Col>
+      </Row>
+    </>
   )
 }
