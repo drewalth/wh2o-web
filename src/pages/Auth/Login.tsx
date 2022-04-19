@@ -3,15 +3,15 @@ import {
   Button,
   Card,
   Col,
-  // Divider,
+  Divider,
   Form,
   Input,
   Row,
-  // Space,
-  // Typography,
+  Space,
+  Typography,
 } from 'antd'
 import { authColSpan } from './defaults'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { authLogin } from '../../controllers'
 import { setToken } from '../../lib/token'
 import { useUserContext } from '../../components/User/UserContext'
@@ -68,15 +68,15 @@ export const Login = () => {
               </Button>
             </Form.Item>
           </Form>
-          {/*<Divider />*/}
-          {/*<Space direction={'horizontal'} size={'middle'}>*/}
-          {/*  <Link to={'/auth/request-access'}>*/}
-          {/*    <Typography.Link>Request Access</Typography.Link>*/}
-          {/*  </Link>*/}
-          {/*  <Link to={'/auth/forgot'}>*/}
-          {/*    <Typography.Link>Forgot Password</Typography.Link>*/}
-          {/*  </Link>*/}
-          {/*</Space>*/}
+          <Divider />
+          <Space direction={'horizontal'} size={'middle'}>
+            <Link to={'/auth/register'}>
+              <Typography.Link>Register</Typography.Link>
+            </Link>
+            <Link to={'/auth/forgot'}>
+              <Typography.Link>Forgot Password</Typography.Link>
+            </Link>
+          </Space>
         </Card>
       </Col>
     </Row>

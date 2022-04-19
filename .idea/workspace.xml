@@ -3,8 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="a1c21490-e9e0-4e3b-ad87-3412f5592323" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/auth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/auth.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Account.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Account.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Auth/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Auth/Login.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Home/Hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home/Hero.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Home/Home.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home/Home.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Home/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home/Home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/style/navigation.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/navigation.scss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +96,10 @@
       <workItem from="1650255230886" duration="216000" />
       <workItem from="1650302150761" duration="10000" />
       <workItem from="1650306163037" duration="888000" />
-      <workItem from="1650309936154" duration="5159000" />
+      <workItem from="1650309936154" duration="7913000" />
+      <workItem from="1650341564670" duration="1250000" />
+      <workItem from="1650388539782" duration="392000" />
+      <workItem from="1650406882120" duration="2875000" />
     </task>
     <servers />
   </component>

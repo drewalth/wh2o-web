@@ -14,6 +14,9 @@ import { Unauthorized } from './pages/Auth/Unauthorized'
 import { GageDetail } from './components/Gage/GageDetail'
 import { FiveHundred } from './pages/Auth/FiveHundred'
 import { Admin } from './pages/Admin/Admin'
+import { AuthGuard } from './hooks'
+import { Register } from './pages/Auth/Register'
+import { Verify } from './pages/Auth/Verify'
 
 function App() {
   return (
@@ -22,14 +25,23 @@ function App() {
         <Navigation>
           <Routes>
             <Route path="/user/settings" element={<Settings />} />
-            <Route path="/user/dashboard" element={<Account />} />
+
+            <Route
+              path="/user/dashboard"
+              element={
+                <AuthGuard>
+                  <Account />
+                </AuthGuard>
+              }
+            />
             <Route path="/gage" element={<Gage />} />
             <Route path="/gage/:state/:id" element={<GageDetail />} />
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/logout" element={<Logout />} />
             <Route path="/auth/forgot" element={<Login />} />
             <Route path="/auth/reset" element={<Login />} />
-            <Route path="/auth/verify" element={<Login />} />
+            <Route path="/auth/register" element={<Register />} />
+            <Route path="/auth/verify" element={<Verify />} />
             <Route path="/auth/unauthorized" element={<Unauthorized />} />
             <Route path="/five-hundred" element={<FiveHundred />} />
             <Route path="/admin" element={<Admin />} />

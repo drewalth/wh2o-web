@@ -3,6 +3,7 @@ import {
   CreateAlertDto,
   UpdateAlertDto,
   User,
+  UserCreateDto,
   UserUpdateDto,
 } from '../types'
 import { checkResponse, http } from '../lib'
@@ -66,4 +67,10 @@ export const deleteAlert = async (alertId: number) => {
 
 export const deleteUser = async (id: number) => {
   return http.delete(`/user/${id}`).then((res) => checkResponse(res))
+}
+
+export const createUser = async (createUserDto: UserCreateDto) => {
+  return http
+    .post('/user/new', { body: JSON.stringify(createUserDto) })
+    .then((res) => checkResponse(res))
 }

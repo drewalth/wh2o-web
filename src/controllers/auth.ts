@@ -8,3 +8,11 @@ export const authLogin = async (payload) => {
     })
     .then((res) => checkResponse(res))
 }
+
+export const authVerify = async (token: string, email: string) => {
+  return http
+    .post(Endpoints.AUTH + '/verify', {
+      body: JSON.stringify({ token, email }),
+    })
+    .then((res) => checkResponse(res))
+}

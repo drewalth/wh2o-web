@@ -1,7 +1,6 @@
 import { Layout, Menu } from 'antd'
 import { Alert } from '../components/User/Alert/Alert'
 import { useState } from 'react'
-import { useLocalNavGuard } from '../hooks'
 import { UserGages } from '../components/User/Gage/UserGages'
 
 type Tab = '1' | '2'
@@ -10,7 +9,6 @@ const { Content, Sider } = Layout
 
 const Account = () => {
   const [selectedTab, setSelectedTab] = useState<Tab>('1')
-  useLocalNavGuard()
 
   return (
     <Layout
