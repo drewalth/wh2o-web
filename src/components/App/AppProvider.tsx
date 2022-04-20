@@ -12,6 +12,7 @@ const AppProvider = ({ children }: AppProviderProps): JSX.Element => {
     <AppContext.Provider
       value={{
         env: process.env.NODE_ENV as NodeEnv,
+        isProduction: process.env.NODE_ENV === 'production',
       }}
     >
       <UserProvider>

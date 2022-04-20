@@ -3,16 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="a1c21490-e9e0-4e3b-ad87-3412f5592323" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/auth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/auth.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/user.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Account.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Account.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Auth/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Auth/Login.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Home/Home.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home/Home.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Home/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home/Home.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/style/navigation.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/navigation.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/App/AppContext.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App/AppContext.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/App/AppProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App/AppProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Common/Navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Common/Navigation.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Gage/Gage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Gage/Gage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,11 +63,11 @@
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/Prophet/Charts" />
       <recent name="$PROJECT_DIR$/src/components/User" />
       <recent name="$PROJECT_DIR$/src/components/User/Gage" />
       <recent name="$PROJECT_DIR$/src/assets/" />
       <recent name="$PROJECT_DIR$/src/pages/Home" />
-      <recent name="$PROJECT_DIR$/src/components" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -100,6 +99,7 @@
       <workItem from="1650341564670" duration="1250000" />
       <workItem from="1650388539782" duration="392000" />
       <workItem from="1650406882120" duration="2875000" />
+      <workItem from="1650476193774" duration="5196000" />
     </task>
     <servers />
   </component>

@@ -1,6 +1,25 @@
 /* eslint-disable no-unused-vars */
 import { AlertCriteria, AlertInterval, AlertChannel } from './enums'
 
+export type ForeCastDataPoint = {
+  forecast: any
+  index: string
+  lower_error_bound: any
+  past_value: number
+  upper_error_bound: any
+}
+
+export type RunnablePercentage = {
+  index: string
+  percent: number
+}
+
+export type DailyAverage = {
+  index: string
+  average: number
+  middleFifty: number[]
+}
+
 export type FlowRange = {
   id: number
   name: string

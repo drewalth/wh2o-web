@@ -17,6 +17,7 @@ import { Admin } from './pages/Admin/Admin'
 import { AuthGuard } from './hooks'
 import { Register } from './pages/Auth/Register'
 import { Verify } from './pages/Auth/Verify'
+import { Prophet } from './components/Prophet/Prophet'
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
               }
             />
             <Route path="/gage" element={<Gage />} />
+            <Route path="/prophet" element={<Prophet />} />
             <Route path="/gage/:state/:id" element={<GageDetail />} />
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/logout" element={<Logout />} />

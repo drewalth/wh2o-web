@@ -4,6 +4,7 @@ export type NodeEnv = 'development' | 'production'
 
 export type AppContextData = {
   env: NodeEnv
+  isProduction: boolean
 }
 
 export const AppContext = createContext({} as AppContextData)
