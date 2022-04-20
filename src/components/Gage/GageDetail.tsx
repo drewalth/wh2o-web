@@ -41,7 +41,7 @@ export const GageDetail = () => {
         text: '',
         onClick: () => {},
       }
-    const exists = user.gages.find((g) => g.id === gage.id)
+    const exists = user?.gages.find((g) => g.id === gage.id)
 
     return {
       text: !!exists ? 'Remove Bookmark' : 'Add Bookmark',

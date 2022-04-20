@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import { GageProvider } from '../Provider/GageProvider'
 import { UserProvider } from '../User/UserProvider'
+import { AppContext, NodeEnv } from './AppContext'
 
 type AppProviderProps = {
   children: ReactNode
@@ -8,9 +9,15 @@ type AppProviderProps = {
 
 const AppProvider = ({ children }: AppProviderProps): JSX.Element => {
   return (
-    <UserProvider>
-      <GageProvider>{children}</GageProvider>
-    </UserProvider>
+    <AppContext.Provider
+      value={{
+        env: process.env.NODE_ENV as NodeEnv,
+      }}
+    >
+      <UserProvider>
+        <GageProvider>{children}</GageProvider>
+      </UserProvider>
+    </AppContext.Provider>
   )
 }
 
