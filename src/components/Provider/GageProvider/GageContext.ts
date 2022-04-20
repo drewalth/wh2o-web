@@ -15,12 +15,12 @@ export const DEFAULT_PAGINATION: TablePagination = {
 }
 
 export const DEFAULT_GAGE_SEARCH_PARAMS: GageSearchParams = {
-  state: 'AL',
+  state: 'BC',
   offset: DEFAULT_PAGINATION.offset,
   limit: DEFAULT_PAGINATION.limit,
-  country: Country.US,
+  country: Country.CA,
   searchTerm: '',
-  source: GageSource.USGS,
+  source: GageSource.ENVIRONMENT_CANADA,
 }
 
 type GageContextData = {
