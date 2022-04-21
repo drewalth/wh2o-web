@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { getDailyAverage, getForecast } from '../../controllers'
 import { HistoricAverageChart } from './Charts/HistoricAverageChart'
 import { ForecastChart } from './Charts/ForecastChart'
+import { Card, Divider } from 'antd'
 
 export type RiverFormProps = {
   className?: string
@@ -78,15 +79,16 @@ export const RiverForm = ({
   }, [siteId])
 
   return (
-    <div className={className}>
+    <Card className={className} title={siteDescription}>
       <HistoricAverageChart
         data={dailyAverages}
         requestStatus={dailyAveragesRequestStatus}
       />
+      <Divider />
       <ForecastChart
         data={forecastData}
         requestStatus={forecastRequestStatus}
       />
-    </div>
+    </Card>
   )
 }

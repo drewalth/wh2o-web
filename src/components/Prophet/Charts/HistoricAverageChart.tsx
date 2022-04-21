@@ -10,7 +10,7 @@ import {
   YAxis,
   XAxis,
 } from 'recharts'
-import { Spin } from 'antd'
+import { Spin, Typography } from 'antd'
 
 export type HistoricAverageChartProps = {
   data: DailyAverage[]
@@ -23,8 +23,13 @@ export const HistoricAverageChart = ({
 }: HistoricAverageChartProps) => {
   if (requestStatus === 'loading') {
     return (
-      <div>
-        <Spin />
+      <div className={'prophet-chart loading'}>
+        <div className={'loading-content'}>
+          <Spin />
+          <Typography.Title level={5} type={'secondary'}>
+            Loading Daily Averages...
+          </Typography.Title>
+        </div>
       </div>
     )
   }

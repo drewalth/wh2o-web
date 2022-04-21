@@ -1,5 +1,5 @@
 import { ForeCastDataPoint, RequestStatus } from '../../../types'
-import { Spin } from 'antd'
+import { Spin, Typography } from 'antd'
 import {
   CartesianGrid,
   ComposedChart,
@@ -19,8 +19,13 @@ export type ForecastChartProps = {
 export const ForecastChart = ({ data, requestStatus }: ForecastChartProps) => {
   if (requestStatus === 'loading') {
     return (
-      <div>
-        <Spin />
+      <div className={'prophet-chart loading'}>
+        <div className={'loading-content'}>
+          <Spin />
+          <Typography.Title level={5} type={'secondary'}>
+            Loading Flow Predictions...
+          </Typography.Title>
+        </div>
       </div>
     )
   }

@@ -5593,7 +5593,7 @@
   },
   {
     "site_no": "02315920",
-    "station_nm": "ALAPAHA RIVER AT GA 125\/32 NEAR IRWINVILLE, GA",
+    "station_nm": "ALAPAHA RIVER AT GA 125/32 NEAR IRWINVILLE, GA",
     "dec_lat_va": 31.63129589,
     "dec_long_va": -83.4179382
   },
@@ -6619,7 +6619,7 @@
   },
   {
     "site_no": "02397530",
-    "station_nm": "COOSA RIVER AT STATE LINE, AL\/GA",
+    "station_nm": "COOSA RIVER AT STATE LINE, AL/GA",
     "dec_lat_va": 34.20176124,
     "dec_long_va": -85.447458
   },
@@ -21751,7 +21751,7 @@
   },
   {
     "site_no": "07367690",
-    "station_nm": "Boeuf River at Ark\/La State Line",
+    "station_nm": "Boeuf River at Ark/La State Line",
     "dec_lat_va": 33.00138889,
     "dec_long_va": -91.4380556
   },

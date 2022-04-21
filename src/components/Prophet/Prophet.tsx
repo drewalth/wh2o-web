@@ -1,6 +1,7 @@
 import { GageMap } from './GageMap'
 import { useState } from 'react'
 import { RiverForm } from './RiverForm'
+import { Col, Row } from 'antd'
 
 export const Prophet = () => {
   const [siteId, setSiteId] = useState('06719505')
@@ -14,9 +15,17 @@ export const Prophet = () => {
   }
 
   return (
-    <>
-      <GageMap onSelectGauge={handleSelectGage} />
-      <RiverForm siteDescription={siteDescription} siteId={siteId} />
-    </>
+    <div>
+      <Row style={{ marginBottom: 24 }}>
+        <Col span={24}>
+          <GageMap onSelectGauge={handleSelectGage} />
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <RiverForm siteDescription={siteDescription} siteId={siteId} />
+        </Col>
+      </Row>
+    </div>
   )
 }

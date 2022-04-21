@@ -29,14 +29,14 @@ export type NavItem = {
 
 const baseNavItems: NavItem[] = [
   {
-    path: '/gage',
-    text: 'Gages',
-    icon: <AreaChartOutlined />,
-  },
-  {
     path: '/prophet',
     text: 'Prophet',
     icon: <EyeOutlined />,
+  },
+  {
+    path: '/gage',
+    text: 'Search',
+    icon: <AreaChartOutlined />,
   },
 ]
 
