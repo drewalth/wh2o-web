@@ -4,6 +4,7 @@ import { Form, Input, Select } from 'antd'
 import { useGagesContext } from '../Provider/GageProvider'
 import { Country, GageSource } from '../../types'
 import { usStates, canadianProvinces } from '../../lib/states'
+// import { useAppContext } from '../App/AppContext'
 
 /**
  *
@@ -11,7 +12,7 @@ import { usStates, canadianProvinces } from '../../lib/states'
  */
 export const Gage = (): JSX.Element => {
   const { searchParams, setSearchParams } = useGagesContext()
-
+  // const { isProduction } = useAppContext()
   const stateOptions =
     searchParams.country === Country.CA ? canadianProvinces : usStates
 

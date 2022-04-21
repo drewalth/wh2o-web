@@ -8,6 +8,7 @@ import {
   AreaChartOutlined,
   ExportOutlined,
   ImportOutlined,
+  EyeOutlined,
 } from '@ant-design/icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
@@ -28,8 +29,13 @@ export type NavItem = {
 
 const baseNavItems: NavItem[] = [
   {
+    path: '/prophet',
+    text: 'Prophet',
+    icon: <EyeOutlined />,
+  },
+  {
     path: '/gage',
-    text: 'Gages',
+    text: 'Search',
     icon: <AreaChartOutlined />,
   },
 ]
@@ -92,7 +98,10 @@ export const Navigation = ({ children }: NavigationProps) => {
   )
 
   return (
-    <Layout style={{ minHeight: '100vh' }} className={'navigation'}>
+    <Layout
+      style={{ minHeight: '100vh', maxHeight: '100vh' }}
+      className={'navigation'}
+    >
       <Sider breakpoint="lg" collapsedWidth="0">
         <div className={'sider'}>
           <Logo onClick={() => navigate('/', { replace: false })} />
