@@ -8,8 +8,14 @@ import { useNavigate } from 'react-router-dom'
 import { ReadingSelect } from './ReadingSelect'
 
 const GageTable = (): JSX.Element => {
-  const { gages, pagination, setSearchParams, searchParams, setPagination } =
-    useGagesContext()
+  const {
+    gages,
+    pagination,
+    setSearchParams,
+    searchParams,
+    setPagination,
+    requestStatus,
+  } = useGagesContext()
   const navigate = useNavigate()
 
   const columns = [
@@ -88,6 +94,7 @@ const GageTable = (): JSX.Element => {
   return (
     <div style={{ position: 'relative', width: '100%', overflowX: 'scroll' }}>
       <Table
+        loading={requestStatus === 'loading'}
         dataSource={gages || []}
         columns={columns}
         pagination={{
