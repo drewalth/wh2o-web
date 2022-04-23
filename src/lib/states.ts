@@ -244,4 +244,12 @@ export const canadianProvinces: StateEntry[] = [
     name: 'British Columbia',
     abbreviation: 'BC',
   },
+  {
+    name: 'Ontario',
+    abbreviation: 'ON',
+  },
+  {
+    name: 'Alberta',
+    abbreviation: 'AB',
+  },
 ]

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import './gage-map.css'
+import './gage-map.scss'
 import { Typography } from 'antd'
 
 const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN

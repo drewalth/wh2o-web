@@ -3,9 +3,8 @@ import { Button, Table, Tooltip, Typography } from 'antd'
 import { ArrowRightOutlined } from '@ant-design/icons'
 import { useGagesContext } from '../Provider/GageProvider'
 import moment from 'moment'
-import { Gage, GageReading } from '../../types'
+import { Gage } from '../../types'
 import { useNavigate } from 'react-router-dom'
-import { ReadingSelect } from './ReadingSelect'
 
 const GageTable = (): JSX.Element => {
   const {
@@ -34,28 +33,31 @@ const GageTable = (): JSX.Element => {
         </Tooltip>
       ),
     },
-    // {
-    //   title: 'Latest Reading',
-    //   dataIndex: 'reading',
-    //   key: 'reading',
-    //   render: (reading: number, gage: Gage) => (
-    //     <div style={{ minWidth: 150 }}>{`${reading} ${gage.metric}`}</div>
-    //   ),
-    // },
     {
-      title: 'Readings',
-      dataIndex: 'readings',
-      key: 'readings',
-      render: (readings: GageReading[], gage: Gage) => (
+      title: 'Latest Reading',
+      dataIndex: 'reading',
+      key: 'reading',
+      render: (reading: number, gage: Gage) => (
         <div style={{ minWidth: 150 }}>
-          <ReadingSelect
-            readings={readings || []}
-            metric={gage.metric}
-            disabled={gage.disabled}
-          />
+          {gage.disabled ? `Disabled` : `${reading} ${gage.metric}`}
         </div>
       ),
     },
+    // {
+    //   title: 'Readings',
+    //   dataIndex: 'readings',
+    //   key: 'readings',
+    //   render: (readings: GageReading[], gage: Gage) => (
+    //     <div style={{ minWidth: 150 }}>
+    //       {/*<ReadingSelect*/}
+    //       {/*  readings={readings || []}*/}
+    //       {/*  metric={gage.metric}*/}
+    //       {/*  disabled={gage.disabled}*/}
+    //       {/*/>*/}
+    //
+    //     </div>
+    //   ),
+    // },
     {
       title: 'Updated',
       dataIndex: 'updatedAt',
