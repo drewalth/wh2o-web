@@ -109,7 +109,7 @@ export enum Country {
   CA = 'CA',
 }
 
-export type GageSearchParams = Omit<TablePagination, 'total'> & {
+export type GageSearchParams = {
   searchTerm?: string
   state: string
   country: string
@@ -117,9 +117,9 @@ export type GageSearchParams = Omit<TablePagination, 'total'> & {
 }
 
 export type TablePagination = {
+  page: number
+  page_size: number
   total: number
-  offset: number
-  limit: number
 }
 
 export enum CanadianProvinces {
@@ -158,6 +158,7 @@ export type Gage = {
   metric: GageMetric
   reading: number
   state: string
+  disabled: boolean
   country: string
   latitude?: number
   longitude?: number

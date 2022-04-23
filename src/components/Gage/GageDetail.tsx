@@ -9,6 +9,7 @@ import {
   Button,
   notification,
   Typography,
+  Tooltip,
 } from 'antd'
 import { GageReadingsChart } from './GageReadingsChart'
 import moment from 'moment'
@@ -99,10 +100,19 @@ export const GageDetail = () => {
             onBack={() => navigate('/gage')}
             extra={
               <>
-                {!!user && (
-                  <Button onClick={bookMarkButtonProps.onClick}>
+                {!!user ? (
+                  <Button
+                    type={'primary'}
+                    onClick={bookMarkButtonProps.onClick}
+                  >
                     {bookMarkButtonProps.text}
                   </Button>
+                ) : (
+                  <Tooltip title={'Log in to bookmark'}>
+                    <Button type={'primary'} disabled>
+                      Add Bookmark
+                    </Button>
+                  </Tooltip>
                 )}
               </>
             }

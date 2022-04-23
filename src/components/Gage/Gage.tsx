@@ -1,18 +1,20 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import GageTable from './GageTable'
-import { Form, Input, Select } from 'antd'
+import { Form, Input, Select, Button } from 'antd'
 import { useGagesContext } from '../Provider/GageProvider'
 import { Country, GageSource } from '../../types'
-import { usStates, canadianProvinces } from '../../lib/states'
+import { canadianProvinces, usStates } from '../../lib/states'
 // import { useAppContext } from '../App/AppContext'
+import { SyncOutlined } from '@ant-design/icons'
 
 /**
  *
  * @todo fix source and state options inputs to reflect currently selected country
  */
 export const Gage = (): JSX.Element => {
-  const { searchParams, setSearchParams } = useGagesContext()
-  // const { isProduction } = useAppContext()
+  const formRef = useRef<HTMLFormElement>(null)
+  const { searchParams, setSearchParams, resetPagination, reset } =
+    useGagesContext()
   const stateOptions =
     searchParams.country === Country.CA ? canadianProvinces : usStates
 
@@ -21,48 +23,113 @@ export const Gage = (): JSX.Element => {
       ? [GageSource.ENVIRONMENT_CANADA]
       : [GageSource.USGS]
 
+  const setFormAttributes = (country: Country) => {
+    if (formRef && formRef.current) {
+      const form = formRef.current
+
+      switch (country) {
+        case Country.US:
+          form.setFields([
+            {
+              name: 'country',
+              value: 'US',
+            },
+            {
+              name: 'state',
+              value: 'AL',
+            },
+            {
+              name: 'source',
+              value: 'USGS',
+            },
+          ])
+          return
+        default:
+        case Country.CA:
+          form.setFields([
+            {
+              name: 'country',
+              value: 'CA',
+            },
+            {
+              name: 'state',
+              value: 'BC',
+            },
+            {
+              name: 'source',
+              value: 'ENVIRONMENT_CANADA',
+            },
+          ])
+
+          return
+      }
+    }
+  }
+
+  const handleOnValuesChange = (val) => {
+    try {
+      if (searchParams.country === Country.US && val.country === Country.CA) {
+        resetPagination()
+        setSearchParams(
+          Object.assign({}, searchParams, {
+            ...val,
+            source: GageSource.ENVIRONMENT_CANADA,
+            state: 'BC',
+          }),
+        )
+        setFormAttributes(Country.CA)
+        return
+      }
+
+      if (searchParams.country === Country.CA && val.country === Country.US) {
+        resetPagination()
+        setSearchParams(
+          Object.assign({}, searchParams, {
+            ...val,
+            source: GageSource.USGS,
+            state: 'AL',
+          }),
+        )
+        setFormAttributes(Country.US)
+        return
+      }
+
+      if (searchParams.state !== val.state) {
+        resetPagination()
+      }
+
+      setSearchParams(Object.assign({}, searchParams, val))
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   return (
     <>
       <Form
+        // @ts-ignore
+        ref={formRef}
         layout={'inline'}
         initialValues={searchParams}
-        onValuesChange={(val) => {
-          if (
-            searchParams.country === Country.US &&
-            val.country === Country.CA
-          ) {
-            setSearchParams(
-              Object.assign({}, searchParams, {
-                ...val,
-                source: GageSource.ENVIRONMENT_CANADA,
-                state: 'BC',
-              }),
-            )
-
-            return
-          }
-
-          if (
-            searchParams.country === Country.CA &&
-            val.country === Country.US
-          ) {
-            setSearchParams(
-              Object.assign({}, searchParams, {
-                ...val,
-                source: GageSource.USGS,
-                state: 'AL',
-              }),
-            )
-
-            return
-          }
-
-          setSearchParams(Object.assign({}, searchParams, val))
-        }}
+        onValuesChange={handleOnValuesChange}
         wrapperCol={{ span: 24 }}
       >
-        <Form.Item name={'searchTerm'}>
-          <Input placeholder={'Gage Name'} />
+        <Form.Item name={'country'}>
+          <Select>
+            {Object.values(Country).map((country) => (
+              <Select.Option key={country} value={country}>
+                {(() => {
+                  switch (country) {
+                    case Country.US:
+                      return 'United States'
+                    default:
+                    case Country.CA:
+                      return 'Canada'
+                  }
+                })()}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item name={'state'}>
           <Select>
@@ -85,14 +152,20 @@ export const Gage = (): JSX.Element => {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name={'country'}>
-          <Select>
-            {Object.values(Country).map((country) => (
-              <Select.Option key={country} value={country}>
-                {country}
-              </Select.Option>
-            ))}
-          </Select>
+        <Form.Item name={'searchTerm'}>
+          <Input placeholder={'Gage Name'} allowClear />
+        </Form.Item>
+        <Form.Item>
+          <Button
+            type={'ghost'}
+            title={'Reset Search'}
+            onClick={() => {
+              reset()
+              setFormAttributes(Country.CA)
+            }}
+          >
+            <SyncOutlined />
+          </Button>
         </Form.Item>
       </Form>
       <div className={'mb-2'} />

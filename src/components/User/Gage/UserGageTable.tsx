@@ -26,9 +26,13 @@ export const UserGageTable = () => {
       title: 'Readings',
       dataIndex: 'readings',
       key: 'readings',
-      render: (readings: GageReading[]) => (
+      render: (readings: GageReading[], gage: Gage) => (
         <div style={{ minWidth: 150 }}>
-          <ReadingSelect readings={readings || []} />
+          <ReadingSelect
+            readings={readings || []}
+            metric={gage.metric}
+            disabled={gage.disabled}
+          />
         </div>
       ),
     },
@@ -72,5 +76,9 @@ export const UserGageTable = () => {
     },
   ]
 
-  return <Table columns={columns} dataSource={user?.gages || []} />
+  return (
+    <div style={{ maxWidth: '100%', overflowX: 'scroll' }}>
+      <Table columns={columns} dataSource={user?.gages || []} />
+    </div>
+  )
 }

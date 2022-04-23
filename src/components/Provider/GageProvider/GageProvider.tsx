@@ -32,19 +32,35 @@ export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
     setPagination(DEFAULT_PAGINATION)
   }
 
-  useEffect(() => {
-    console.log('pagination', pagination)
-  }, [pagination])
+  const resetPagination = () => {
+    setPagination({ ...pagination, page: 1 })
+  }
+
+  const getTotal = (total: number) => {
+    if (pagination.total !== 0 && total !== pagination.total && total !== 0) {
+      return total
+    }
+
+    if (total === 0) {
+      return pagination.total
+    }
+
+    if (pagination.total !== 0) {
+      return pagination.total
+    }
+    return total
+  }
 
   useEffect(() => {
     ;(async () => {
       try {
         setRequestStatus('loading')
         // @todo debounce
-        const { gages, total } = await gageSearch(searchParams)
+        const { gages, total } = await gageSearch(searchParams, pagination)
         setGages(gages)
         // pagination kinda busted...
-        setPagination({ ...pagination, total })
+
+        setPagination({ ...pagination, total: getTotal(total) })
         setRequestStatus('success')
       } catch (e) {
         setRequestStatus('failure')
@@ -64,7 +80,9 @@ export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
         setSearchParams,
         searchParams,
         pagination,
+        resetPagination,
         reset,
+        setPagination,
       }}
     >
       {children}
