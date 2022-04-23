@@ -27,6 +27,7 @@ export const GageMap = ({ latitude, longitude }: GageMapProps) => {
     })
     const el = document.createElement('div')
     el.className = 'map-marker'
+    el.innerHTML = "<div class='blob red'></div>"
     document.body.appendChild(el)
     new mapboxgl.Marker(el).setLngLat([longitude, latitude]).addTo(map)
 
