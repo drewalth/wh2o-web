@@ -1,7 +1,8 @@
 import { checkResponse, http } from '../lib'
 import { Endpoints } from '../enums'
+import { AuthLoginResponse } from '../types'
 
-export const authLogin = async (payload) => {
+export const authLogin = async (payload): Promise<AuthLoginResponse> => {
   return http
     .post(Endpoints.AUTH + '/login', {
       body: JSON.stringify(payload),

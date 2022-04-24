@@ -7,7 +7,7 @@ export type UserContextData = {
   setUser: (user: User) => void
   reset: () => void
   appendUserAlerts: (alert: Alert) => void
-  reload: () => void
+  reload: () => Promise<void>
 }
 
 export const UserContext = createContext({} as UserContextData)

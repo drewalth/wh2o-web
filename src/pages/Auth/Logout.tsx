@@ -1,24 +1,29 @@
 import { Card, Col, Row, Spin, Typography } from 'antd'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { clearToken } from '../../lib/token'
 import { useUserContext } from '../../components/User/UserContext'
+import { RequestStatus } from '../../types'
+import { CheckCircleTwoTone } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 
 export const Logout = () => {
   const { reset } = useUserContext()
   const navigate = useNavigate()
+  const [status, setStatus] = useState<RequestStatus>('loading')
   useEffect(() => {
     ;(async () => {
       clearToken()
       reset()
-      await new Promise((resolve) => setTimeout(resolve, 3000))
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      setStatus('success')
+      await new Promise((resolve) => setTimeout(resolve, 2000))
       navigate('/')
     })()
   }, [])
 
   return (
     <Row justify={'center'}>
-      <Col span={24} sm={4}>
+      <Col span={24} sm={12} md={8} lg={12} xl={6}>
         <Card>
           <div
             style={{
@@ -28,10 +33,21 @@ export const Logout = () => {
               alignItems: 'center',
             }}
           >
-            <Spin />
-            <Typography.Text type={'secondary'}>
-              Clearing session data...
-            </Typography.Text>
+            {status === 'loading' ? (
+              <>
+                <Spin />
+                <Typography.Text type={'secondary'}>
+                  Clearing session data...
+                </Typography.Text>
+              </>
+            ) : (
+              <>
+                <CheckCircleTwoTone size={32} />
+                <Typography.Text type={'secondary'}>
+                  Cleared. See ya!
+                </Typography.Text>
+              </>
+            )}
           </div>
         </Card>
       </Col>

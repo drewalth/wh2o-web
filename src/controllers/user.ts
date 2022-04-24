@@ -1,5 +1,6 @@
 import {
   Alert,
+  AuthLoginResponse,
   CreateAlertDto,
   UpdateAlertDto,
   User,
@@ -69,7 +70,9 @@ export const deleteUser = async (id: number) => {
   return http.delete(`/user/${id}`).then((res) => checkResponse(res))
 }
 
-export const createUser = async (createUserDto: UserCreateDto) => {
+export const createUser = async (
+  createUserDto: UserCreateDto,
+): Promise<AuthLoginResponse> => {
   return http
     .post('/user/new', { body: JSON.stringify(createUserDto) })
     .then((res) => checkResponse(res))

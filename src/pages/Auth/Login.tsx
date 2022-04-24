@@ -19,14 +19,15 @@ import { useAppContext } from '../../components/App/AppContext'
 
 export const Login = () => {
   const [form, setForm] = useState({})
-  const { setUser } = useUserContext()
+  const { reload } = useUserContext()
   const navigate = useNavigate()
   const { env } = useAppContext()
   const handleSubmit = async () => {
     try {
-      const { user, token } = await authLogin(form)
-      setUser(user)
+      const { token } = await authLogin(form)
       setToken(token)
+      await reload()
+
       await new Promise((resolve) => setTimeout(resolve, 500))
       navigate('/user/dashboard')
     } catch (e) {

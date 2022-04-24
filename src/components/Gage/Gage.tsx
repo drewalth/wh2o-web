@@ -6,6 +6,7 @@ import { Country, GageSource } from '../../types'
 import { canadianProvinces, usStates } from '../../lib/states'
 // import { useAppContext } from '../App/AppContext'
 import { SyncOutlined } from '@ant-design/icons'
+import debounce from 'lodash.debounce'
 
 /**
  *
@@ -66,7 +67,7 @@ export const Gage = (): JSX.Element => {
     }
   }
 
-  const handleOnValuesChange = (val) => {
+  const handleOnValuesChange = debounce((val) => {
     try {
       if (searchParams.country === Country.US && val.country === Country.CA) {
         resetPagination()
@@ -102,7 +103,7 @@ export const Gage = (): JSX.Element => {
     } catch (e) {
       console.error(e)
     }
-  }
+  }, 300)
 
   return (
     <>

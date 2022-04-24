@@ -1,6 +1,16 @@
 /* eslint-disable no-unused-vars */
 import { AlertCriteria, AlertInterval, AlertChannel } from './enums'
 
+export type AuthLoginResponse = {
+  token: string
+  user: {
+    id: number
+    email: string
+    name: string
+    role: UserRole
+  }
+}
+
 export type ForeCastDataPoint = {
   forecast: any
   index: string

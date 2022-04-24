@@ -59,9 +59,11 @@ const http = {
   },
 }
 
-export const checkResponse = (res: Response) => {
+export const checkResponse = async (res: Response) => {
   if (!res.ok) {
-    throw new Error('Request Failed')
+    const text = await res.text()
+
+    throw new Error(text || res.statusText)
   }
   return res.json()
 }
