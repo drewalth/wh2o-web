@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+
+import Recaptcha from 'react-google-invisible-recaptcha'
 import {
   Button,
   Card,
@@ -17,23 +19,65 @@ import { setToken } from '../../lib/token'
 import { useUserContext } from '../../components/User/UserContext'
 import { useAppContext } from '../../components/App/AppContext'
 
+type LoginForm = { email: string; password: string }
+
+const DEFAULT_FORM: LoginForm = {
+  email: '',
+  password: '',
+}
+
 export const Login = () => {
-  const [form, setForm] = useState({})
+  const recaptchaSiteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY
+  const recaptchaRef = useRef(null)
+  const [form, setForm] = useState<LoginForm>(DEFAULT_FORM)
   const { reload } = useUserContext()
   const navigate = useNavigate()
   const { env } = useAppContext()
+
+  const [humanDetected, setHumanDetected] = useState(false)
+  const [formSubmitted, setFormSubmitted] = useState(false)
+
+  const inputsProvided = form.password.length >= 8 && form.email.length > 3
+
+  const checkRecaptcha = () => {
+    try {
+      if (humanDetected) return
+
+      if (!inputsProvided) {
+        // @ts-ignore
+        recaptchaRef.current.reset()
+      } else {
+        // @ts-ignore
+        recaptchaRef.current.execute()
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   const handleSubmit = async () => {
     try {
       const { token } = await authLogin(form)
       setToken(token)
       await reload()
 
-      await new Promise((resolve) => setTimeout(resolve, 500))
+      await new Promise((resolve) => setTimeout(resolve, 500)).catch((e) => {
+        console.error(e)
+      })
       navigate('/user/dashboard')
     } catch (e) {
       console.error(e)
     }
   }
+
+  useEffect(() => {
+    ;(async () => {
+      if (formSubmitted && humanDetected) {
+        await handleSubmit()
+      }
+    })()
+  }, [formSubmitted, humanDetected])
+
   return (
     <Row justify={'center'}>
       <Col {...authColSpan}>
@@ -41,7 +85,10 @@ export const Login = () => {
           <Form
             name="basic"
             initialValues={form}
-            onFinish={handleSubmit}
+            onFinish={() => {
+              checkRecaptcha()
+              setFormSubmitted(true)
+            }}
             autoComplete="off"
             onValuesChange={(val) => setForm(Object.assign({}, form, val))}
           >
@@ -87,6 +134,13 @@ export const Login = () => {
           )}
         </Card>
       </Col>
+      <Recaptcha
+        ref={recaptchaRef}
+        sitekey={recaptchaSiteKey}
+        onResolved={() => {
+          setHumanDetected(true)
+        }}
+      />
     </Row>
   )
 }

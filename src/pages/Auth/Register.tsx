@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
   Button,
   Card,
@@ -20,6 +20,7 @@ import { useCurrentTimezone } from '../../hooks'
 import { setToken } from '../../lib/token'
 import { useUserContext } from '../../components/User/UserContext'
 import { RequestStatus } from '../../types'
+import Recaptcha from 'react-google-invisible-recaptcha'
 
 type RegisterForm = {
   name: string
@@ -31,6 +32,7 @@ type RegisterForm = {
 }
 
 export const Register = () => {
+  const recaptchaSiteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY
   const { reload } = useUserContext()
   const schema = new PasswordValidator()
   schema
@@ -53,8 +55,11 @@ export const Register = () => {
     .not()
     .oneOf(['Passw0rd', 'Password123']) // Blacklist these values
 
+  const recaptchaRef = useRef(null)
   const timezone = useCurrentTimezone()
   const [requestStatus, setRequestStatus] = useState<RequestStatus>()
+  const [humanDetected, setHumanDetected] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
   const [duplicateEmailProvided, setDuplicateEmailProvided] = useState(false)
   const [form, setForm] = useState<RegisterForm>({
     name: '',
@@ -74,12 +79,39 @@ export const Register = () => {
 
   const navigate = useNavigate()
 
+  const passwordErrors: any[] | boolean = schema.validate(form.password, {
+    list: true,
+  })
+
+  const formValid =
+    form.password === form.passwordConfirm &&
+    validateEmail(form.email) &&
+    Array.isArray(passwordErrors) &&
+    passwordErrors.length === 0
+
+  const checkRecaptcha = () => {
+    try {
+      if (humanDetected) return
+      if (!formValid) {
+        // @ts-ignore
+        recaptchaRef.current.reset()
+      } else {
+        // @ts-ignore
+        recaptchaRef.current.execute()
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   const handleSubmit = async () => {
     try {
       setRequestStatus('loading')
       const { token } = await createUser(form)
       setToken(token)
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 1000)).catch((e) => {
+        console.error(e)
+      })
       setRequestStatus('success')
       notification.success({
         message: 'Account created',
@@ -98,18 +130,9 @@ export const Register = () => {
           placement: 'bottomRight',
         })
       }
+      setSubmitted(false)
     }
   }
-
-  const passwordErrors: any[] | boolean = schema.validate(form.password, {
-    list: true,
-  })
-
-  const formValid =
-    form.password === form.passwordConfirm &&
-    validateEmail(form.email) &&
-    Array.isArray(passwordErrors) &&
-    passwordErrors.length === 0
 
   const validatePasswordConfirm = (rule, value, callback) => {
     if (value && value !== form.password) {
@@ -162,6 +185,14 @@ export const Register = () => {
     }
   }
 
+  useEffect(() => {
+    ;(async () => {
+      if (submitted && humanDetected) {
+        await handleSubmit()
+      }
+    })()
+  }, [submitted, humanDetected])
+
   return (
     <Row justify={'center'}>
       <Col {...authColSpan}>
@@ -169,7 +200,10 @@ export const Register = () => {
           <Form
             name="basic"
             initialValues={form}
-            onFinish={handleSubmit}
+            onFinish={() => {
+              checkRecaptcha()
+              setSubmitted(true)
+            }}
             autoComplete="off"
             onValuesChange={(val) => {
               setDuplicateEmailProvided(false)
@@ -263,6 +297,13 @@ export const Register = () => {
           </Form>
         </Card>
       </Col>
+      <Recaptcha
+        ref={recaptchaRef}
+        sitekey={recaptchaSiteKey}
+        onResolved={() => {
+          setHumanDetected(true)
+        }}
+      />
     </Row>
   )
 }
