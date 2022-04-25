@@ -1,3 +1,5 @@
+import { Country } from '../types'
+
 export type StateEntry = { name: string; abbreviation: string }
 
 export const usStates: StateEntry[] = [
@@ -253,3 +255,8 @@ export const canadianProvinces: StateEntry[] = [
     abbreviation: 'AB',
   },
 ]
+
+export const getCountryStates = (country: Country): StateEntry[] => {
+  if (country === Country.CA) return canadianProvinces
+  return usStates
+}

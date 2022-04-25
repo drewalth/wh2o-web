@@ -19,6 +19,7 @@ import { Register } from './pages/Auth/Register'
 import { Verify } from './pages/Auth/Verify'
 import { Prophet } from './components/Prophet/Prophet'
 import { Forgot } from './pages/Auth/Forgot'
+import { Contact } from './pages/Contact'
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
             <Route path="/auth/unauthorized" element={<Unauthorized />} />
             <Route path="/five-hundred" element={<FiveHundred />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/contact" element={<Contact />} />
             <Route index element={<Home />} />
           </Routes>
         </Navigation>
