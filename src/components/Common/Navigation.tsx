@@ -34,6 +34,7 @@ export const Navigation = ({ children }: NavigationProps) => {
   const location = useLocation()
   const { user } = useUserContext()
   const { t, i18n } = useTranslation()
+  // @TODO set by user language
   const [currentLocale, setCurrentLocale] = useState<Locale>(Locale.EN)
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export const Navigation = ({ children }: NavigationProps) => {
   const baseNavItems: NavItem[] = [
     {
       path: '/prophet',
-      text: 'Prophet',
+      text: t('menu.prophet'),
       icon: <EyeOutlined />,
     },
     {
@@ -129,7 +130,10 @@ export const Navigation = ({ children }: NavigationProps) => {
           mode="inline"
           defaultSelectedKeys={['dashboard']}
           selectedKeys={getSelectedItems()}
-          onSelect={({ key }) => navigate(key, { replace: false })}
+          onSelect={({ key }) => {
+            if (key === 'locale') return
+            navigate(key, { replace: false })
+          }}
         >
           {navItems.map((item) => (
             <Menu.Item key={item.path} icon={item.icon}>
@@ -137,7 +141,7 @@ export const Navigation = ({ children }: NavigationProps) => {
             </Menu.Item>
           ))}
           <Menu.Divider />
-          <Menu.Item>
+          <Menu.Item key={'locale'}>
             <Select
               style={{ color: '#fff' }}
               bordered={false}

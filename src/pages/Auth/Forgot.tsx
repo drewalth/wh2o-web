@@ -7,7 +7,7 @@ import { validateEmail } from '../../lib'
 import { authForgot } from '../../controllers'
 import { RequestStatus } from '../../types'
 import { Link } from 'react-router-dom'
-// import { useAppContext } from '../../components/App/AppContext'
+import { useTranslation } from 'react-i18next'
 
 type ForgotForm = { email: string }
 
@@ -16,6 +16,7 @@ const DEFAULT_FORM: ForgotForm = {
 }
 
 export const Forgot = () => {
+  const { t } = useTranslation()
   const recaptchaSiteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY
   const recaptchaRef = useRef(null)
   const [form, setForm] = useState<ForgotForm>(DEFAULT_FORM)
@@ -74,13 +75,13 @@ export const Forgot = () => {
     <Row justify={'center'}>
       <Col {...authColSpan}>
         <Card
-          title={'Forgot Password'}
+          title={t('login.forgot')}
           actions={[
             <Link to={'/auth/register'}>
-              <Typography.Link>Register</Typography.Link>
+              <Typography.Link>{t('register.title')}</Typography.Link>
             </Link>,
             <Link to={'/auth/login'}>
-              <Typography.Link>Login</Typography.Link>
+              <Typography.Link>{t('usermenu.signin')}</Typography.Link>
             </Link>,
           ]}
         >
@@ -95,7 +96,7 @@ export const Forgot = () => {
             onValuesChange={(val) => setForm(Object.assign({}, form, val))}
           >
             <Form.Item name="email">
-              <Input placeholder={'Email'} />
+              <Input placeholder={t('register.email')} />
             </Form.Item>
             <Form.Item>
               <Button
@@ -104,7 +105,7 @@ export const Forgot = () => {
                 disabled={!emailValid}
                 loading={requestStatus === 'loading'}
               >
-                Submit
+                {t('common.submit')}
               </Button>
             </Form.Item>
           </Form>

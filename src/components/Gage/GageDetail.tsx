@@ -19,6 +19,7 @@ import { addUserGage, getGage, removeUserGage } from '../../controllers'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useUserContext } from '../User/UserContext'
 import { FlowRangeTable } from './FlowRangeTable'
+import { useTranslation } from 'react-i18next'
 
 type BookmarkButtonProps = {
   text: string
@@ -30,6 +31,7 @@ const whiteBg: CSSProperties = {
 }
 
 export const GageDetail = () => {
+  const { t } = useTranslation()
   const { user, reload } = useUserContext()
   const [gage, setGage] = useState<Gage>()
   const [delta, setDelta] = useState('')
@@ -94,7 +96,7 @@ export const GageDetail = () => {
     const exists = user?.gages.find((g) => g.id === gage.id)
 
     return {
-      text: !!exists ? 'Remove Bookmark' : 'Add Bookmark',
+      text: !!exists ? t('common.removeBookmark') : t('common.addBookmark'),
       onClick: async () => {
         try {
           const fn = !!exists ? removeUserGage : addUserGage
@@ -164,9 +166,9 @@ export const GageDetail = () => {
                     {bookMarkButtonProps.text}
                   </Button>
                 ) : (
-                  <Tooltip title={'Log in to bookmark'}>
+                  <Tooltip title={t('common.loginToBookmark')}>
                     <Button type={'primary'} disabled>
-                      Add Bookmark
+                      {t('common.addBookmark')}
                     </Button>
                   </Tooltip>
                 )}
@@ -187,14 +189,14 @@ export const GageDetail = () => {
             <Row gutter={24} style={{ marginBottom: 24 }}>
               <Col span={12}>
                 <Statistic
-                  title={'latest reading'}
+                  title={t('gage.latestReading')}
                   loading={requestStatus === 'loading'}
                   value={gage?.reading + ' ' + gage?.metric || '-'}
                 />
               </Col>
               <Col span={12}>
                 <Statistic
-                  title={'delta'}
+                  title={t('gage.delta')}
                   value={delta}
                   // prefix={<ArrowUpOutlined/>}
                   // valueStyle={{color: '#3f8600'}}
@@ -206,7 +208,7 @@ export const GageDetail = () => {
             <Row gutter={24}>
               <Col span={12}>
                 <Statistic
-                  title={'last fetched'}
+                  title={t('gage.lastFetched')}
                   loading={requestStatus === 'loading'}
                   value={
                     gage.updatedAt
@@ -217,7 +219,7 @@ export const GageDetail = () => {
               </Col>
               <Col span={12}>
                 <Statistic
-                  title={'source'}
+                  title={t('gage.source')}
                   formatter={() => (
                     <>
                       <a
@@ -242,9 +244,9 @@ export const GageDetail = () => {
       </Row>
       <Row style={{ ...whiteBg }}>
         <Col span={24} md={24} lg={12}>
-          <Card style={{ border: 0 }} title={'Description'}>
+          <Card style={{ border: 0 }} title={t('common.description')}>
             <Typography.Text>
-              {gage.description || 'No description available.'}
+              {gage.description || t('common.noDescription')}
             </Typography.Text>
           </Card>
         </Col>

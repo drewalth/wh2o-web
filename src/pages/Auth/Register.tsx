@@ -22,6 +22,7 @@ import { setToken } from '../../lib/token'
 import { useUserContext } from '../../components/User/UserContext'
 import { RequestStatus } from '../../types'
 import Recaptcha from 'react-google-invisible-recaptcha'
+import { useTranslation } from 'react-i18next'
 
 type RegisterForm = {
   name: string
@@ -35,6 +36,7 @@ type RegisterForm = {
 export const Register = () => {
   const recaptchaSiteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY
   const { reload } = useUserContext()
+  const { t } = useTranslation()
   const schema = new PasswordValidator()
   schema
     .is()
@@ -198,13 +200,13 @@ export const Register = () => {
     <Row justify={'center'}>
       <Col {...authColSpan}>
         <Card
-          title={'Register'}
+          title={t('register.title')}
           actions={[
             <Link to={'/auth/forgot'}>
-              <Typography.Link>Forgot Password</Typography.Link>
+              <Typography.Link>{t('login.forgot')}</Typography.Link>
             </Link>,
             <Link to={'/auth/login'}>
-              <Typography.Link>Login</Typography.Link>
+              <Typography.Link>{t('usermenu.signin')}</Typography.Link>
             </Link>,
           ]}
         >
@@ -225,7 +227,7 @@ export const Register = () => {
               name="name"
               rules={[{ required: true, message: 'Please input your name' }]}
             >
-              <Input placeholder={'Name'} />
+              <Input placeholder={t('register.name')} />
             </Form.Item>
             <Form.Item
               name="email"
@@ -243,7 +245,7 @@ export const Register = () => {
               ]}
             >
               <Input
-                placeholder={'Email'}
+                placeholder={t('register.email')}
                 status={duplicateEmailProvided ? 'error' : ''}
               />
             </Form.Item>
@@ -256,13 +258,11 @@ export const Register = () => {
               }
             >
               <Space direction={'horizontal'}>
-                <Input placeholder={'Telephone'} />
-                <HelpTooltip
-                  title={'Optional. Used for SMS alerts that you create.'}
-                />
+                <Input placeholder={t('register.telephone')} />
+                <HelpTooltip title={t('register.telephoneHelpMsg')} />
               </Space>
             </Form.Item>
-            <Form.Item name={'timezone'}>
+            <Form.Item name={'timezone'} help={t('register.timezone')}>
               <Select>
                 {timezones.map((tz) => (
                   <Select.Option key={tz} value={tz}>
@@ -281,7 +281,7 @@ export const Register = () => {
                 },
               ]}
             >
-              <Input.Password placeholder={'Password'} />
+              <Input.Password placeholder={t('register.password')} />
             </Form.Item>
             <Form.Item
               name="passwordConfirm"
@@ -293,7 +293,7 @@ export const Register = () => {
                 },
               ]}
             >
-              <Input.Password placeholder={'Confirm Password'} />
+              <Input.Password placeholder={t('register.confirmPassword')} />
             </Form.Item>
             <Form.Item>
               <Button
@@ -302,7 +302,7 @@ export const Register = () => {
                 disabled={!formValid}
                 loading={requestStatus === 'loading'}
               >
-                Submit
+                {t('common.submit')}
               </Button>
             </Form.Item>
           </Form>

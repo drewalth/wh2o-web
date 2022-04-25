@@ -5,6 +5,7 @@ import { useGagesContext } from '../Provider/GageProvider'
 import moment from 'moment'
 import { Gage } from '../../types'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const GageTable = (): JSX.Element => {
   const {
@@ -15,11 +16,12 @@ const GageTable = (): JSX.Element => {
     setPagination,
     requestStatus,
   } = useGagesContext()
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const columns = [
     {
-      title: 'Name',
+      title: t('common.name'),
       dataIndex: 'name',
       key: 'name',
       render: (name: string, gage: Gage) => (
@@ -34,12 +36,12 @@ const GageTable = (): JSX.Element => {
       ),
     },
     {
-      title: 'Latest Reading',
+      title: t('common.latestReading'),
       dataIndex: 'reading',
       key: 'reading',
       render: (reading: number, gage: Gage) => (
         <div style={{ minWidth: 150 }}>
-          {gage.disabled ? `Disabled` : `${reading} ${gage.metric}`}
+          {gage.disabled ? t('common.disabled') : `${reading} ${gage.metric}`}
         </div>
       ),
     },
@@ -59,7 +61,7 @@ const GageTable = (): JSX.Element => {
     //   ),
     // },
     {
-      title: 'Updated',
+      title: t('common.updated'),
       dataIndex: 'updatedAt',
       key: 'updatedAt',
       render: (val: Date) => {

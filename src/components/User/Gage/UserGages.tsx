@@ -7,8 +7,10 @@ import { addUserGage } from '../../../controllers'
 import { UserGageTable } from './UserGageTable'
 import { useUserContext } from '../UserContext'
 import debounce from 'lodash.debounce'
+import { useTranslation } from 'react-i18next'
 
 export const UserGages = (): JSX.Element => {
+  const { t } = useTranslation()
   const formRef = useRef<HTMLFormElement>(null)
   const [createModalVisible, setCreateModalVisible] = useState(false)
   const [selectedGageSiteId, setSelectedGageSiteId] = useState<number>()
@@ -148,7 +150,7 @@ export const UserGages = (): JSX.Element => {
           onValuesChange={handleOnValuesChange}
           initialValues={searchParams}
         >
-          <Form.Item label={'Country'} name={'country'}>
+          <Form.Item label={t('common.country')} name={'country'}>
             <Select>
               {Object.values(Country).map((val, index) => (
                 <Select.Option value={val} key={index}>
@@ -157,7 +159,7 @@ export const UserGages = (): JSX.Element => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item label={'Source'} name={'source'}>
+          <Form.Item label={t('gage.source')} name={'source'}>
             <Select>
               {sourceOptions.map((val, index) => (
                 <Select.Option value={val} key={index}>
@@ -166,7 +168,7 @@ export const UserGages = (): JSX.Element => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item label={'State'} name={'state'}>
+          <Form.Item label={t('common.state')} name={'state'}>
             <Select>
               {stateOptions.map((val, index) => (
                 <Select.Option value={val.abbreviation} key={index}>
@@ -175,11 +177,11 @@ export const UserGages = (): JSX.Element => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name={'searchTerm'} label={'Search'}>
-            <Input placeholder={'Gage Name'} allowClear />
+          <Form.Item name={'searchTerm'} label={t('menu.search')}>
+            <Input placeholder={t('common.name')} allowClear />
           </Form.Item>
           <Divider />
-          <Form.Item name={'id'} label={'Gage Search Results'}>
+          <Form.Item name={'id'} label={t('common.results')}>
             <Select
               onSelect={(value) => {
                 console.log('value: ', value)
@@ -210,7 +212,7 @@ export const UserGages = (): JSX.Element => {
           disabled={gages.length >= 15}
           onClick={() => setCreateModalVisible(true)}
         >
-          Add Gage
+          {t('gage.addGage')}
         </Button>
       </div>
       <UserGageTable />

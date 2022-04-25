@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { authLogin } from '../../controllers'
 import { setToken } from '../../lib/token'
 import { useUserContext } from '../../components/User/UserContext'
+import { useTranslation } from 'react-i18next'
 // import { useAppContext } from '../../components/App/AppContext'
 
 type LoginForm = { email: string; password: string }
@@ -22,6 +23,7 @@ export const Login = () => {
   const [form, setForm] = useState<LoginForm>(DEFAULT_FORM)
   const { reload } = useUserContext()
   const navigate = useNavigate()
+  const { t } = useTranslation()
   let redirectTimer
   // const { env } = useAppContext()
 
@@ -78,13 +80,13 @@ export const Login = () => {
     <Row justify={'center'}>
       <Col {...authColSpan}>
         <Card
-          title={'Login'}
+          title={t('usermenu.signin')}
           actions={[
             <Link to={'/auth/register'}>
-              <Typography.Link>Register</Typography.Link>
+              <Typography.Link>{t('register.title')}</Typography.Link>
             </Link>,
             <Link to={'/auth/forgot'}>
-              <Typography.Link>Forgot Password</Typography.Link>
+              <Typography.Link>{t('login.forgot')}</Typography.Link>
             </Link>,
           ]}
         >
@@ -108,7 +110,7 @@ export const Login = () => {
                 },
               ]}
             >
-              <Input placeholder={'Email'} />
+              <Input placeholder={t('login.email')} />
             </Form.Item>
 
             <Form.Item
@@ -121,7 +123,7 @@ export const Login = () => {
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Submit
+                {t('common.submit')}
               </Button>
             </Form.Item>
           </Form>

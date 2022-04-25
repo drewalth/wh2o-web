@@ -148,6 +148,7 @@ export const fr = {
     checkout: 'Check-out',
   },
   menu: {
+    prophet: 'Prophète',
     search: 'Recherche',
     dashboard: 'Tableau de bord',
     logout: 'Se déconnecter',

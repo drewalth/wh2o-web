@@ -1,8 +1,23 @@
 export const es = {
+  gage: {
+    latestReading: 'Última lectura',
+    delta: 'Delta',
+    lastFetched: 'Última búsqueda',
+    source: 'Fuente',
+    flowRanges: 'Rangos de flujo',
+  },
   common: {
+    addBookmark: 'Añadir marcador',
+    removeBookmark: 'Quitar marcador',
+    loginToBookmark: 'Iniciar sesión para marcar',
+    name: 'Nombre',
+    updated: 'Actualizado',
+    disabled: 'Deshabilitado',
+    submit: 'Entregar',
     add: 'Añadir',
     cancel: 'Cancelar',
     description: 'Descripción',
+    noDescription: 'No hay descripción disponible',
     delete: 'Eliminar',
     title: 'Título',
     save: 'Salvar',
@@ -148,6 +163,7 @@ export const es = {
     checkout: 'Revisa',
   },
   menu: {
+    prophet: 'Propheta',
     search: 'Buscar',
     dashboard: 'Tablero',
     logout: 'Cerrar sesión',
