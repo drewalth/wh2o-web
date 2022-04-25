@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Button,
   Card,
@@ -9,9 +9,10 @@ import {
   Row,
   Select,
   Space,
+  Typography,
 } from 'antd'
 import { authColSpan } from './defaults'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { createUser } from '../../controllers'
 import { timezones, validateEmail } from '../../lib'
 import PasswordValidator from 'password-validator'
@@ -196,7 +197,17 @@ export const Register = () => {
   return (
     <Row justify={'center'}>
       <Col {...authColSpan}>
-        <Card title={'Register'}>
+        <Card
+          title={'Register'}
+          actions={[
+            <Link to={'/auth/forgot'}>
+              <Typography.Link>Forgot Password</Typography.Link>
+            </Link>,
+            <Link to={'/auth/login'}>
+              <Typography.Link>Login</Typography.Link>
+            </Link>,
+          ]}
+        >
           <Form
             name="basic"
             initialValues={form}

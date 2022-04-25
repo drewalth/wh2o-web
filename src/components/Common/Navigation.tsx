@@ -4,11 +4,11 @@ import { Layout, Menu, Typography } from 'antd'
 import 'antd/dist/antd.css'
 import {
   DashboardOutlined,
-  UserOutlined,
-  AreaChartOutlined,
   ExportOutlined,
-  ImportOutlined,
   EyeOutlined,
+  ImportOutlined,
+  SearchOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
@@ -36,7 +36,7 @@ const baseNavItems: NavItem[] = [
   {
     path: '/gage',
     text: 'Search',
-    icon: <AreaChartOutlined />,
+    icon: <SearchOutlined />,
   },
 ]
 

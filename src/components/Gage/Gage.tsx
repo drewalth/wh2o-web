@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import GageTable from './GageTable'
-import { Form, Input, Select, Button } from 'antd'
+import { Button, Form, Input, Select } from 'antd'
 import { useGagesContext } from '../Provider/GageProvider'
 import { Country, GageSource } from '../../types'
 import { canadianProvinces, usStates } from '../../lib/states'

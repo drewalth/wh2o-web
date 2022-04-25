@@ -2,10 +2,10 @@ import { createContext, useContext } from 'react'
 import {
   Country,
   Gage,
+  GageSearchParams,
   GageSource,
   RequestStatus,
   TablePagination,
-  GageSearchParams,
 } from '../../../types'
 
 export const DEFAULT_PAGINATION: TablePagination = {
@@ -15,10 +15,10 @@ export const DEFAULT_PAGINATION: TablePagination = {
 }
 
 export const DEFAULT_GAGE_SEARCH_PARAMS: GageSearchParams = {
-  state: 'BC',
-  country: Country.CA,
+  state: 'CO',
+  country: Country.US,
   searchTerm: '',
-  source: GageSource.ENVIRONMENT_CANADA,
+  source: GageSource.USGS,
 }
 
 type GageContextData = {

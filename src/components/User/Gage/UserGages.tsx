@@ -1,18 +1,20 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { canadianProvinces, StateEntry, usStates } from '../../../lib'
-import { AutoComplete, Button, Form, Modal, notification, Select } from 'antd'
+import { Button, Divider, Form, Input, Modal, notification, Select } from 'antd'
 import { Country, GageSource } from '../../../types'
 import { useGagesContext } from '../../Provider/GageProvider'
 import { addUserGage } from '../../../controllers'
 import { UserGageTable } from './UserGageTable'
 import { useUserContext } from '../UserContext'
+import debounce from 'lodash.debounce'
 
 export const UserGages = (): JSX.Element => {
+  const formRef = useRef<HTMLFormElement>(null)
   const [createModalVisible, setCreateModalVisible] = useState(false)
-  const [selectedGageSiteId, setSelectedGageSiteId] = useState('')
-  const { searchParams, gages, setSearchParams } = useGagesContext()
-  const { user } = useUserContext()
-  const [options, setOptions] = useState<{ value: string; label: string }[]>([])
+  const [selectedGageSiteId, setSelectedGageSiteId] = useState<number>()
+  const { searchParams, setSearchParams, resetPagination, gages } =
+    useGagesContext()
+  const { user, reload } = useUserContext()
 
   const stateOptions: StateEntry[] =
     searchParams.country === Country.CA ? canadianProvinces : usStates
@@ -22,20 +24,86 @@ export const UserGages = (): JSX.Element => {
       ? [GageSource.ENVIRONMENT_CANADA]
       : [GageSource.USGS]
 
-  const onSearch = (searchText: string) => {
-    const vals = gages?.filter((g) =>
-      g.name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()),
-    )
+  const setFormAttributes = (country: Country) => {
+    if (formRef && formRef.current) {
+      const form = formRef.current
 
-    if (vals.length) {
-      setOptions(
-        vals.map((g) => ({
-          value: g.siteId,
-          label: g.name,
-        })),
-      )
+      switch (country) {
+        case Country.US:
+          form.setFields([
+            {
+              name: 'country',
+              value: 'US',
+            },
+            {
+              name: 'state',
+              value: 'AL',
+            },
+            {
+              name: 'source',
+              value: 'USGS',
+            },
+          ])
+          return
+        default:
+        case Country.CA:
+          form.setFields([
+            {
+              name: 'country',
+              value: 'CA',
+            },
+            {
+              name: 'state',
+              value: 'BC',
+            },
+            {
+              name: 'source',
+              value: 'ENVIRONMENT_CANADA',
+            },
+          ])
+
+          return
+      }
     }
   }
+
+  const handleOnValuesChange = debounce((val) => {
+    try {
+      if (searchParams.country === Country.US && val.country === Country.CA) {
+        resetPagination()
+        setSearchParams(
+          Object.assign({}, searchParams, {
+            ...val,
+            source: GageSource.ENVIRONMENT_CANADA,
+            state: 'BC',
+          }),
+        )
+        setFormAttributes(Country.CA)
+        return
+      }
+
+      if (searchParams.country === Country.CA && val.country === Country.US) {
+        resetPagination()
+        setSearchParams(
+          Object.assign({}, searchParams, {
+            ...val,
+            source: GageSource.USGS,
+            state: 'AL',
+          }),
+        )
+        setFormAttributes(Country.US)
+        return
+      }
+
+      if (searchParams.state !== val.state) {
+        resetPagination()
+      }
+
+      setSearchParams(Object.assign({}, searchParams, val))
+    } catch (e) {
+      console.error(e)
+    }
+  }, 300)
 
   const handleClose = () => {
     setCreateModalVisible(false)
@@ -43,17 +111,14 @@ export const UserGages = (): JSX.Element => {
 
   const handleOk = async () => {
     try {
-      if (!user || !selectedGageSiteId) return
+      if (!user) return
 
-      const selectedGageId = gages.find((g) => g.siteId === selectedGageSiteId)
-
-      if (!selectedGageId) {
+      if (!selectedGageSiteId) {
         console.error('no selected gage')
         return
       }
-
-      await addUserGage(selectedGageId.id, user.id)
-
+      await addUserGage(selectedGageSiteId, user.id)
+      await reload()
       notification.success({
         message: 'Gage Created',
         placement: 'bottomRight',
@@ -73,13 +138,14 @@ export const UserGages = (): JSX.Element => {
         onCancel={handleClose}
       >
         <Form
+          preserve={false}
+          // @ts-ignore
+          ref={formRef}
           wrapperCol={{
             span: 23,
           }}
           layout={'vertical'}
-          onValuesChange={(val) => {
-            setSearchParams(Object.assign({}, searchParams, val))
-          }}
+          onValuesChange={handleOnValuesChange}
           initialValues={searchParams}
         >
           <Form.Item label={'Country'} name={'country'}>
@@ -109,12 +175,25 @@ export const UserGages = (): JSX.Element => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name={'SiteId'} label={'Gage Name'}>
-            <AutoComplete
-              options={options}
-              onSearch={onSearch}
-              onSelect={(val) => setSelectedGageSiteId(val)}
-            />
+          <Form.Item name={'searchTerm'} label={'Search'}>
+            <Input placeholder={'Gage Name'} allowClear />
+          </Form.Item>
+          <Divider />
+          <Form.Item name={'id'} label={'Gage Search Results'}>
+            <Select
+              onSelect={(value) => {
+                console.log('value: ', value)
+                setSelectedGageSiteId(value)
+              }}
+            >
+              {gages &&
+                gages.length > 0 &&
+                gages.map((g) => (
+                  <Select.Option key={g.id} value={g.id}>
+                    {g.name}
+                  </Select.Option>
+                ))}
+            </Select>
           </Form.Item>
         </Form>
       </Modal>

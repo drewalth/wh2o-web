@@ -17,3 +17,11 @@ export const authVerify = async (token: string, email: string) => {
     })
     .then((res) => checkResponse(res))
 }
+
+export const authForgot = async (email: string) => {
+  return http
+    .post(Endpoints.AUTH + '/forgot', {
+      body: JSON.stringify({ email }),
+    })
+    .then((res) => checkResponse(res))
+}

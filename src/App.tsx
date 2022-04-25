@@ -1,7 +1,7 @@
 import React from 'react'
 import './App.css'
 import './style/index.scss'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Settings from './components/User/Settings'
 import Account from './pages/Account'
 import Home from './pages/Home/Home'
@@ -18,6 +18,7 @@ import { AuthGuard } from './hooks'
 import { Register } from './pages/Auth/Register'
 import { Verify } from './pages/Auth/Verify'
 import { Prophet } from './components/Prophet/Prophet'
+import { Forgot } from './pages/Auth/Forgot'
 
 function App() {
   return (
@@ -40,7 +41,7 @@ function App() {
             <Route path="/gage/:state/:id" element={<GageDetail />} />
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/logout" element={<Logout />} />
-            <Route path="/auth/forgot" element={<Login />} />
+            <Route path="/auth/forgot" element={<Forgot />} />
             <Route path="/auth/reset" element={<Login />} />
             <Route path="/auth/register" element={<Register />} />
             <Route path="/auth/verify" element={<Verify />} />
