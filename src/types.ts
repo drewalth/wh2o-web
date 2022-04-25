@@ -1,5 +1,29 @@
 /* eslint-disable no-unused-vars */
-import { AlertCriteria, AlertInterval, AlertChannel } from './enums'
+import { AlertChannel, AlertCriteria, AlertInterval } from './enums'
+
+export enum ContactType {
+  MISSING_GAGE = 'MISSING_GAGE',
+  MISC = 'MISC',
+  BUG_REPORT = 'BUG_REPORT',
+  FEATURE_REQUEST = 'FEATURE_REQUEST',
+}
+
+export type Contact = {
+  id: number
+  title: string
+  description?: string
+  siteId?: string
+  country: Country
+  state?: string
+  source?: GageSource
+  email: string
+  userId?: number
+  type: ContactType
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type CreateContactDto = Omit<Contact, 'id' | 'createdAt' | 'updatedAt'>
 
 export type AuthLoginResponse = {
   token: string

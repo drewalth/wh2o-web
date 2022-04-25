@@ -7,6 +7,7 @@ import {
   ExportOutlined,
   EyeOutlined,
   ImportOutlined,
+  MailOutlined,
   SearchOutlined,
   UserOutlined,
 } from '@ant-design/icons'
@@ -37,6 +38,11 @@ const baseNavItems: NavItem[] = [
     path: '/gage',
     text: 'Search',
     icon: <SearchOutlined />,
+  },
+  {
+    path: '/contact',
+    text: 'Contact',
+    icon: <MailOutlined />,
   },
 ]
 
