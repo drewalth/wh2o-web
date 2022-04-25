@@ -1,18 +1,20 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import Logo from './wh2o-logo'
-import { Layout, Menu, Typography } from 'antd'
+import { Layout, Menu, Select, Typography } from 'antd'
 import 'antd/dist/antd.css'
 import {
   DashboardOutlined,
-  UserOutlined,
-  AreaChartOutlined,
   ExportOutlined,
+  EyeOutlined,
   ImportOutlined,
+  MailOutlined,
+  SearchOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 import { useUserContext } from '../User/UserContext'
-import { User } from '../../types'
+import { Locale, User } from '../../types'
 import { useTranslation } from 'react-i18next'
 
 type NavigationProps = {
@@ -31,13 +33,30 @@ export const Navigation = ({ children }: NavigationProps) => {
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useUserContext()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const [currentLocale, setCurrentLocale] = useState<Locale>(Locale.EN)
+
+  useEffect(() => {
+    ;(async () => {
+      await i18n.changeLanguage(currentLocale)
+    })()
+  }, [currentLocale])
 
   const baseNavItems: NavItem[] = [
     {
+      path: '/prophet',
+      text: 'Prophet',
+      icon: <EyeOutlined />,
+    },
+    {
       path: '/gage',
-      text: 'Gages',
-      icon: <AreaChartOutlined />,
+      text: t('menu.search'),
+      icon: <SearchOutlined />,
+    },
+    {
+      path: '/contact',
+      text: t('common.contact'),
+      icon: <MailOutlined />,
     },
   ]
 
@@ -94,7 +113,10 @@ export const Navigation = ({ children }: NavigationProps) => {
   )
 
   return (
-    <Layout style={{ minHeight: '100vh' }} className={'navigation'}>
+    <Layout
+      style={{ minHeight: '100vh', maxHeight: '100vh' }}
+      className={'navigation'}
+    >
       <Sider breakpoint="lg" collapsedWidth="0">
         <div className={'sider'}>
           <Logo onClick={() => navigate('/', { replace: false })} />
@@ -114,6 +136,24 @@ export const Navigation = ({ children }: NavigationProps) => {
               {item.text}
             </Menu.Item>
           ))}
+          <Menu.Divider />
+          <Menu.Item>
+            <Select
+              style={{ color: '#fff' }}
+              bordered={false}
+              showArrow
+              value={currentLocale}
+              onSelect={(val) => {
+                setCurrentLocale(val)
+              }}
+            >
+              {Object.values(Locale).map((l) => (
+                <Select.Option key={l} value={l}>
+                  {l}
+                </Select.Option>
+              ))}
+            </Select>
+          </Menu.Item>
         </Menu>
       </Sider>
       <Layout>

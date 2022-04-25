@@ -148,7 +148,7 @@ export const fr = {
     checkout: 'Check-out',
   },
   menu: {
-    search: "Recherche (appuyez sur 'ctrl + /' pour faire la mise au point)",
+    search: 'Recherche',
     dashboard: 'Tableau de bord',
     logout: 'Se déconnecter',
     profile: 'Profil',

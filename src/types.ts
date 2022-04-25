@@ -1,5 +1,76 @@
 /* eslint-disable no-unused-vars */
-import { AlertCriteria, AlertInterval, AlertChannel } from './enums'
+import { AlertChannel, AlertCriteria, AlertInterval } from './enums'
+
+export enum Locale {
+  EN = 'en',
+  ES = 'es',
+  FR = 'fr',
+}
+
+export enum ContactType {
+  MISSING_GAGE = 'MISSING_GAGE',
+  MISC = 'MISC',
+  BUG_REPORT = 'BUG_REPORT',
+  FEATURE_REQUEST = 'FEATURE_REQUEST',
+}
+
+export type Contact = {
+  id: number
+  title: string
+  description?: string
+  siteId?: string
+  country: Country
+  state?: string
+  source?: GageSource
+  email: string
+  userId?: number
+  type: ContactType
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type CreateContactDto = Omit<Contact, 'id' | 'createdAt' | 'updatedAt'>
+
+export type AuthLoginResponse = {
+  token: string
+  user: {
+    id: number
+    email: string
+    name: string
+    role: UserRole
+  }
+}
+
+export type ForeCastDataPoint = {
+  forecast: any
+  index: string
+  lower_error_bound: any
+  past_value: number
+  upper_error_bound: any
+}
+
+export type RunnablePercentage = {
+  index: string
+  percent: number
+}
+
+export type DailyAverage = {
+  index: string
+  average: number
+  middleFifty: number[]
+}
+
+export type FlowRange = {
+  id: number
+  name: string
+  description: string
+  minimum: number
+  maximum: number
+  metric: GageMetric
+  gageId: number
+  createdAt: Date
+  updatedAt: Date
+}
 
 export enum UserRole {
   GENERAL = 'GENERAL',
@@ -78,7 +149,7 @@ export enum Country {
   CA = 'CA',
 }
 
-export type GageSearchParams = Omit<TablePagination, 'total'> & {
+export type GageSearchParams = {
   searchTerm?: string
   state: string
   country: string
@@ -86,9 +157,9 @@ export type GageSearchParams = Omit<TablePagination, 'total'> & {
 }
 
 export type TablePagination = {
+  page: number
+  page_size: number
   total: number
-  offset: number
-  limit: number
 }
 
 export enum CanadianProvinces {
@@ -121,16 +192,19 @@ export type GageReading = {
 export type Gage = {
   id: number
   name: string
+  description: string
   source: GageSource
   siteId: string
   metric: GageMetric
   reading: number
   state: string
+  disabled: boolean
   country: string
   latitude?: number
   longitude?: number
   readings?: GageReading[]
   delta: number
+  flowRanges?: FlowRange[]
   lastFetch: Date
   createdAt: Date
   updatedAt?: Date
@@ -141,11 +215,16 @@ export type UpdateGageDto = Omit<
   'ID' | 'Alerts' | 'UpdatedAt' | 'LastFetch' | 'CreatedAt'
 >
 
-export interface CreateGageDto {
-  Name: string
-  SiteId: string
-  Metric: GageMetric
-}
+export type CreateGageDto = Omit<
+  Gage,
+  | 'id'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'readings'
+  | 'reading'
+  | 'lastFetch'
+  | 'delta'
+>
 
 export interface GageUpdateDTO {
   latitude: number

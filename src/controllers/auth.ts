@@ -1,11 +1,27 @@
-import { http } from '../lib'
+import { checkResponse, http } from '../lib'
 import { Endpoints } from '../enums'
-import * as qs from 'qs'
+import { AuthLoginResponse } from '../types'
 
-export const authLogin = async (payload) => {
+export const authLogin = async (payload): Promise<AuthLoginResponse> => {
   return http
-    .post(Endpoints.AUTH + '/login', qs.stringify(payload), {
-      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    .post(Endpoints.AUTH + '/login', {
+      body: JSON.stringify(payload),
     })
-    .then(({ data }) => data)
+    .then((res) => checkResponse(res))
+}
+
+export const authVerify = async (token: string, email: string) => {
+  return http
+    .post(Endpoints.AUTH + '/verify', {
+      body: JSON.stringify({ token, email }),
+    })
+    .then((res) => checkResponse(res))
+}
+
+export const authForgot = async (email: string) => {
+  return http
+    .post(Endpoints.AUTH + '/forgot', {
+      body: JSON.stringify({ email }),
+    })
+    .then((res) => checkResponse(res))
 }

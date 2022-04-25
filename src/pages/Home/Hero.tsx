@@ -21,8 +21,8 @@ export const Hero = () => {
               </div>
             </div>
             <Typography.Title level={5}>
-              Email & SMS Notifications for River Flow Data in the United States
-              and Canada
+              Custom Reporting & Flow Predictions for Rivers in the United
+              States and Canada
             </Typography.Title>
           </Card>
         </Col>

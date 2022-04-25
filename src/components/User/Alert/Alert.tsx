@@ -32,7 +32,7 @@ const defaultCreateForm: CreateAlertDto = {
 }
 
 export const Alert = (): JSX.Element => {
-  const { user, appendUserAlerts } = useUserContext()
+  const { user, reload } = useUserContext()
 
   const userUnverified = user && !user.verified
   const userHasAlertLimit = user && user.verified && user.alerts.length >= 15
@@ -52,13 +52,14 @@ export const Alert = (): JSX.Element => {
       const notifyTime = moment(createForm.notifyTime).format(
         'YYYY-MM-DDTHH:mm:ss',
       )
-      const result = await createAlert({
+      await createAlert({
         ...createForm,
         value: Number(createForm.value),
         userId: user.id,
         notifyTime,
       })
-      appendUserAlerts(result)
+      // appendUserAlerts(result)
+      await reload()
       notification.success({
         message: 'Alert Created',
         placement: 'bottomRight',

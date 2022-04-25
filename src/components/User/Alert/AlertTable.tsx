@@ -2,11 +2,11 @@ import React from 'react'
 import {
   Button,
   notification,
+  Switch,
   Table,
   Tag,
   Tooltip,
   Typography,
-  Switch,
 } from 'antd'
 import { Alert } from '../../../types'
 import { DeleteOutlined } from '@ant-design/icons'
@@ -16,7 +16,7 @@ import { AlertInterval } from '../../../enums'
 import { useUserContext } from '../UserContext'
 
 export const AlertTable = (): JSX.Element => {
-  const { user } = useUserContext()
+  const { user, reload } = useUserContext()
 
   const getIntervalTag = (alert: Alert): JSX.Element => {
     return (
@@ -53,6 +53,7 @@ export const AlertTable = (): JSX.Element => {
         message: 'Alert deleted',
         placement: 'bottomRight',
       })
+      await reload()
     } catch (e) {
       notification.error({
         message: 'Failed to Delete Alert',
@@ -106,12 +107,13 @@ export const AlertTable = (): JSX.Element => {
       title: 'Last Sent',
       dataIndex: 'lastSent',
       key: 'lastSent',
-      render: (val: Date) => {
-        if (!val) return '-'
+      render: (val: Date | string) => {
+        if (!val || val === '0001-01-01T00:00:00Z') return '-'
         return moment(val).format('llll')
       },
     },
     {
+      title: 'Active',
       dataIndex: 'active',
       key: 'active',
       render: (active: boolean, alert: Alert) => (

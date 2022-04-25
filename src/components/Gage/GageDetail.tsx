@@ -1,18 +1,126 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Col, Divider, PageHeader, Row, Statistic } from 'antd'
+import React, { CSSProperties, useEffect, useState } from 'react'
+import {
+  Card,
+  Col,
+  Divider,
+  PageHeader,
+  Row,
+  Statistic,
+  Button,
+  notification,
+  Typography,
+  Tooltip,
+} from 'antd'
 import { GageReadingsChart } from './GageReadingsChart'
 import moment from 'moment'
 import { GageMap } from './GageMap'
-import { Gage, RequestStatus } from '../../types'
-import { getGage } from '../../controllers'
+import { Gage, GageMetric, GageReading, RequestStatus } from '../../types'
+import { addUserGage, getGage, removeUserGage } from '../../controllers'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useUserContext } from '../User/UserContext'
+import { FlowRangeTable } from './FlowRangeTable'
+
+type BookmarkButtonProps = {
+  text: string
+  onClick: () => void
+}
+
+const whiteBg: CSSProperties = {
+  backgroundColor: '#fff',
+}
 
 export const GageDetail = () => {
-  // const { user } = useUserContext()
+  const { user, reload } = useUserContext()
   const [gage, setGage] = useState<Gage>()
+  const [delta, setDelta] = useState('')
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
   const navigate = useNavigate()
   const { id: gageId, state: gageState } = useParams()
+
+  const getDelta = (
+    readings: GageReading[] | undefined,
+    metric: GageMetric,
+  ) => {
+    function getPercentageChange(oldNumber, newNumber) {
+      var decreaseValue = oldNumber - newNumber
+
+      if (oldNumber === 0) return
+
+      return ((decreaseValue / oldNumber) * 100).toFixed(2)
+    }
+
+    const filteredReadings = readings?.filter((r) => r.metric === metric)
+
+    if (
+      filteredReadings &&
+      Array.isArray(filteredReadings) &&
+      filteredReadings.length >= 2
+    ) {
+      // return relDiff(
+      //   readings[readings.length - 1].value,
+      //   readings[readings.length - 2].value,
+      // )
+
+      // const diff = getPercentageChange(
+      //   readings[readings.length - 2].value,
+      //   readings[readings.length - 1].value,
+      // )
+
+      const diff = getPercentageChange(
+        Math.floor(filteredReadings[filteredReadings.length - 2].value),
+        Math.floor(filteredReadings[filteredReadings.length - 1].value),
+      )
+
+      if (diff === undefined) {
+        return '-'
+      }
+
+      if (String(diff).charAt(0) === '-') {
+        return `+${diff.substring(1, diff.length - 1)}%`
+      }
+
+      return `-${diff}%`
+    }
+
+    return '-'
+  }
+
+  const bookMarkButtonProps: BookmarkButtonProps = (() => {
+    if (!user || !gage)
+      return {
+        text: '',
+        onClick: () => {},
+      }
+    const exists = user?.gages.find((g) => g.id === gage.id)
+
+    return {
+      text: !!exists ? 'Remove Bookmark' : 'Add Bookmark',
+      onClick: async () => {
+        try {
+          const fn = !!exists ? removeUserGage : addUserGage
+          await fn(gage.id, user.id)
+
+          notification.success({
+            message: !!exists ? 'Bookmark removed' : 'Bookmark added',
+            placement: 'bottomRight',
+          })
+          await reload()
+        } catch (e) {
+          notification.error({
+            message: 'Something went wrong',
+            placement: 'bottomRight',
+          })
+        }
+      },
+    }
+  })()
+
+  useEffect(() => {
+    if (gage && gage.readings && gage.readings.length >= 2) {
+      const val = getDelta(gage.readings, gage.metric)
+      setDelta(val)
+    }
+  }, [gage])
 
   useEffect(() => {
     ;(async () => {
@@ -34,30 +142,13 @@ export const GageDetail = () => {
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexFlow: 'column nowrap',
-        justifyContent: 'space-between',
-        height: 'calc(100vh - 72px)',
-        position: 'relative',
-      }}
-    >
-      <div>
-        {gage.latitude && gage.longitude && (
+    <>
+      <Row>
+        <Col span={24}>
           <GageMap latitude={gage.latitude} longitude={gage.longitude} />
-        )}
-      </div>
-      <Row
-        align={'top'}
-        style={{
-          backgroundColor: '#fff',
-          zIndex: 2,
-          position: 'absolute',
-          bottom: 0,
-          width: '100%',
-        }}
-      >
+        </Col>
+      </Row>
+      <Row style={{ ...whiteBg }}>
         <Col span={24}>
           <PageHeader
             title={gage?.name || ''}
@@ -65,19 +156,31 @@ export const GageDetail = () => {
             onBack={() => navigate('/gage')}
             extra={
               <>
-                {/*{userData && (*/}
-                {/*  <Button*/}
-                {/*    onClick={async () => {*/}
-                {/*      await addUserGage(gage.id)*/}
-                {/*    }}*/}
-                {/*  >*/}
-                {/*    Bookmark*/}
-                {/*  </Button>*/}
-                {/*)}*/}
+                {!!user ? (
+                  <Button
+                    type={'primary'}
+                    onClick={bookMarkButtonProps.onClick}
+                  >
+                    {bookMarkButtonProps.text}
+                  </Button>
+                ) : (
+                  <Tooltip title={'Log in to bookmark'}>
+                    <Button type={'primary'} disabled>
+                      Add Bookmark
+                    </Button>
+                  </Tooltip>
+                )}
               </>
             }
           />
           <Divider style={{ margin: 0 }} />
+        </Col>
+      </Row>
+      <Row style={{ ...whiteBg }}>
+        <Col span={24} md={24} lg={24}>
+          {gage && !!gage.readings && gage?.readings?.length > 0 && (
+            <GageReadingsChart readings={gage.readings} metric={gage.metric} />
+          )}
         </Col>
         <Col span={24} md={24} lg={12} style={{ height: '100%' }}>
           <Card style={{ border: 0, paddingTop: 16 }}>
@@ -92,7 +195,7 @@ export const GageDetail = () => {
               <Col span={12}>
                 <Statistic
                   title={'delta'}
-                  value={'-'}
+                  value={delta}
                   // prefix={<ArrowUpOutlined/>}
                   // valueStyle={{color: '#3f8600'}}
                   loading={requestStatus === 'loading'}
@@ -105,7 +208,11 @@ export const GageDetail = () => {
                 <Statistic
                   title={'last fetched'}
                   loading={requestStatus === 'loading'}
-                  value={moment(gage?.updatedAt).format('l hh:mm a') || '-'}
+                  value={
+                    gage.updatedAt
+                      ? moment(gage?.updatedAt).format('l hh:mm a')
+                      : '-'
+                  }
                 />
               </Col>
               <Col span={12}>
@@ -132,12 +239,21 @@ export const GageDetail = () => {
             </Row>
           </Card>
         </Col>
+      </Row>
+      <Row style={{ ...whiteBg }}>
         <Col span={24} md={24} lg={12}>
-          {gage && !!gage.readings && gage?.readings?.length > 0 && (
-            <GageReadingsChart readings={gage.readings} metric={gage.metric} />
-          )}
+          <Card style={{ border: 0 }} title={'Description'}>
+            <Typography.Text>
+              {gage.description || 'No description available.'}
+            </Typography.Text>
+          </Card>
         </Col>
       </Row>
-    </div>
+      <Row style={{ ...whiteBg }}>
+        <Col span={24} md={24}>
+          <FlowRangeTable flowRanges={gage.flowRanges || []} />
+        </Col>
+      </Row>
+    </>
   )
 }

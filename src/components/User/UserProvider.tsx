@@ -11,17 +11,19 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User>()
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
 
+  const reload = async () => {
+    try {
+      setRequestStatus('loading')
+      const result = await whoAmI()
+      setUser(result)
+      setRequestStatus('success')
+    } catch (e) {
+      setRequestStatus('failure')
+    }
+  }
+
   useEffect(() => {
-    ;(async () => {
-      try {
-        setRequestStatus('loading')
-        const result = await whoAmI()
-        setUser(result)
-        setRequestStatus('success')
-      } catch (e) {
-        setRequestStatus('failure')
-      }
-    })()
+    reload()
   }, [])
 
   const appendUserAlerts = (alert: Alert) => {
@@ -37,6 +39,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     <UserContext.Provider
       value={{
         user,
+        reload,
         appendUserAlerts,
         setUser: (user: User) => {
           setUser(user)

@@ -148,7 +148,7 @@ export const es = {
     checkout: 'Revisa',
   },
   menu: {
-    search: "Buscar (presione 'ctrl + /' para enfocar)",
+    search: 'Buscar',
     dashboard: 'Tablero',
     logout: 'Cerrar sesión',
     profile: 'Perfil',

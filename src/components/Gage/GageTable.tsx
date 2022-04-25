@@ -1,15 +1,20 @@
 import React from 'react'
-import { Button, Select, Table, Tooltip, Typography } from 'antd'
+import { Button, Table, Tooltip, Typography } from 'antd'
 import { ArrowRightOutlined } from '@ant-design/icons'
 import { useGagesContext } from '../Provider/GageProvider'
-import { updateGage } from '../../controllers'
 import moment from 'moment'
-import { Gage, GageMetric, GageReading } from '../../types'
-import { ReadingSelect } from './ReadingSelect'
+import { Gage } from '../../types'
 import { useNavigate } from 'react-router-dom'
 
 const GageTable = (): JSX.Element => {
-  const { gages, pagination, setSearchParams, searchParams } = useGagesContext()
+  const {
+    gages,
+    pagination,
+    setSearchParams,
+    searchParams,
+    setPagination,
+    requestStatus,
+  } = useGagesContext()
   const navigate = useNavigate()
 
   const columns = [
@@ -17,46 +22,42 @@ const GageTable = (): JSX.Element => {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: (name: string) => (
+      render: (name: string, gage: Gage) => (
         <Tooltip title={name} placement={'top'}>
-          <Typography.Text ellipsis>{name}</Typography.Text>
+          <Typography.Link
+            ellipsis
+            onClick={() => navigate(`/gage/${gage.state}/${gage.id}`)}
+          >
+            {name}
+          </Typography.Link>
         </Tooltip>
       ),
     },
     {
-      title: 'Primary Metric',
-      dataIndex: 'metric',
-      key: 'metric',
-      render: (metric: GageMetric, gage: Gage) => (
-        <Select
-          value={metric}
-          bordered={false}
-          size={'small'}
-          onChange={async (metric: GageMetric) => {
-            await updateGage({
-              ...gage,
-              metric,
-            })
-          }}
-        >
-          {Object.values(GageMetric).map((m) => (
-            <Select.Option value={m} key={m}>
-              {m}
-            </Select.Option>
-          ))}
-        </Select>
-      ),
-    },
-    {
-      title: 'Readings',
-      dataIndex: 'readings',
-      key: 'readings',
-      render: (readings: GageReading[]) => (
+      title: 'Latest Reading',
+      dataIndex: 'reading',
+      key: 'reading',
+      render: (reading: number, gage: Gage) => (
         <div style={{ minWidth: 150 }}>
-          <ReadingSelect readings={readings || []} />
+          {gage.disabled ? `Disabled` : `${reading} ${gage.metric}`}
         </div>
       ),
     },
+    // {
+    //   title: 'Readings',
+    //   dataIndex: 'readings',
+    //   key: 'readings',
+    //   render: (readings: GageReading[], gage: Gage) => (
+    //     <div style={{ minWidth: 150 }}>
+    //       {/*<ReadingSelect*/}
+    //       {/*  readings={readings || []}*/}
+    //       {/*  metric={gage.metric}*/}
+    //       {/*  disabled={gage.disabled}*/}
+    //       {/*/>*/}
+    //
+    //     </div>
+    //   ),
+    // },
     {
       title: 'Updated',
       dataIndex: 'updatedAt',
@@ -65,9 +66,11 @@ const GageTable = (): JSX.Element => {
         if (val) {
           return (
             <div style={{ maxWidth: 200 }}>
-              <Typography.Text ellipsis>
-                {moment(val).format('llll')}
-              </Typography.Text>
+              <Tooltip title={moment(val).format('llll')}>
+                <Typography.Text ellipsis>
+                  {moment(val).format('dd hh:mm a')}
+                </Typography.Text>
+              </Tooltip>
             </div>
           )
         }
@@ -80,6 +83,8 @@ const GageTable = (): JSX.Element => {
       render: (id: number, gage: Gage) => (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
+            title={'View Gage'}
+            size={'small'}
             onClick={() => navigate(`/gage/${gage.state}/${id}`)}
             icon={<ArrowRightOutlined />}
           />
@@ -91,19 +96,20 @@ const GageTable = (): JSX.Element => {
   return (
     <div style={{ position: 'relative', width: '100%', overflowX: 'scroll' }}>
       <Table
+        loading={requestStatus === 'loading'}
         dataSource={gages || []}
         columns={columns}
         pagination={{
           total: pagination.total,
           showSizeChanger: true,
-          pageSize: pagination.limit,
+          current: pagination.page,
+          pageSize: pagination.page_size,
           pageSizeOptions: [10, 25, 50],
-          onChange: (page, pageSize) => {
+          onChange: (page, page_size) => {
             setSearchParams({
               ...searchParams,
-              limit: pageSize,
-              offset: page === 1 ? 0 : (page - 1) * pagination.limit,
             })
+            setPagination({ page_size, page, total: pagination.total })
           },
         }}
       />

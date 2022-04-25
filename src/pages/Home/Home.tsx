@@ -1,12 +1,8 @@
 import { Hero } from './Hero'
-import './Home.css'
+import './Home.scss'
 
 const Home = () => {
-  return (
-    <div>
-      <Hero />
-    </div>
-  )
+  return <Hero />
 }
 
 export default Home
