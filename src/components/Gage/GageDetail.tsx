@@ -80,8 +80,6 @@ export const GageDetail = () => {
       }
 
       return `-${diff}%`
-    } else {
-      debugger
     }
 
     return '-'
