@@ -1,12 +1,19 @@
 import React from 'react'
-import { Button, Table, Tooltip, Typography } from 'antd'
-import { ArrowRightOutlined } from '@ant-design/icons'
-import { useGagesContext } from '../Provider/GageProvider'
 import moment from 'moment'
+import { Button, notification, Table, Tooltip, Typography } from 'antd'
+import { StarFilled, StarOutlined } from '@ant-design/icons'
+import { useGagesContext } from '../Provider/GageProvider'
 import { Gage } from '../../types'
 import { useNavigate } from 'react-router-dom'
+import { addUserGage, removeUserGage } from '../../controllers'
+import { useUserContext } from '../User/UserContext'
 
-const GageTable = (): JSX.Element => {
+type Props = {
+  siteIds?: string[]
+}
+
+const GageTable = ({ siteIds }: Props): JSX.Element => {
+  const { user, reload } = useUserContext()
   const {
     gages,
     pagination,
@@ -17,6 +24,38 @@ const GageTable = (): JSX.Element => {
   } = useGagesContext()
   const navigate = useNavigate()
 
+  const addFavoriteGage = async (gage: Gage) => {
+    try {
+      await addUserGage(gage.id, user?.id ?? 0)
+      notification.success({
+        message: `Added ${gage.name} to favorites`,
+        placement: 'bottomRight',
+      })
+      await reload()
+    } catch (e) {
+      notification.error({
+        message: `Failed to add ${gage.name} to favorites`,
+        placement: 'bottomRight',
+      })
+    }
+  }
+
+  const removeFavoriteGage = async (gage: Gage) => {
+    try {
+      await removeUserGage(gage.id, user?.id ?? 0)
+      notification.success({
+        message: `Removed ${gage.name} from favorites`,
+        placement: 'bottomRight',
+      })
+      await reload()
+    } catch (e) {
+      notification.error({
+        message: `Failed to remove ${gage.name} from favorites`,
+        placement: 'bottomRight',
+      })
+    }
+  }
+
   const columns = [
     {
       title: 'Name',
@@ -25,8 +64,7 @@ const GageTable = (): JSX.Element => {
       render: (name: string, gage: Gage) => (
         <Tooltip title={name} placement={'top'}>
           <Typography.Link
-            ellipsis
-            onClick={() => navigate(`/gage/${gage.state}/${gage.id}`)}
+            onClick={() => navigate(`/explore/${gage.state}/${gage.id}`)}
           >
             {name}
           </Typography.Link>
@@ -37,6 +75,7 @@ const GageTable = (): JSX.Element => {
       title: 'Latest Reading',
       dataIndex: 'reading',
       key: 'reading',
+      responsive: ['sm' as const],
       render: (reading: number, gage: Gage) => (
         <div style={{ minWidth: 150 }}>
           {gage.disabled ? `Disabled` : `${reading} ${gage.metric}`}
@@ -62,13 +101,14 @@ const GageTable = (): JSX.Element => {
       title: 'Updated',
       dataIndex: 'updatedAt',
       key: 'updatedAt',
+      responsive: ['md' as const],
       render: (val: Date) => {
         if (val) {
           return (
             <div style={{ maxWidth: 200 }}>
               <Tooltip title={moment(val).format('llll')}>
                 <Typography.Text ellipsis>
-                  {moment(val).format('dd hh:mm a')}
+                  {moment(val).format('ddd hh:mm a')}
                 </Typography.Text>
               </Tooltip>
             </div>
@@ -78,18 +118,43 @@ const GageTable = (): JSX.Element => {
       },
     },
     {
-      dataIndex: 'id',
-      key: 'id',
-      render: (id: number, gage: Gage) => (
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button
-            title={'View Gage'}
-            size={'small'}
-            onClick={() => navigate(`/gage/${gage.state}/${id}`)}
-            icon={<ArrowRightOutlined />}
-          />
-        </div>
-      ),
+      dataIndex: 'favorite',
+      key: 'favorite',
+      render: (siteId: number, gage: Gage) => {
+        const isVerified = Boolean(user?.verified)
+        const isFavorited =
+          user?.gages.find((g) => g.id === gage.id) !== undefined
+        const tooltip = isFavorited
+          ? 'Remove from favorites'
+          : 'Add to favorites'
+        const icon = isFavorited ? (
+          <StarFilled style={{ color: 'gold' }} />
+        ) : (
+          <StarOutlined style={{ color: 'gray' }} />
+        )
+
+        return (
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Tooltip
+              title={isVerified ? tooltip : 'Please verify your account'}
+            >
+              <Button
+                title={'Favorite Gage'}
+                shape="circle"
+                onClick={async () => {
+                  if (isFavorited) {
+                    await removeFavoriteGage(gage)
+                  }
+                  await addFavoriteGage(gage)
+                }}
+                icon={icon}
+                type="text"
+                disabled={!isVerified}
+              />
+            </Tooltip>
+          </div>
+        )
+      },
     },
   ]
 
@@ -97,7 +162,11 @@ const GageTable = (): JSX.Element => {
     <div style={{ position: 'relative', width: '100%', overflowX: 'scroll' }}>
       <Table
         loading={requestStatus === 'loading'}
-        dataSource={gages || []}
+        dataSource={
+          siteIds !== undefined
+            ? gages.filter((g) => siteIds.includes(g.siteId))
+            : gages || []
+        }
         columns={columns}
         pagination={{
           total: pagination.total,

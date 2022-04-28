@@ -3,9 +3,7 @@ import Logo from './wh2o-logo'
 import { Layout, Menu, Typography } from 'antd'
 import 'antd/dist/antd.css'
 import {
-  DashboardOutlined,
   ExportOutlined,
-  EyeOutlined,
   ImportOutlined,
   MailOutlined,
   SearchOutlined,
@@ -30,31 +28,21 @@ export type NavItem = {
 
 const baseNavItems: NavItem[] = [
   {
-    path: '/prophet',
-    text: 'Prophet',
-    icon: <EyeOutlined />,
-  },
-  {
-    path: '/gage',
-    text: 'Search',
+    path: '/explore',
+    text: 'Explore',
     icon: <SearchOutlined />,
-  },
-  {
-    path: '/contact',
-    text: 'Contact',
-    icon: <MailOutlined />,
   },
 ]
 
 const getNavItems = (user: User | undefined): NavItem[] => {
   if (!!user) {
     return [
-      {
-        path: '/user/dashboard',
-        text: 'Dashboard',
-        icon: <DashboardOutlined />,
-      },
       ...baseNavItems,
+      {
+        path: '/user/alerts',
+        text: 'Alerts',
+        icon: <MailOutlined />,
+      },
       {
         path: '/user/settings',
         text: 'Account',
@@ -108,7 +96,11 @@ export const Navigation = ({ children }: NavigationProps) => {
       style={{ minHeight: '100vh', maxHeight: '100vh' }}
       className={'navigation'}
     >
-      <Sider breakpoint="lg" collapsedWidth="0">
+      <Sider
+        breakpoint="lg"
+        collapsedWidth="0"
+        zeroWidthTriggerStyle={{ top: 0 }}
+      >
         <div className={'sider'}>
           <Logo onClick={() => navigate('/', { replace: false })} />
           <Typography.Title level={5} style={{ color: '#fff', lineHeight: 1 }}>
@@ -118,7 +110,7 @@ export const Navigation = ({ children }: NavigationProps) => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['dashboard']}
+          defaultSelectedKeys={['explore']}
           selectedKeys={getSelectedItems()}
           onSelect={({ key }) => navigate(key, { replace: false })}
         >

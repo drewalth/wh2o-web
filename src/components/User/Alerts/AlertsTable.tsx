@@ -15,7 +15,7 @@ import moment from 'moment'
 import { AlertInterval } from '../../../enums'
 import { useUserContext } from '../UserContext'
 
-export const AlertTable = (): JSX.Element => {
+export const AlertsTable = (): JSX.Element => {
   const { user, reload } = useUserContext()
 
   const getIntervalTag = (alert: Alert): JSX.Element => {

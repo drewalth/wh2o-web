@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { AlertTable } from './AlertTable'
+import { AlertsTable } from './AlertsTable'
 import {
   Button,
   Form,
@@ -31,7 +31,7 @@ const defaultCreateForm: CreateAlertDto = {
   gageId: 1,
 }
 
-export const Alert = (): JSX.Element => {
+export const Alerts = (): JSX.Element => {
   const { user, reload } = useUserContext()
 
   const userUnverified = user && !user.verified
@@ -223,7 +223,7 @@ export const Alert = (): JSX.Element => {
           </Button>
         )}
       </div>
-      <AlertTable />
+      <AlertsTable />
     </>
   )
 }

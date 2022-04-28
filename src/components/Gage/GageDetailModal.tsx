@@ -3,34 +3,25 @@ import {
   Card,
   Col,
   Divider,
+  Modal,
   PageHeader,
   Row,
   Statistic,
-  Button,
-  notification,
   Typography,
-  Tooltip,
 } from 'antd'
 import { GageReadingsChart } from './GageReadingsChart'
 import moment from 'moment'
 import { GageMap } from './GageMap'
 import { Gage, GageMetric, GageReading, RequestStatus } from '../../types'
-import { addUserGage, getGage, removeUserGage } from '../../controllers'
+import { getGage } from '../../controllers'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useUserContext } from '../User/UserContext'
 import { FlowRangeTable } from './FlowRangeTable'
-
-type BookmarkButtonProps = {
-  text: string
-  onClick: () => void
-}
 
 const whiteBg: CSSProperties = {
   backgroundColor: '#fff',
 }
 
-export const GageDetail = () => {
-  const { user, reload } = useUserContext()
+export const GageDetailModal = () => {
   const [gage, setGage] = useState<Gage>()
   const [delta, setDelta] = useState('')
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
@@ -42,7 +33,7 @@ export const GageDetail = () => {
     metric: GageMetric,
   ) => {
     function getPercentageChange(oldNumber, newNumber) {
-      var decreaseValue = oldNumber - newNumber
+      const decreaseValue = oldNumber - newNumber
 
       if (oldNumber === 0) return
 
@@ -85,36 +76,6 @@ export const GageDetail = () => {
     return '-'
   }
 
-  const bookMarkButtonProps: BookmarkButtonProps = (() => {
-    if (!user || !gage)
-      return {
-        text: '',
-        onClick: () => {},
-      }
-    const exists = user?.gages.find((g) => g.id === gage.id)
-
-    return {
-      text: !!exists ? 'Remove Bookmark' : 'Add Bookmark',
-      onClick: async () => {
-        try {
-          const fn = !!exists ? removeUserGage : addUserGage
-          await fn(gage.id, user.id)
-
-          notification.success({
-            message: !!exists ? 'Bookmark removed' : 'Bookmark added',
-            placement: 'bottomRight',
-          })
-          await reload()
-        } catch (e) {
-          notification.error({
-            message: 'Something went wrong',
-            placement: 'bottomRight',
-          })
-        }
-      },
-    }
-  })()
-
   useEffect(() => {
     if (gage && gage.readings && gage.readings.length >= 2) {
       const val = getDelta(gage.readings, gage.metric)
@@ -142,38 +103,30 @@ export const GageDetail = () => {
   }
 
   return (
-    <>
-      <Row>
-        <Col span={24}>
-          <GageMap latitude={gage.latitude} longitude={gage.longitude} />
-        </Col>
-      </Row>
+    <Modal
+      visible={Boolean(gageId)}
+      closable={false}
+      style={{
+        top: 24,
+        paddingLeft: 24,
+        paddingRight: 24,
+      }}
+      width={768}
+      footer={null}
+    >
       <Row style={{ ...whiteBg }}>
         <Col span={24}>
           <PageHeader
             title={gage?.name || ''}
             subTitle={`${gage?.state}, ${gage?.country}`}
-            onBack={() => navigate('/gage')}
-            extra={
-              <>
-                {!!user ? (
-                  <Button
-                    type={'primary'}
-                    onClick={bookMarkButtonProps.onClick}
-                  >
-                    {bookMarkButtonProps.text}
-                  </Button>
-                ) : (
-                  <Tooltip title={'Log in to bookmark'}>
-                    <Button type={'primary'} disabled>
-                      Add Bookmark
-                    </Button>
-                  </Tooltip>
-                )}
-              </>
-            }
+            onBack={() => navigate('/explore')}
           />
           <Divider style={{ margin: 0 }} />
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24} style={{ padding: '24px 24px 0px 24px' }}>
+          <GageMap siteIds={[gage.siteId]} />
         </Col>
       </Row>
       <Row style={{ ...whiteBg }}>
@@ -254,6 +207,6 @@ export const GageDetail = () => {
           <FlowRangeTable flowRanges={gage.flowRanges || []} />
         </Col>
       </Row>
-    </>
+    </Modal>
   )
 }

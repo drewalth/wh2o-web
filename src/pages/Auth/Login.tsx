@@ -57,7 +57,7 @@ export const Login = () => {
       }).catch((e) => {
         console.error(e)
       })
-      navigate('/user/dashboard')
+      navigate('/user/explore')
     } catch (e) {
       console.error(e)
     }

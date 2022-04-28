@@ -1,12 +1,22 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
+import debounce from 'lodash.debounce'
+import {
+  Button,
+  Card,
+  Checkbox,
+  Col,
+  Form,
+  Input,
+  Row,
+  Select,
+  Tooltip,
+} from 'antd'
 import GageTable from './GageTable'
-import { Button, Form, Input, Select } from 'antd'
 import { useGagesContext } from '../Provider/GageProvider'
 import { Country, GageSource } from '../../types'
-import { canadianProvinces, usStates } from '../../lib/states'
-// import { useAppContext } from '../App/AppContext'
-import { SyncOutlined } from '@ant-design/icons'
-import debounce from 'lodash.debounce'
+import { canadianProvinces, usStates } from '../../lib'
+import { GageMap } from './GageMap'
+import { useUserContext } from '../User/UserContext'
 
 /**
  *
@@ -14,8 +24,12 @@ import debounce from 'lodash.debounce'
  */
 export const Gage = (): JSX.Element => {
   const formRef = useRef<HTMLFormElement>(null)
+  const [enableFavoritesOnly, setFavoritesOnly] = useState(false)
+  const { user } = useUserContext()
   const { searchParams, setSearchParams, resetPagination, reset } =
     useGagesContext()
+  const isVerified = Boolean(user?.verified)
+  const favoriteSiteIds = user?.gages.map((g) => g.siteId) ?? []
   const stateOptions =
     searchParams.country === Country.CA ? canadianProvinces : usStates
 
@@ -106,71 +120,98 @@ export const Gage = (): JSX.Element => {
   }, 300)
 
   return (
-    <>
-      <Form
-        // @ts-ignore
-        ref={formRef}
-        layout={'inline'}
-        initialValues={searchParams}
-        onValuesChange={handleOnValuesChange}
-        wrapperCol={{ span: 24 }}
-      >
-        <Form.Item name={'country'}>
-          <Select>
-            {Object.values(Country).map((country) => (
-              <Select.Option key={country} value={country}>
-                {(() => {
-                  switch (country) {
-                    case Country.US:
-                      return 'United States'
-                    default:
-                    case Country.CA:
-                      return 'Canada'
-                  }
-                })()}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name={'state'}>
-          <Select>
-            {stateOptions.map((state) => (
-              <Select.Option
-                key={state.abbreviation}
-                value={state.abbreviation}
-              >
-                {state.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name={'source'}>
-          <Select>
-            {sourceOptions.map((source) => (
-              <Select.Option key={source} value={source}>
-                {source}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name={'searchTerm'}>
-          <Input placeholder={'Gage Name'} allowClear />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type={'ghost'}
-            title={'Reset Search'}
-            onClick={() => {
-              reset()
-              setFormAttributes(Country.CA)
-            }}
+    <Row
+      gutter={[0, 24]}
+      style={{ maxWidth: 1024, marginLeft: 'auto', marginRight: 'auto' }}
+    >
+      <Col span={24}>
+        <Card size="small" style={{ backgroundColor: '#fafafa' }}>
+          <Form
+            // @ts-ignore
+            ref={formRef}
+            layout={'inline'}
+            initialValues={searchParams}
+            onValuesChange={handleOnValuesChange}
+            wrapperCol={{ span: 24 }}
           >
-            <SyncOutlined />
-          </Button>
-        </Form.Item>
-      </Form>
-      <div className={'mb-2'} />
-      <GageTable />
-    </>
+            <Form.Item name={'country'}>
+              <Select>
+                {Object.values(Country).map((country) => (
+                  <Select.Option key={country} value={country}>
+                    {(() => {
+                      switch (country) {
+                        case Country.US:
+                          return 'United States'
+                        default:
+                        case Country.CA:
+                          return 'Canada'
+                      }
+                    })()}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name={'state'}>
+              <Select>
+                {stateOptions.map((state) => (
+                  <Select.Option
+                    key={state.abbreviation}
+                    value={state.abbreviation}
+                  >
+                    {state.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name={'source'}>
+              <Select>
+                {sourceOptions.map((source) => (
+                  <Select.Option key={source} value={source}>
+                    {source}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name={'searchTerm'}>
+              <Input placeholder={'Gage Name'} allowClear />
+            </Form.Item>
+            <Form.Item>
+              <Tooltip
+                title={!isVerified ? 'Please verify your account' : undefined}
+              >
+                <Checkbox
+                  checked={enableFavoritesOnly}
+                  onChange={() => setFavoritesOnly((s) => !s)}
+                  disabled={!isVerified}
+                >
+                  Favorites Only
+                </Checkbox>
+              </Tooltip>
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                title="Reset Search"
+                onClick={() => {
+                  reset()
+                  setFormAttributes(Country.CA)
+                }}
+              >
+                Search
+              </Button>
+            </Form.Item>
+          </Form>
+          <GageMap
+            siteIds={enableFavoritesOnly ? favoriteSiteIds : undefined}
+            style={{ margin: '12px -12px -12px -12px' }}
+          />
+        </Card>
+      </Col>
+      <Col span={24}>
+        <GageTable
+          siteIds={enableFavoritesOnly ? favoriteSiteIds : undefined}
+        />
+      </Col>
+    </Row>
   )
 }

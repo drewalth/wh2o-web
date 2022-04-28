@@ -1,69 +1,49 @@
-import React, { useEffect, useRef } from 'react'
-import mapboxgl from 'mapbox-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
-import './gage-map.scss'
-import { Typography } from 'antd'
-
-const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN
-
-mapboxgl.accessToken = mapboxToken
+import { MapContainer, TileLayer, Tooltip, Marker, Popup } from 'react-leaflet'
+import MarkerClusterGroup from 'react-leaflet-markercluster'
+import allSites from '../Prophet/all_sites_filtered_on_mean.json'
 
 export type GageMapProps = {
-  latitude?: number
-  longitude?: number
+  siteIds?: string[]
+  onSelectGauge?: (siteNo: string, siteNm: string) => void
+  style?: Record<string, string>
 }
 
-export const GageMap = ({ latitude, longitude }: GageMapProps) => {
-  const mapRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!mapboxToken || !mapRef.current || !longitude || !latitude) return
-
-    const map = new mapboxgl.Map({
-      container: mapRef.current,
-      style: 'mapbox://styles/mapbox/outdoors-v11',
-      center: [longitude, latitude],
-      zoom: 12,
-    })
-    const el = document.createElement('div')
-    el.className = 'map-marker'
-    el.innerHTML = "<div class='blob red'></div>"
-    document.body.appendChild(el)
-    new mapboxgl.Marker(el).setLngLat([longitude, latitude]).addTo(map)
-
-    return () => {
-      map.remove()
-    }
-  }, [])
-
-  if (!latitude || !longitude) {
-    return (
-      <div
-        style={{
-          height: '40vh',
-          position: 'absolute',
-          zIndex: 1,
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#ccc',
-        }}
-      >
-        <Typography.Text>No geospatial data available</Typography.Text>
-      </div>
-    )
-  }
+export const GageMap = ({ siteIds, onSelectGauge, style }: GageMapProps) => {
+  const sites =
+    siteIds !== undefined
+      ? allSites.filter((s) => siteIds.includes(s.site_no))
+      : allSites
 
   return (
-    <div
-      style={{
-        height: '40vh',
-        width: '100%',
-      }}
-      ref={mapRef}
-      id={'YOUR_CONTAINER_ELEMENT_ID'}
-      className={'map'}
-    />
+    <div style={style}>
+      <MapContainer
+        center={[38.2, -97.0]}
+        zoom={4}
+        scrollWheelZoom={false}
+        className={'leaflet-container'}
+        style={{ height: 360 }}
+      >
+        <TileLayer
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <MarkerClusterGroup>
+          {sites.map((data) => (
+            <Marker
+              position={[data.dec_lat_va, data.dec_long_va]}
+              key={data.site_no}
+              eventHandlers={{
+                click: () => {
+                  onSelectGauge?.(data.site_no, data.station_nm)
+                },
+              }}
+            >
+              <Popup>Graph generated for gauge: {data.station_nm}</Popup>
+              <Tooltip>Description: {data.station_nm}</Tooltip>
+            </Marker>
+          ))}
+        </MarkerClusterGroup>
+      </MapContainer>
+    </div>
   )
 }

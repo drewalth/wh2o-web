@@ -119,7 +119,7 @@ export const Register = () => {
         placement: 'bottomRight',
       })
       await reload()
-      navigate('/user/dashboard')
+      navigate('/user/explore')
     } catch (e) {
       console.error(e)
       if (String(e).includes('Account with email')) {
