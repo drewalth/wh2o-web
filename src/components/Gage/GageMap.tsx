@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer, Tooltip, Marker, Popup } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import allSites from '../Charts/all_sites_filtered_on_mean.json'
+import allSites from '../Common/all_sites_filtered_on_mean.json'
 
 export type GageMapProps = {
   siteIds?: string[]
