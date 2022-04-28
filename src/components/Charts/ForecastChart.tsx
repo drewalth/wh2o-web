@@ -1,6 +1,6 @@
-import { DailyAverage, RequestStatus } from '../../../types'
+import { ForeCastDataPoint, RequestStatus } from '../../types'
+import { Spin, Typography } from 'antd'
 import {
-  Area,
   CartesianGrid,
   ComposedChart,
   Label,
@@ -10,24 +10,20 @@ import {
   YAxis,
   XAxis,
 } from 'recharts'
-import { Spin, Typography } from 'antd'
 
-export type HistoricAverageChartProps = {
-  data: DailyAverage[]
+export type ForecastChartProps = {
+  data: ForeCastDataPoint[]
   requestStatus: RequestStatus
 }
 
-export const HistoricAverageChart = ({
-  data,
-  requestStatus,
-}: HistoricAverageChartProps) => {
+export const ForecastChart = ({ data, requestStatus }: ForecastChartProps) => {
   if (requestStatus === 'loading') {
     return (
       <div className={'prophet-chart loading'}>
         <div className={'loading-content'}>
           <Spin />
           <Typography.Title level={5} type={'secondary'}>
-            Loading Daily Averages...
+            Loading Flow Predictions...
           </Typography.Title>
         </div>
       </div>
@@ -50,29 +46,27 @@ export const HistoricAverageChart = ({
               offset={10}
             />
           </YAxis>
-          <Area
+          <Line
+            connectnulls
             type="monotone"
-            dataKey="middleFifty"
-            stroke="#349dcf"
-            fill="#349dcf"
-            fillOpacity={0.5}
+            dataKey="past_value"
+            stroke="#000000"
+            dot={false}
           />
           <Line
+            connectNulls
             type="monotone"
-            dataKey="average"
-            stroke="#000000"
+            dataKey="forecast"
+            stroke="#349dcf"
             dot={false}
           />
           <Tooltip
             label=""
             formatter={(value, name, props) => {
-              if (name === 'middleFifty') {
-                return [
-                  `Middle 50%: ${props.payload.middleFifty[0]} - ${props.payload.middleFifty[1]} cfs`,
-                  '',
-                ]
+              if (name === 'past_value') {
+                return [`Flow: ${Math.round(value)} cfs`, '']
               } else {
-                return [`Average: ${Math.round(value)} cfs`, '']
+                return [`Forecast: ${Math.round(value)} cfs`, '']
               }
             }}
             itemSorter={(item) => item.name}

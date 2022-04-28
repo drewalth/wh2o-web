@@ -16,6 +16,7 @@ import { Gage, GageMetric, GageReading, RequestStatus } from '../../types'
 import { getGage } from '../../controllers'
 import { useNavigate, useParams } from 'react-router-dom'
 import { FlowRangeTable } from './FlowRangeTable'
+import { RiverCharts } from '../Charts/RiverCharts'
 
 const whiteBg: CSSProperties = {
   backgroundColor: '#fff',
@@ -200,6 +201,14 @@ export const GageDetailModal = () => {
               {gage.description || 'No description available.'}
             </Typography.Text>
           </Card>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <RiverCharts
+            siteId={gage.siteId}
+            siteDescription={gage.description}
+          />
         </Col>
       </Row>
       <Row style={{ ...whiteBg }}>

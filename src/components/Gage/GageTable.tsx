@@ -62,13 +62,11 @@ const GageTable = ({ siteIds }: Props): JSX.Element => {
       dataIndex: 'name',
       key: 'name',
       render: (name: string, gage: Gage) => (
-        <Tooltip title={name} placement={'top'}>
-          <Typography.Link
-            onClick={() => navigate(`/explore/${gage.state}/${gage.id}`)}
-          >
-            {name}
-          </Typography.Link>
-        </Tooltip>
+        <Typography.Link
+          onClick={() => navigate(`/explore/${gage.state}/${gage.id}`)}
+        >
+          {name}
+        </Typography.Link>
       ),
     },
     {

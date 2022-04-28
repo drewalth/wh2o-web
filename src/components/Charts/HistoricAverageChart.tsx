@@ -1,6 +1,6 @@
-import { ForeCastDataPoint, RequestStatus } from '../../../types'
-import { Spin, Typography } from 'antd'
+import { DailyAverage, RequestStatus } from '../../types'
 import {
+  Area,
   CartesianGrid,
   ComposedChart,
   Label,
@@ -10,20 +10,24 @@ import {
   YAxis,
   XAxis,
 } from 'recharts'
+import { Spin, Typography } from 'antd'
 
-export type ForecastChartProps = {
-  data: ForeCastDataPoint[]
+export type HistoricAverageChartProps = {
+  data: DailyAverage[]
   requestStatus: RequestStatus
 }
 
-export const ForecastChart = ({ data, requestStatus }: ForecastChartProps) => {
+export const HistoricAverageChart = ({
+  data,
+  requestStatus,
+}: HistoricAverageChartProps) => {
   if (requestStatus === 'loading') {
     return (
       <div className={'prophet-chart loading'}>
         <div className={'loading-content'}>
           <Spin />
           <Typography.Title level={5} type={'secondary'}>
-            Loading Flow Predictions...
+            Loading Daily Averages...
           </Typography.Title>
         </div>
       </div>
@@ -46,27 +50,29 @@ export const ForecastChart = ({ data, requestStatus }: ForecastChartProps) => {
               offset={10}
             />
           </YAxis>
-          <Line
-            connectnulls
+          <Area
             type="monotone"
-            dataKey="past_value"
-            stroke="#000000"
-            dot={false}
+            dataKey="middleFifty"
+            stroke="#349dcf"
+            fill="#349dcf"
+            fillOpacity={0.5}
           />
           <Line
-            connectNulls
             type="monotone"
-            dataKey="forecast"
-            stroke="#349dcf"
+            dataKey="average"
+            stroke="#000000"
             dot={false}
           />
           <Tooltip
             label=""
             formatter={(value, name, props) => {
-              if (name === 'past_value') {
-                return [`Flow: ${Math.round(value)} cfs`, '']
+              if (name === 'middleFifty') {
+                return [
+                  `Middle 50%: ${props.payload.middleFifty[0]} - ${props.payload.middleFifty[1]} cfs`,
+                  '',
+                ]
               } else {
-                return [`Forecast: ${Math.round(value)} cfs`, '']
+                return [`Average: ${Math.round(value)} cfs`, '']
               }
             }}
             itemSorter={(item) => item.name}

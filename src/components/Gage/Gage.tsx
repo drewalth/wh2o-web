@@ -26,8 +26,7 @@ export const Gage = (): JSX.Element => {
   const formRef = useRef<HTMLFormElement>(null)
   const [enableFavoritesOnly, setFavoritesOnly] = useState(false)
   const { user } = useUserContext()
-  const { searchParams, setSearchParams, resetPagination, reset } =
-    useGagesContext()
+  const { searchParams, setSearchParams, resetPagination } = useGagesContext()
   const isVerified = Boolean(user?.verified)
   const favoriteSiteIds = user?.gages.map((g) => g.siteId) ?? []
   const stateOptions =
@@ -81,7 +80,7 @@ export const Gage = (): JSX.Element => {
     }
   }
 
-  const handleOnValuesChange = debounce((val) => {
+  const handleSubmit = debounce((val) => {
     try {
       if (searchParams.country === Country.US && val.country === Country.CA) {
         resetPagination()
@@ -131,7 +130,7 @@ export const Gage = (): JSX.Element => {
             ref={formRef}
             layout={'inline'}
             initialValues={searchParams}
-            onValuesChange={handleOnValuesChange}
+            onFinish={handleSubmit}
             wrapperCol={{ span: 24 }}
           >
             <Form.Item name={'country'}>
@@ -189,14 +188,7 @@ export const Gage = (): JSX.Element => {
               </Tooltip>
             </Form.Item>
             <Form.Item>
-              <Button
-                type="primary"
-                title="Reset Search"
-                onClick={() => {
-                  reset()
-                  setFormAttributes(Country.CA)
-                }}
-              >
+              <Button type="primary" title="Reset Search" htmlType="submit">
                 Search
               </Button>
             </Form.Item>

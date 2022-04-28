@@ -1,8 +1,8 @@
 import { DailyAverage, ForeCastDataPoint, RequestStatus } from '../../types'
 import { useEffect, useState } from 'react'
 import { getDailyAverage, getForecast } from '../../controllers'
-import { HistoricAverageChart } from './Charts/HistoricAverageChart'
-import { ForecastChart } from './Charts/ForecastChart'
+import { HistoricAverageChart } from './HistoricAverageChart'
+import { ForecastChart } from './ForecastChart'
 import { Card, Divider } from 'antd'
 
 export type RiverFormProps = {
@@ -11,7 +11,7 @@ export type RiverFormProps = {
   siteDescription: string
 }
 
-export const RiverForm = ({
+export const RiverCharts = ({
   siteDescription,
   siteId,
   className,
