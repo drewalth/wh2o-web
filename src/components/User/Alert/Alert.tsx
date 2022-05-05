@@ -10,7 +10,7 @@ import {
   TimePicker,
   Tooltip,
 } from 'antd'
-import { CreateAlertDto, GageMetric } from '../../../types'
+import { CreateAlertDto, GageMetric, RequestStatus } from '../../../types'
 import { AlertChannel, AlertCriteria, AlertInterval } from '../../../enums'
 import { createAlert } from '../../../controllers'
 import moment from 'moment'
@@ -44,11 +44,12 @@ export const Alert = (): JSX.Element => {
   const [modalVisible, setModalVisible] = useState(false)
   const [createForm, setCreateForm] =
     useState<CreateAlertDto>(defaultCreateForm)
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>()
 
   const handleOk = async () => {
     try {
       if (!user) return
-
+      setRequestStatus('loading')
       const notifyTime = moment(createForm.notifyTime).format(
         'YYYY-MM-DDTHH:mm:ss',
       )
@@ -60,11 +61,13 @@ export const Alert = (): JSX.Element => {
       })
       // appendUserAlerts(result)
       await reload()
+      setRequestStatus('success')
       notification.success({
         message: 'Alert Created',
         placement: 'bottomRight',
       })
     } catch (e) {
+      setRequestStatus('failure')
       notification.error({
         message: 'Failed to create alert',
         placement: 'bottomRight',
@@ -86,6 +89,7 @@ export const Alert = (): JSX.Element => {
         title={'Add Alert'}
         onOk={handleOk}
         onCancel={handleCancel}
+        confirmLoading={requestStatus === 'loading'}
       >
         <Form
           layout={'vertical'}
