@@ -210,7 +210,7 @@ export const UserGages = (): JSX.Element => {
           disabled={gages.length >= 15}
           onClick={() => setCreateModalVisible(true)}
         >
-          Add Gage
+          Bookmark Gage
         </Button>
       </div>
       <UserGageTable />

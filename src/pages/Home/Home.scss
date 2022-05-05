@@ -1,12 +1,18 @@
 .hero-container {
-  height: 100vh;
-  min-height: 100vh;
-  width: calc(100vw - 200px);
-  min-width: 100%;
+  height: 70vh;
+  min-height: 70vh;
+  width: 100vw;
+  padding: 32px;
+  position: relative;
   background-position: center center;
   background-size: cover;
-  @media screen and (max-width: 375px) {
-    width: 100vw;
+  @media screen and (min-width: 1020px) {
+    width: calc(100vw - 216px);
+  }
+  .hero-photo-credit-tooltip {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
   }
 }
 
@@ -16,4 +22,16 @@ img.Hero {
   min-height: 100%;
   max-height: 100%;
   width: 100%;
+}
+
+.feature-row {
+  display: flex;
+  justify-content: center;
+  padding: 32px 1rem;
+  @media screen and (min-width: 1020px) {
+    padding-top: 32px;
+  }
+  .feature-col {
+    margin: 32px;
+  }
 }

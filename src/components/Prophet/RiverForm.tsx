@@ -9,12 +9,16 @@ export type RiverFormProps = {
   className?: string
   siteId: string
   siteDescription: string
+  historicalAverageChartVisible?: boolean
+  dividerVisible?: boolean
 }
 
 export const RiverForm = ({
   siteDescription,
   siteId,
   className,
+  historicalAverageChartVisible = true,
+  dividerVisible = true,
 }: RiverFormProps) => {
   const [dailyAverages, setDailyAverages] = useState<DailyAverage[]>([])
   const [dailyAveragesRequestStatus, setDailyAveragesRequestStatus] =
@@ -80,11 +84,13 @@ export const RiverForm = ({
 
   return (
     <Card className={className} title={siteDescription}>
-      <HistoricAverageChart
-        data={dailyAverages}
-        requestStatus={dailyAveragesRequestStatus}
-      />
-      <Divider />
+      {historicalAverageChartVisible && (
+        <HistoricAverageChart
+          data={dailyAverages}
+          requestStatus={dailyAveragesRequestStatus}
+        />
+      )}
+      {siteDescription && dividerVisible && <Divider />}
       <ForecastChart
         data={forecastData}
         requestStatus={forecastRequestStatus}

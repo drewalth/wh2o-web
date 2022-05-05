@@ -1,33 +1,56 @@
-import React from 'react'
-import { Button, Card, Col, Popover, Row, Tag, Typography } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Button, Col, Popover, Row, Typography, Grid } from 'antd'
 import cover from '../../assets/john-huisjen-cover.jpeg'
 import { CameraOutlined } from '@ant-design/icons'
 
+const { useBreakpoint } = Grid
+
 export const Hero = () => {
+  const [titleFontSize, setTitleFontSize] = useState(0)
+  const breakpoints = useBreakpoint()
+  const currentBreakpoints = Object.keys(breakpoints).filter(
+    (key) => breakpoints[key],
+  )
+
+  const isMobile =
+    (currentBreakpoints.includes('sm') && currentBreakpoints.includes('xs')) ||
+    currentBreakpoints.includes('xs')
+
+  const getTitleFontSize = () => {
+    const height = window.innerHeight / (isMobile ? 10 : 6)
+    setTitleFontSize(height)
+  }
+
+  useEffect(() => {
+    getTitleFontSize()
+  }, [breakpoints])
+
   return (
     <div
       className={'hero-container'}
       style={{ backgroundImage: `url(${cover})` }}
     >
-      <Row justify={'center'} align={'middle'} style={{ height: '60%' }}>
-        <Col span={24} sm={12} md={12} lg={12} xl={8}>
-          <Card>
-            <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-              <Typography.Title level={1} style={{ lineHeight: 1 }}>
-                wh2o
-              </Typography.Title>
-              <div>
-                <Tag color={'blue'}>Alpha</Tag>
-              </div>
-            </div>
-            <Typography.Title level={5}>
-              Custom Reporting & Flow Predictions for Rivers in the United
-              States and Canada
-            </Typography.Title>
-          </Card>
+      <Row align={'middle'} justify={'center'}>
+        <Col span={24} xl={12}>
+          <Typography.Title
+            type={'secondary'}
+            style={{
+              fontSize: titleFontSize,
+              color: '#fff',
+              lineHeight: 1,
+              paddingTop: 24,
+            }}
+          >
+            w.H<sub>2</sub>O
+          </Typography.Title>
+          <Typography.Title type={'secondary'} style={{ color: '#fff' }}>
+            Historical river flow data, forecasting, and custom reporting for
+            rivers in the United States and Canada.
+          </Typography.Title>
         </Col>
       </Row>
-      <div style={{ position: 'fixed', bottom: 16, right: 16 }}>
+
+      <div className={'hero-photo-credit-tooltip'}>
         <Popover
           placement={'topLeft'}
           content={

@@ -1,10 +1,12 @@
 import React from 'react'
-import { Button, Table, Tooltip, Typography } from 'antd'
-import { ArrowRightOutlined } from '@ant-design/icons'
+import { Table, Tooltip, Typography } from 'antd'
+// import { ArrowRightOutlined } from '@ant-design/icons'
 import { useGagesContext } from '../Provider/GageProvider'
 import moment from 'moment'
 import { Gage } from '../../types'
 import { useNavigate } from 'react-router-dom'
+import { GageBookmarkToggle } from '../Common/GageBookmarkToggle'
+import { GageReadingsChart } from './GageReadingsChart'
 
 const GageTable = (): JSX.Element => {
   const {
@@ -43,21 +45,6 @@ const GageTable = (): JSX.Element => {
         </div>
       ),
     },
-    // {
-    //   title: 'Readings',
-    //   dataIndex: 'readings',
-    //   key: 'readings',
-    //   render: (readings: GageReading[], gage: Gage) => (
-    //     <div style={{ minWidth: 150 }}>
-    //       {/*<ReadingSelect*/}
-    //       {/*  readings={readings || []}*/}
-    //       {/*  metric={gage.metric}*/}
-    //       {/*  disabled={gage.disabled}*/}
-    //       {/*/>*/}
-    //
-    //     </div>
-    //   ),
-    // },
     {
       title: 'Updated',
       dataIndex: 'updatedAt',
@@ -80,14 +67,9 @@ const GageTable = (): JSX.Element => {
     {
       dataIndex: 'id',
       key: 'id',
-      render: (id: number, gage: Gage) => (
+      render: (id: number) => (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button
-            title={'View Gage'}
-            size={'small'}
-            onClick={() => navigate(`/gage/${gage.state}/${id}`)}
-            icon={<ArrowRightOutlined />}
-          />
+          <GageBookmarkToggle gageId={id} type={'icon'} />
         </div>
       ),
     },
@@ -96,6 +78,13 @@ const GageTable = (): JSX.Element => {
   return (
     <div style={{ position: 'relative', width: '100%', overflowX: 'scroll' }}>
       <Table
+        rowKey={(record) => record.id}
+        expandable={{
+          expandedRowRender: (g) => (
+            <GageReadingsChart readings={g.readings || []} metric={g.metric} />
+          ),
+          rowExpandable: (g) => (g.readings && g.readings.length > 0) || false,
+        }}
         loading={requestStatus === 'loading'}
         dataSource={gages || []}
         columns={columns}

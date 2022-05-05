@@ -1,19 +1,21 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import Chart from 'react-apexcharts'
-import { GageMetric, GageReading } from '../../types'
+import { Gage, GageMetric, GageReading } from '../../types'
 import moment from 'moment'
-import { Card, Divider, Select } from 'antd'
+import { Card, Divider, Form, Select } from 'antd'
 
 export type GageReadingsChartProps = {
   readings: GageReading[]
   chartId?: string
   metric: GageMetric
+  gage?: Gage
 }
 
 export const GageReadingsChart = ({
   readings,
   chartId,
   metric,
+  gage,
 }: GageReadingsChartProps) => {
   const cardRef = useRef<HTMLDivElement>(null)
   const [chartHeight, setChartHeight] = useState(300)
@@ -22,8 +24,13 @@ export const GageReadingsChart = ({
 
   const getAvailableMetrics = () => {
     const m = new Set(readings.map((r) => r.metric))
+    const mArr = [...m]
 
-    return [...m]
+    if (!mArr.includes(activeMetric)) {
+      setActiveMetric(mArr[0])
+    }
+
+    return mArr
   }
 
   const getChartData = () => {
@@ -111,7 +118,7 @@ export const GageReadingsChart = ({
 
   return (
     <div ref={cardRef}>
-      <Card style={{ border: 0 }}>
+      <Card style={{ border: 0, backgroundColor: 'transparent' }}>
         <Chart
           options={chart.options}
           series={chart.series}
@@ -122,16 +129,28 @@ export const GageReadingsChart = ({
         {readings.length > 0 && (
           <>
             <Divider />
-            <Select
-              value={activeMetric}
-              onSelect={(metric: GageMetric) => setActiveMetric(metric)}
-            >
-              {getAvailableMetrics().map((m) => (
-                <Select.Option key={m} value={m}>
-                  {m}
-                </Select.Option>
-              ))}
-            </Select>
+            <Form layout={'inline'}>
+              <Form.Item label={'Chart metric'}>
+                <Select
+                  value={activeMetric}
+                  onSelect={(metric: GageMetric) => setActiveMetric(metric)}
+                >
+                  {getAvailableMetrics().map((m) => (
+                    <Select.Option key={m} value={m}>
+                      {m}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item label={'Chart timeframe'}>
+                <Select value={'Last 7 Days'} disabled>
+                  <Select.Option value={'Last 7 Days'}>
+                    Last 7 Days
+                  </Select.Option>
+                </Select>
+              </Form.Item>
+            </Form>
+            <Divider style={{ marginBottom: 0 }} />
           </>
         )}
       </Card>

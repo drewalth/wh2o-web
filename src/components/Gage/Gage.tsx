@@ -1,18 +1,20 @@
 import React, { useRef } from 'react'
 import GageTable from './GageTable'
-import { Button, Form, Input, Select } from 'antd'
+import { Button, Card, Form, Input, PageHeader, Select } from 'antd'
 import { useGagesContext } from '../Provider/GageProvider'
 import { Country, GageSource } from '../../types'
 import { canadianProvinces, usStates } from '../../lib/states'
 // import { useAppContext } from '../App/AppContext'
 import { SyncOutlined } from '@ant-design/icons'
 import debounce from 'lodash.debounce'
+import { useNavigate } from 'react-router-dom'
 
 /**
  *
  * @todo fix source and state options inputs to reflect currently selected country
  */
 export const Gage = (): JSX.Element => {
+  const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
   const { searchParams, setSearchParams, resetPagination, reset } =
     useGagesContext()
@@ -67,6 +69,13 @@ export const Gage = (): JSX.Element => {
     }
   }
 
+  const getStateInputLabel = () => {
+    if (searchParams.country === Country.CA) {
+      return 'Province'
+    }
+    return 'State'
+  }
+
   const handleOnValuesChange = debounce((val) => {
     try {
       if (searchParams.country === Country.US && val.country === Country.CA) {
@@ -107,69 +116,70 @@ export const Gage = (): JSX.Element => {
 
   return (
     <>
-      <Form
-        // @ts-ignore
-        ref={formRef}
-        layout={'inline'}
-        initialValues={searchParams}
-        onValuesChange={handleOnValuesChange}
-        wrapperCol={{ span: 24 }}
-      >
-        <Form.Item name={'country'}>
-          <Select>
-            {Object.values(Country).map((country) => (
-              <Select.Option key={country} value={country}>
-                {(() => {
-                  switch (country) {
-                    case Country.US:
-                      return 'United States'
-                    default:
-                    case Country.CA:
-                      return 'Canada'
-                  }
-                })()}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name={'state'}>
-          <Select>
-            {stateOptions.map((state) => (
-              <Select.Option
-                key={state.abbreviation}
-                value={state.abbreviation}
-              >
-                {state.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name={'source'}>
-          <Select>
-            {sourceOptions.map((source) => (
-              <Select.Option key={source} value={source}>
-                {source}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name={'searchTerm'}>
-          <Input placeholder={'Gage Name'} allowClear />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type={'ghost'}
-            title={'Reset Search'}
-            onClick={() => {
-              reset()
-              setFormAttributes(Country.CA)
-            }}
-          >
-            <SyncOutlined />
-          </Button>
-        </Form.Item>
-      </Form>
-      <div className={'mb-2'} />
+      <PageHeader title={'Search'} onBack={() => navigate('/')} />
+      <Card>
+        <Form
+          // @ts-ignore
+          ref={formRef}
+          layout={'inline'}
+          initialValues={searchParams}
+          onValuesChange={handleOnValuesChange}
+        >
+          <Form.Item name={'country'} label={'Country'}>
+            <Select>
+              {Object.values(Country).map((country) => (
+                <Select.Option key={country} value={country}>
+                  {(() => {
+                    switch (country) {
+                      case Country.US:
+                        return 'United States'
+                      default:
+                      case Country.CA:
+                        return 'Canada'
+                    }
+                  })()}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name={'state'} label={getStateInputLabel()}>
+            <Select>
+              {stateOptions.map((state) => (
+                <Select.Option
+                  key={state.abbreviation}
+                  value={state.abbreviation}
+                >
+                  {state.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name={'source'}>
+            <Select>
+              {sourceOptions.map((source) => (
+                <Select.Option key={source} value={source}>
+                  {source}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name={'searchTerm'}>
+            <Input placeholder={'Gage Name'} allowClear />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type={'ghost'}
+              title={'Reset Search'}
+              onClick={() => {
+                reset()
+                setFormAttributes(Country.CA)
+              }}
+            >
+              <SyncOutlined />
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
       <GageTable />
     </>
   )

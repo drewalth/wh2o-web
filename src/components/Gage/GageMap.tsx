@@ -41,7 +41,6 @@ export const GageMap = ({ latitude, longitude }: GageMapProps) => {
       <div
         style={{
           height: '40vh',
-          position: 'absolute',
           zIndex: 1,
           width: '100%',
           display: 'flex',
