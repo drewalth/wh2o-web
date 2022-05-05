@@ -68,7 +68,7 @@ const GageTable = (): JSX.Element => {
             <div style={{ maxWidth: 200 }}>
               <Tooltip title={moment(val).format('llll')}>
                 <Typography.Text ellipsis>
-                  {moment(val).format('dd hh:mm a')}
+                  {moment(val).format('ddd hh:mm a')}
                 </Typography.Text>
               </Tooltip>
             </div>
