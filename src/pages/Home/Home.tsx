@@ -41,7 +41,7 @@ const Home = () => {
             help you plan your next trip.
           </Typography.Paragraph>
           <Button onClick={() => navigate('/prophet')} type={'ghost'}>
-            Search Prophet
+            Consult Prophet
           </Button>
         </Col>
         <Col {...colProps} className={'feature-col'}>
