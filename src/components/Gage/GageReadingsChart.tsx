@@ -25,7 +25,6 @@ export const GageReadingsChart = ({
   const getAvailableMetrics = () => {
     const m = new Set(readings.map((r) => r.metric))
     const mArr = [...m]
-
     if (!mArr.includes(activeMetric)) {
       setActiveMetric(mArr[0])
     }
@@ -37,9 +36,9 @@ export const GageReadingsChart = ({
     if (readings.length > 0) {
       const filteredReadings = readings.filter((r) => r.metric === activeMetric)
       return {
-        categories: filteredReadings.map((r) =>
-          moment(r.createdAt).format('hh:mm a'),
-        ),
+        categories: filteredReadings
+          .reverse()
+          .map((r) => moment(r.createdAt).local().format('dd hh:mm a')),
         data: filteredReadings.map((r) => r.value),
       }
     }

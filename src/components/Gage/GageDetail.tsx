@@ -12,7 +12,7 @@ import {
 import { GageReadingsChart } from './GageReadingsChart'
 import moment from 'moment'
 import { GageMap } from './GageMap'
-import { Gage, RequestStatus } from '../../types'
+import { Gage, GageSource, RequestStatus } from '../../types'
 import { getGage } from '../../controllers'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ErrorBoundary } from '../Common/ErrorBoundary'
@@ -104,7 +104,7 @@ export const GageDetail = () => {
                   loading={requestStatus === 'loading'}
                   value={
                     gage.updatedAt
-                      ? moment(gage?.updatedAt).local().format('l hh:mm a')
+                      ? moment(gage?.updatedAt).local().format('ll hh:mm a')
                       : '-'
                   }
                 />
@@ -116,16 +116,23 @@ export const GageDetail = () => {
 
       <Row>
         <Col span={24}>
-          <RiverForm
-            siteId={gage.siteId}
-            siteDescription={'Flow Forecast'}
-            historicalAverageChartVisible={false}
-            dividerVisible={false}
-          />
+          {gage.source === GageSource.USGS && (
+            <RiverForm
+              siteId={gage.siteId}
+              siteDescription={'Flow Forecast'}
+              historicalAverageChartVisible={false}
+              dividerVisible={false}
+            />
+          )}
         </Col>
       </Row>
       <Row>
-        <Col span={12}>
+        <Col
+          span={12}
+          style={{
+            padding: '24px 0',
+          }}
+        >
           <Statistic
             title={'source'}
             formatter={() => (

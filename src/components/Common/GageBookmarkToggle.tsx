@@ -1,8 +1,9 @@
 import { Button, notification, Tooltip } from 'antd'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { addUserGage, removeUserGage } from '../../controllers'
 import { useUserContext } from '../User/UserContext'
-import { HeartFilled, HeartOutlined } from '@ant-design/icons'
+import { HeartFilled, HeartOutlined, LoadingOutlined } from '@ant-design/icons'
+import { RequestStatus } from '../../types'
 
 type BookmarkButtonOptions = {
   text: string
@@ -20,6 +21,7 @@ export const GageBookmarkToggle = ({
   type,
 }: GageBookmarkToggleProps) => {
   const { user, reload } = useUserContext()
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>()
 
   const bookMarkButtonoptions: BookmarkButtonOptions = (() => {
     const exists = user?.gages.find((g) => g.id === gageId)
@@ -31,23 +33,32 @@ export const GageBookmarkToggle = ({
       return !!exists ? 'Remove Bookmark' : 'Bookmark Gage'
     }
 
+    const getIcon = () => {
+      if (requestStatus === 'loading') {
+        return <LoadingOutlined />
+      }
+      return !!exists ? <HeartFilled /> : <HeartOutlined />
+    }
+
     return {
       text: getText(),
-      icon: !!exists ? <HeartFilled /> : <HeartOutlined />,
+      icon: getIcon(),
       onClick: async () => {
         try {
           if (!user) {
             throw new Error('Must sign in')
           }
+          setRequestStatus('loading')
           const fn = !!exists ? removeUserGage : addUserGage
           await fn(gageId, user.id)
-
+          setRequestStatus('success')
           notification.success({
             message: !!exists ? 'Bookmark removed' : 'Bookmark added',
             placement: 'bottomRight',
           })
           await reload()
         } catch (e) {
+          setRequestStatus('failure')
           notification.error({
             message: 'Something went wrong',
             placement: 'bottomRight',
