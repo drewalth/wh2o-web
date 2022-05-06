@@ -1,7 +1,7 @@
 import { GageMap } from './GageMap'
 import { useState } from 'react'
 import { RiverForm } from './RiverForm'
-import { Col, PageHeader, Row } from 'antd'
+import { Alert, Col, PageHeader, Row } from 'antd'
 import { useNavigate } from 'react-router-dom'
 
 export const Prophet = () => {
@@ -18,7 +18,17 @@ export const Prophet = () => {
 
   return (
     <>
-      <PageHeader title={'Prophet'} onBack={() => navigate('/')} />
+      <PageHeader
+        title={'Prophet'}
+        onBack={() => navigate('/')}
+        extra={
+          <Alert
+            message="Currently available for USGS gages only"
+            type="info"
+            showIcon
+          />
+        }
+      />
       <div>
         <Row style={{ marginBottom: 24 }}>
           <Col span={24}>

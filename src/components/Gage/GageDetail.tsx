@@ -127,29 +127,31 @@ export const GageDetail = () => {
         </Col>
       </Row>
       <Row>
-        <Col
-          span={12}
-          style={{
-            padding: '24px 0',
-          }}
-        >
-          <Statistic
-            title={'source'}
-            formatter={() => (
-              <>
-                <a
-                  href={`https://waterdata.usgs.gov/nwis/uv?site_no=${
-                    gage?.siteId || 0
-                  }`}
-                  target={'_blank'}
-                  rel="noreferrer"
-                >
-                  {gage.source}
-                </a>
-              </>
-            )}
-          />
-        </Col>
+        {gage.source === GageSource.USGS && (
+          <Col
+            span={12}
+            style={{
+              padding: '24px 0',
+            }}
+          >
+            <Statistic
+              title={'source'}
+              formatter={() => (
+                <>
+                  <a
+                    href={`https://waterdata.usgs.gov/nwis/uv?site_no=${
+                      gage?.siteId || 0
+                    }`}
+                    target={'_blank'}
+                    rel="noreferrer"
+                  >
+                    {gage.source}
+                  </a>
+                </>
+              )}
+            />
+          </Col>
+        )}
       </Row>
     </>
   )
