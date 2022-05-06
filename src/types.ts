@@ -2,6 +2,7 @@
 import { AlertChannel, AlertCriteria, AlertInterval } from './enums'
 
 export enum ContactType {
+  BETA_WAITLIST = 'BETA_WAITLIST',
   MISSING_GAGE = 'MISSING_GAGE',
   MISC = 'MISC',
   BUG_REPORT = 'BUG_REPORT',
@@ -136,11 +137,13 @@ export type UpdateAlertDto = Omit<
 export enum GageSource {
   USGS = 'USGS',
   ENVIRONMENT_CANADA = 'ENVIRONMENT_CANADA',
+  ENVIRONMENT_AUCKLAND = 'ENVIRONMENT_AUCKLAND',
 }
 
 export enum Country {
   US = 'US',
   CA = 'CA',
+  NZ = 'NZ',
 }
 
 export type GageSearchParams = {

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import {
   Button,
   Card,
+  Checkbox,
   Col,
   Form,
   Input,
@@ -22,6 +23,7 @@ import { setToken } from '../../lib/token'
 import { useUserContext } from '../../components/User/UserContext'
 import { RequestStatus } from '../../types'
 import Recaptcha from 'react-google-invisible-recaptcha'
+import { LegalModal } from '../Legal'
 
 type RegisterForm = {
   name: string
@@ -30,6 +32,7 @@ type RegisterForm = {
   timezone: string
   password: string
   passwordConfirm: string
+  termsAgreed: boolean
 }
 
 export const Register = () => {
@@ -58,6 +61,7 @@ export const Register = () => {
 
   const recaptchaRef = useRef(null)
   const timezone = useCurrentTimezone()
+  const [legalModalVisible, setLegalModalVisible] = useState(false)
   const [requestStatus, setRequestStatus] = useState<RequestStatus>()
   const [humanDetected, setHumanDetected] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -69,6 +73,7 @@ export const Register = () => {
     passwordConfirm: '',
     timezone,
     telephone: '',
+    termsAgreed: false,
   })
   const DEFAULT_PASS_ERR_MSG = 'Please input your password!'
   const [passwordErrMsg, setPasswordErrMsg] = useState(DEFAULT_PASS_ERR_MSG)
@@ -85,6 +90,7 @@ export const Register = () => {
   })
 
   const formValid =
+    form.termsAgreed &&
     form.password === form.passwordConfirm &&
     validateEmail(form.email) &&
     Array.isArray(passwordErrors) &&
@@ -258,7 +264,9 @@ export const Register = () => {
               <Space direction={'horizontal'}>
                 <Input placeholder={'Telephone'} />
                 <HelpTooltip
-                  title={'Optional. Used for SMS alerts that you create.'}
+                  title={
+                    'Optional. Used for SMS alerts that you create. You can add this later.'
+                  }
                 />
               </Space>
             </Form.Item>
@@ -295,6 +303,23 @@ export const Register = () => {
             >
               <Input.Password placeholder={'Confirm Password'} />
             </Form.Item>
+            <Form.Item
+              name={'termsAgreed'}
+              valuePropName="checked"
+              required={true}
+            >
+              <Checkbox>
+                <Typography.Link
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setLegalModalVisible(true)
+                  }}
+                >
+                  {' '}
+                  Terms and Conditions
+                </Typography.Link>
+              </Checkbox>
+            </Form.Item>
             <Form.Item>
               <Button
                 type="primary"
@@ -313,6 +338,15 @@ export const Register = () => {
         sitekey={recaptchaSiteKey}
         onResolved={() => {
           setHumanDetected(true)
+        }}
+      />
+      <LegalModal
+        visible={legalModalVisible}
+        onOk={() => {
+          setLegalModalVisible(false)
+        }}
+        onCancel={() => {
+          setLegalModalVisible(false)
         }}
       />
     </Row>

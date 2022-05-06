@@ -127,6 +127,9 @@ export const Navigation = ({ children }: NavigationProps) => {
               {item.text}
             </Menu.Item>
           ))}
+          <Menu.Item style={{ position: 'absolute', bottom: 0 }} key={'/legal'}>
+            Legal
+          </Menu.Item>
         </Menu>
       </Sider>
       <Layout>

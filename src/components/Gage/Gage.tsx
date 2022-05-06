@@ -2,8 +2,8 @@ import React, { useRef } from 'react'
 import GageTable from './GageTable'
 import { Button, Card, Form, Input, PageHeader, Select } from 'antd'
 import { useGagesContext } from '../Provider/GageProvider'
-import { Country, GageSource } from '../../types'
-import { canadianProvinces, usStates } from '../../lib/states'
+import { Country, GageSearchParams, GageSource } from '../../types'
+import { canadianProvinces, StateEntry, usStates } from '../../lib/states'
 // import { useAppContext } from '../App/AppContext'
 import { SyncOutlined } from '@ant-design/icons'
 import debounce from 'lodash.debounce'
@@ -18,55 +18,61 @@ export const Gage = (): JSX.Element => {
   const formRef = useRef<HTMLFormElement>(null)
   const { searchParams, setSearchParams, resetPagination, reset } =
     useGagesContext()
-  const stateOptions =
-    searchParams.country === Country.CA ? canadianProvinces : usStates
-
-  const sourceOptions =
-    searchParams.country === Country.CA
-      ? [GageSource.ENVIRONMENT_CANADA]
-      : [GageSource.USGS]
 
   const setFormAttributes = (country: Country) => {
     if (formRef && formRef.current) {
       const form = formRef.current
-
-      switch (country) {
-        case Country.US:
-          form.setFields([
-            {
-              name: 'country',
-              value: 'US',
-            },
-            {
-              name: 'state',
-              value: 'AL',
-            },
-            {
-              name: 'source',
-              value: 'USGS',
-            },
-          ])
-          return
-        default:
-        case Country.CA:
-          form.setFields([
-            {
-              name: 'country',
-              value: 'CA',
-            },
-            {
-              name: 'state',
-              value: 'BC',
-            },
-            {
-              name: 'source',
-              value: 'ENVIRONMENT_CANADA',
-            },
-          ])
-
-          return
-      }
+      form.setFields([
+        {
+          name: 'country',
+          value: country,
+        },
+        {
+          name: 'state',
+          value: properties[country].states[0].abbreviation,
+        },
+        {
+          name: 'source',
+          value: properties[country].sources[0],
+        },
+      ])
     }
+  }
+
+  const properties = {
+    [Country.CA]: {
+      states: canadianProvinces,
+      sources: [GageSource.ENVIRONMENT_CANADA],
+      setFields: () => setFormAttributes(Country.CA),
+      setParams: (val: GageSearchParams) =>
+        handleCountryChange(val, Country.CA),
+    },
+    [Country.US]: {
+      states: usStates,
+      sources: [GageSource.USGS],
+      setFields: () => setFormAttributes(Country.US),
+      setParams: (val: GageSearchParams) =>
+        handleCountryChange(val, Country.US),
+    },
+    [Country.NZ]: {
+      states: [{ abbreviation: '--', name: '--' }] as StateEntry[],
+      sources: [GageSource.ENVIRONMENT_AUCKLAND],
+      setFields: () => setFormAttributes(Country.NZ),
+      setParams: (val: GageSearchParams) =>
+        handleCountryChange(val, Country.NZ),
+    },
+  }
+
+  const handleCountryChange = (val: GageSearchParams, country: Country) => {
+    resetPagination()
+    setSearchParams(
+      Object.assign({}, searchParams, {
+        ...val,
+        source: properties[country].sources[0],
+        state: properties[country].states[0].abbreviation,
+        country,
+      }),
+    )
   }
 
   const getStateInputLabel = () => {
@@ -77,40 +83,15 @@ export const Gage = (): JSX.Element => {
   }
 
   const handleOnValuesChange = debounce((val) => {
-    try {
-      if (searchParams.country === Country.US && val.country === Country.CA) {
-        resetPagination()
-        setSearchParams(
-          Object.assign({}, searchParams, {
-            ...val,
-            source: GageSource.ENVIRONMENT_CANADA,
-            state: 'BC',
-          }),
-        )
-        setFormAttributes(Country.CA)
-        return
-      }
-
-      if (searchParams.country === Country.CA && val.country === Country.US) {
-        resetPagination()
-        setSearchParams(
-          Object.assign({}, searchParams, {
-            ...val,
-            source: GageSource.USGS,
-            state: 'AL',
-          }),
-        )
-        setFormAttributes(Country.US)
-        return
-      }
-
-      if (searchParams.state !== val.state) {
-        resetPagination()
-      }
-
-      setSearchParams(Object.assign({}, searchParams, val))
-    } catch (e) {
-      console.error(e)
+    if (val.country) {
+      properties[val.country].setParams(val)
+      properties[val.country].setFields()
+    } else {
+      setSearchParams(
+        Object.assign({}, searchParams, {
+          ...val,
+        }),
+      )
     }
   }, 300)
 
@@ -131,6 +112,8 @@ export const Gage = (): JSX.Element => {
                 <Select.Option key={country} value={country}>
                   {(() => {
                     switch (country) {
+                      case Country.NZ:
+                        return 'New Zealand'
                       case Country.US:
                         return 'United States'
                       default:
@@ -144,7 +127,7 @@ export const Gage = (): JSX.Element => {
           </Form.Item>
           <Form.Item name={'state'} label={getStateInputLabel()}>
             <Select>
-              {stateOptions.map((state) => (
+              {properties[searchParams.country].states.map((state) => (
                 <Select.Option
                   key={state.abbreviation}
                   value={state.abbreviation}
@@ -156,7 +139,7 @@ export const Gage = (): JSX.Element => {
           </Form.Item>
           <Form.Item name={'source'}>
             <Select>
-              {sourceOptions.map((source) => (
+              {properties[searchParams.country].sources.map((source) => (
                 <Select.Option key={source} value={source}>
                   {source}
                 </Select.Option>
@@ -172,7 +155,7 @@ export const Gage = (): JSX.Element => {
               title={'Reset Search'}
               onClick={() => {
                 reset()
-                setFormAttributes(Country.CA)
+                setFormAttributes(Country.US)
               }}
             >
               <SyncOutlined />
