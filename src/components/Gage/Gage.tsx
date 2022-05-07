@@ -1,18 +1,13 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import GageTable from './GageTable'
 import { Button, Card, Form, Input, PageHeader, Select } from 'antd'
 import { useGagesContext } from '../Provider/GageProvider'
 import { Country, GageSearchParams, GageSource } from '../../types'
-import { canadianProvinces, StateEntry, usStates } from '../../lib/states'
-// import { useAppContext } from '../App/AppContext'
+import { canadianProvinces, StateEntry, usStates } from '../../lib'
 import { SyncOutlined } from '@ant-design/icons'
 import debounce from 'lodash.debounce'
 import { useNavigate } from 'react-router-dom'
 
-/**
- *
- * @todo fix source and state options inputs to reflect currently selected country
- */
 export const Gage = (): JSX.Element => {
   const navigate = useNavigate()
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
