@@ -78,7 +78,11 @@ export const UserGageTable = () => {
 
   return (
     <div style={{ maxWidth: '100%', overflowX: 'scroll' }}>
-      <Table columns={columns} dataSource={user?.gages || []} />
+      <Table
+        columns={columns}
+        dataSource={user?.gages || []}
+        rowKey={(g) => g.id}
+      />
     </div>
   )
 }
