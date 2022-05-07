@@ -18,7 +18,7 @@ export const LegalContent = () => {
         <br />
         <br />
         River sports and activities that take place in or on any river, creek,
-        or stream are inherintly risky. Users and consumers of wh2o datasets
+        or stream are inherently risky. Users and consumers of wh2o datasets
         and/or services must exercise good judgement and caution before engaging
         in any river related activities.
         <br />

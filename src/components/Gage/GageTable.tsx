@@ -1,12 +1,53 @@
 import React from 'react'
-import { Table, Tooltip, Typography } from 'antd'
-// import { ArrowRightOutlined } from '@ant-design/icons'
+import { Button, Popover, Table, Tooltip, Typography } from 'antd'
 import { useGagesContext } from '../Provider/GageProvider'
 import moment from 'moment'
 import { Gage } from '../../types'
 import { useNavigate } from 'react-router-dom'
 import { GageBookmarkToggle } from '../Common/GageBookmarkToggle'
 import { GageReadingsChart } from './GageReadingsChart'
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  TwitterShareButton,
+} from 'react-share'
+import {
+  FacebookOutlined,
+  MailOutlined,
+  ShareAltOutlined,
+  TwitterOutlined,
+} from '@ant-design/icons'
+
+const shareButtons = (gage: Gage) => {
+  const url = `https://wh2o.io/gage/${gage.state}/${gage.id}`
+  return (
+    <div style={{ fontSize: '2rem', display: 'flex' }}>
+      <EmailShareButton
+        url={url}
+        style={{ marginRight: 8 }}
+        subject={`${gage.name} @ ${gage.reading} ${gage.metric}`}
+      >
+        <MailOutlined />
+      </EmailShareButton>
+      <FacebookShareButton url={url} style={{ marginRight: 8 }}>
+        <FacebookOutlined />
+      </FacebookShareButton>
+      <TwitterShareButton url={url}>
+        <TwitterOutlined />
+      </TwitterShareButton>
+    </div>
+  )
+}
+
+const gageShare = (gage: Gage) => {
+  return (
+    <Popover content={shareButtons(gage)} trigger="click">
+      <Button style={{ marginRight: 8 }} title={'Share'}>
+        <ShareAltOutlined />
+      </Button>
+    </Popover>
+  )
+}
 
 const GageTable = (): JSX.Element => {
   const {
@@ -67,8 +108,9 @@ const GageTable = (): JSX.Element => {
     {
       dataIndex: 'id',
       key: 'id',
-      render: (id: number) => (
+      render: (id: number, gage: Gage) => (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          {gageShare(gage)}
           <GageBookmarkToggle gageId={id} type={'icon'} />
         </div>
       ),
@@ -76,7 +118,15 @@ const GageTable = (): JSX.Element => {
   ]
 
   return (
-    <div style={{ position: 'relative', width: '100%', overflowX: 'scroll' }}>
+    <div
+      style={{
+        position: 'relative',
+        width: '100%',
+        overflowX: 'scroll',
+        maxWidth: '100%',
+        backgroundColor: '#fff',
+      }}
+    >
       <Table
         rowKey={(record) => record.id}
         expandable={{

@@ -3,6 +3,8 @@ import Chart from 'react-apexcharts'
 import { Gage, GageMetric, GageReading } from '../../types'
 import moment from 'moment'
 import { Card, Divider, Form, Select } from 'antd'
+import { DateFormat } from '../../enums'
+import { HelpTooltip } from '../Common'
 
 export type GageReadingsChartProps = {
   readings: GageReading[]
@@ -15,12 +17,12 @@ export const GageReadingsChart = ({
   readings,
   chartId,
   metric,
-  gage,
 }: GageReadingsChartProps) => {
   const cardRef = useRef<HTMLDivElement>(null)
   const [chartHeight, setChartHeight] = useState(300)
   const [chartWidth, setChartWidth] = useState(500)
   const [activeMetric, setActiveMetric] = useState<GageMetric>(metric)
+  const [dateFormat, setDateFormat] = useState<DateFormat>(DateFormat.LLLL)
 
   const getAvailableMetrics = () => {
     const m = new Set(readings.map((r) => r.metric))
@@ -38,7 +40,7 @@ export const GageReadingsChart = ({
       return {
         categories: filteredReadings
           .reverse()
-          .map((r) => moment(r.createdAt).local().format('dd hh:mm a')),
+          .map((r) => moment(r.createdAt).local().format(dateFormat)),
         data: filteredReadings.map((r) => r.value),
       }
     }
@@ -101,7 +103,7 @@ export const GageReadingsChart = ({
 
   const handleWindowResize = () => {
     if (cardRef && cardRef.current) {
-      setChartWidth(cardRef.current.clientWidth - 32)
+      setChartWidth(cardRef.current.clientWidth - window.innerWidth * 0.05)
     }
   }
 
@@ -117,7 +119,10 @@ export const GageReadingsChart = ({
 
   return (
     <div ref={cardRef}>
-      <Card style={{ border: 0, backgroundColor: 'transparent' }}>
+      <Card
+        style={{ border: 0, backgroundColor: 'transparent' }}
+        className={'gage-reading-chart-wrapper'}
+      >
         <Chart
           options={chart.options}
           series={chart.series}
@@ -141,12 +146,25 @@ export const GageReadingsChart = ({
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item label={'Chart timeframe'}>
-                <Select value={'Last 7 Days'} disabled>
-                  <Select.Option value={'Last 7 Days'}>
-                    Last 7 Days
-                  </Select.Option>
-                </Select>
+              <Form.Item label={'Date format'}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Select
+                    style={{ marginRight: 8 }}
+                    value={dateFormat}
+                    onSelect={(value) => setDateFormat(value)}
+                  >
+                    {Object.values(DateFormat).map((v) => (
+                      <Select.Option key={v} value={v}>
+                        {v}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                  <HelpTooltip
+                    title={
+                      'https://momentjscom.readthedocs.io/en/latest/moment/04-displaying/01-format/'
+                    }
+                  />
+                </div>
               </Form.Item>
             </Form>
             <Divider style={{ marginBottom: 0 }} />

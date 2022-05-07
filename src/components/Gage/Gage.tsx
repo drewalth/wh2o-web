@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import GageTable from './GageTable'
 import { Button, Card, Form, Input, PageHeader, Select } from 'antd'
 import { useGagesContext } from '../Provider/GageProvider'
@@ -15,9 +15,22 @@ import { useNavigate } from 'react-router-dom'
  */
 export const Gage = (): JSX.Element => {
   const navigate = useNavigate()
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const isMobile = windowWidth <= 900
   const formRef = useRef<HTMLFormElement>(null)
   const { searchParams, setSearchParams, resetPagination, reset } =
     useGagesContext()
+
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth)
+  }
+  useEffect(() => {
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   const setFormAttributes = (country: Country) => {
     if (formRef && formRef.current) {
@@ -102,7 +115,7 @@ export const Gage = (): JSX.Element => {
         <Form
           // @ts-ignore
           ref={formRef}
-          layout={'inline'}
+          layout={isMobile ? 'vertical' : 'inline'}
           initialValues={searchParams}
           onValuesChange={handleOnValuesChange}
         >
@@ -137,7 +150,7 @@ export const Gage = (): JSX.Element => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name={'source'}>
+          <Form.Item name={'source'} label={'Source'}>
             <Select>
               {properties[searchParams.country].sources.map((source) => (
                 <Select.Option key={source} value={source}>
@@ -146,7 +159,7 @@ export const Gage = (): JSX.Element => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name={'searchTerm'}>
+          <Form.Item name={'searchTerm'} label={'Gage name'}>
             <Input placeholder={'Gage Name'} allowClear />
           </Form.Item>
           <Form.Item>

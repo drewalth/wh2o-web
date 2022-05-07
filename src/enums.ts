@@ -26,3 +26,8 @@ export enum AlertChannel {
   EMAIL = 'EMAIL',
   SMS = 'SMS',
 }
+
+export enum DateFormat {
+  DDHHMMA = 'dd hh:mm a',
+  LLLL = 'llll',
+}
