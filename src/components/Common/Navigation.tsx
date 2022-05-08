@@ -150,7 +150,10 @@ export const Navigation = ({ children }: NavigationProps) => {
             <Select
               className={'language-select'}
               value={i18n.language}
-              onSelect={(val) => i18n.changeLanguage(val)}
+              onSelect={async (val) => {
+                await i18n.changeLanguage(val)
+                localStorage.setItem('wh2o-lang', val)
+              }}
             >
               {languages.map((l) => (
                 <Select.Option key={l.value}>{l.text}</Select.Option>

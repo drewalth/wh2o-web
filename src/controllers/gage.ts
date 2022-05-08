@@ -21,7 +21,7 @@ export const updateGage = async (updateGageDto: UpdateGageDto) => {
 export const gageSearch = async (
   input: GageSearchParams,
   pagination: TablePagination,
-): Promise<{ gages: Gage[]; total: number }> => {
+): Promise<{ gages: Gage[]; total: number; refreshing: boolean }> => {
   const params = new URLSearchParams()
 
   for (const val in input) {

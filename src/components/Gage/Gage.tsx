@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import GageTable from './GageTable'
-import { Button, Card, Form, Input, PageHeader, Select } from 'antd'
+import { Button, Card, Form, Input, PageHeader, Select, Tag } from 'antd'
 import { useGagesContext } from '../Provider/GageProvider'
 import { Country, GageSearchParams, GageSource } from '../../types'
 import { canadianProvinces, StateEntry, usStates } from '../../lib'
@@ -14,8 +14,13 @@ export const Gage = (): JSX.Element => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const isMobile = windowWidth <= 900
   const formRef = useRef<HTMLFormElement>(null)
-  const { searchParams, setSearchParams, resetPagination, reset } =
-    useGagesContext()
+  const {
+    searchParams,
+    setSearchParams,
+    resetPagination,
+    reset,
+    gagesRefreshing,
+  } = useGagesContext()
   const { t } = useTranslation()
 
   const handleResize = () => {
@@ -107,7 +112,17 @@ export const Gage = (): JSX.Element => {
 
   return (
     <>
-      <PageHeader title={t('search')} onBack={() => navigate('/')} />
+      <PageHeader
+        title={t('search')}
+        onBack={() => navigate('/')}
+        extra={
+          gagesRefreshing && (
+            <Tag icon={<SyncOutlined spin />} color="processing">
+              Refreshing gages
+            </Tag>
+          )
+        }
+      />
       <Card>
         <Form
           // @ts-ignore
@@ -117,7 +132,7 @@ export const Gage = (): JSX.Element => {
           onValuesChange={handleOnValuesChange}
         >
           <Form.Item name={'country'} label={t('country')}>
-            <Select>
+            <Select disabled={gagesRefreshing}>
               {Object.values(Country).map((country) => (
                 <Select.Option key={country} value={country}>
                   {(() => {
@@ -136,7 +151,7 @@ export const Gage = (): JSX.Element => {
             </Select>
           </Form.Item>
           <Form.Item name={'state'} label={getStateInputLabel()}>
-            <Select>
+            <Select disabled={gagesRefreshing}>
               {properties[searchParams.country].states.map((state) => (
                 <Select.Option
                   key={state.abbreviation}
@@ -148,7 +163,7 @@ export const Gage = (): JSX.Element => {
             </Select>
           </Form.Item>
           <Form.Item name={'source'} label={t('source')}>
-            <Select>
+            <Select disabled={gagesRefreshing}>
               {properties[searchParams.country].sources.map((source) => (
                 <Select.Option key={source} value={source}>
                   {source}
@@ -157,12 +172,17 @@ export const Gage = (): JSX.Element => {
             </Select>
           </Form.Item>
           <Form.Item name={'searchTerm'} label={t('gageName')}>
-            <Input placeholder={t('gageName')} allowClear />
+            <Input
+              placeholder={t('gageName')}
+              allowClear
+              disabled={gagesRefreshing}
+            />
           </Form.Item>
           <Form.Item>
             <Button
               type={'ghost'}
               title={t('resetSearch')}
+              disabled={gagesRefreshing}
               onClick={() => {
                 reset()
                 setFormAttributes(Country.US)
