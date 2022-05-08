@@ -78,6 +78,7 @@ export const GageBookmarkToggle = ({
             type={type === 'icon' ? 'ghost' : 'primary'}
             disabled={disabled}
             onClick={bookMarkButtonoptions.onClick}
+            loading={requestStatus === 'loading'}
           >
             {type !== 'icon' && bookMarkButtonoptions.text}
             {type === 'icon' && bookMarkButtonoptions.icon}
@@ -91,6 +92,7 @@ export const GageBookmarkToggle = ({
         <Button
           type={'ghost'}
           disabled={disabled}
+          loading={requestStatus === 'loading'}
           title={bookMarkButtonoptions.text}
           onClick={bookMarkButtonoptions.onClick}
         >
@@ -102,6 +104,7 @@ export const GageBookmarkToggle = ({
       <Button
         type={'primary'}
         disabled={disabled}
+        loading={requestStatus === 'loading'}
         onClick={bookMarkButtonoptions.onClick}
       >
         {bookMarkButtonoptions.text}
