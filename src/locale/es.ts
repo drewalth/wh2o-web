@@ -110,7 +110,7 @@ export const es = {
   share: 'Cuota',
   signIn: 'Registrarse',
   signInToBookmarkGage: 'Regístrese para marcar gage',
-  signOut: 'desconectar',
+  signOut: 'Desconectar',
   sms: 'SMS',
   somethingWentWrong: 'Algo salió mal',
   source: 'Fuente',
