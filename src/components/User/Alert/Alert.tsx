@@ -74,11 +74,13 @@ export const Alert = (): JSX.Element => {
       })
     } finally {
       setModalVisible(false)
+      setCreateForm({ ...defaultCreateForm })
     }
   }
 
   const handleCancel = () => {
     setModalVisible(false)
+    setCreateForm({ ...defaultCreateForm })
   }
 
   return (

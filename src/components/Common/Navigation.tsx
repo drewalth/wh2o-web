@@ -30,14 +30,14 @@ export type NavItem = {
 
 const baseNavItems: NavItem[] = [
   {
-    path: '/prophet',
-    text: 'Prophet',
-    icon: <EyeOutlined />,
-  },
-  {
     path: '/gage',
     text: 'Search',
     icon: <SearchOutlined />,
+  },
+  {
+    path: '/prophet',
+    text: 'Prophet',
+    icon: <EyeOutlined />,
   },
   {
     path: '/contact',
@@ -49,12 +49,17 @@ const baseNavItems: NavItem[] = [
 const getNavItems = (user: User | undefined): NavItem[] => {
   if (!!user) {
     return [
+      ...baseNavItems,
+      {
+        path: '',
+        text: 'divider',
+        icon: <></>,
+      },
       {
         path: '/user/dashboard',
         text: 'Dashboard',
         icon: <DashboardOutlined />,
       },
-      ...baseNavItems,
       {
         path: '/user/settings',
         text: 'Account',
@@ -122,11 +127,17 @@ export const Navigation = ({ children }: NavigationProps) => {
           selectedKeys={getSelectedItems()}
           onSelect={({ key }) => navigate(key, { replace: false })}
         >
-          {navItems.map((item) => (
-            <Menu.Item key={item.path} icon={item.icon}>
-              {item.text}
-            </Menu.Item>
-          ))}
+          {navItems.map((item) => {
+            if (item.text === 'divider') {
+              return <Menu.Divider />
+            }
+
+            return (
+              <Menu.Item key={item.path} icon={item.icon}>
+                {item.text}
+              </Menu.Item>
+            )
+          })}
           <Menu.Item style={{ position: 'absolute', bottom: 0 }} key={'/legal'}>
             Disclaimer
           </Menu.Item>

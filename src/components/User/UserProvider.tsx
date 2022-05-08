@@ -41,13 +41,10 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         user,
         reload,
         appendUserAlerts,
-        setUser: (user: User) => {
-          setUser(user)
-        },
+        setUser: (user: User) => setUser(user),
         requestStatus,
-        reset: () => {
-          setUser(undefined)
-        },
+        reset: () => setUser(undefined),
+        canBookmarkGages: (user && user.gages.length < 15) || false,
       }}
     >
       {children}

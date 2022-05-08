@@ -9,6 +9,7 @@ type BookmarkButtonOptions = {
   text: string
   onClick: () => void
   icon?: ReactNode
+  disabled: boolean
 }
 
 type GageBookmarkToggleProps = {
@@ -20,7 +21,7 @@ export const GageBookmarkToggle = ({
   gageId,
   type,
 }: GageBookmarkToggleProps) => {
-  const { user, reload } = useUserContext()
+  const { user, reload, canBookmarkGages } = useUserContext()
   const [requestStatus, setRequestStatus] = useState<RequestStatus>()
 
   const bookMarkButtonoptions: BookmarkButtonOptions = (() => {
@@ -43,6 +44,7 @@ export const GageBookmarkToggle = ({
     return {
       text: getText(),
       icon: getIcon(),
+      disabled: !user || (!exists && !canBookmarkGages),
       onClick: async () => {
         try {
           if (!user) {
@@ -69,14 +71,12 @@ export const GageBookmarkToggle = ({
   })()
 
   const getButtonBase = () => {
-    const disabled = !user
-
-    if (disabled) {
+    if (!user) {
       return (
         <Tooltip title={'Log in to bookmark gage'}>
           <Button
             type={type === 'icon' ? 'ghost' : 'primary'}
-            disabled={disabled}
+            disabled
             onClick={bookMarkButtonoptions.onClick}
           >
             {type !== 'icon' && bookMarkButtonoptions.text}
@@ -90,7 +90,7 @@ export const GageBookmarkToggle = ({
       return (
         <Button
           type={'ghost'}
-          disabled={disabled}
+          disabled={bookMarkButtonoptions.disabled}
           title={bookMarkButtonoptions.text}
           onClick={bookMarkButtonoptions.onClick}
         >
@@ -101,7 +101,7 @@ export const GageBookmarkToggle = ({
     return (
       <Button
         type={'primary'}
-        disabled={disabled}
+        disabled={bookMarkButtonoptions.disabled}
         onClick={bookMarkButtonoptions.onClick}
       >
         {bookMarkButtonoptions.text}
