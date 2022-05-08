@@ -19,6 +19,8 @@ import { ErrorBoundary } from '../Common/ErrorBoundary'
 import { GageBookmarkToggle } from '../Common/GageBookmarkToggle'
 import { RiverForm } from '../Prophet/RiverForm'
 
+import { useTranslation } from 'react-i18next'
+
 const whiteBg: CSSProperties = {
   backgroundColor: '#fff',
 }
@@ -28,6 +30,7 @@ export const GageDetail = () => {
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
   const navigate = useNavigate()
   const { id: gageId, state: gageState } = useParams()
+  const { t } = useTranslation()
 
   useEffect(() => {
     ;(async () => {
@@ -93,14 +96,14 @@ export const GageDetail = () => {
             <Row style={{ marginBottom: 24 }}>
               <Col span={12}>
                 <Statistic
-                  title={'latest reading'}
+                  title={t('latestReading')}
                   loading={requestStatus === 'loading'}
                   value={gage?.reading + ' ' + gage?.metric || '-'}
                 />
               </Col>
               <Col span={12}>
                 <Statistic
-                  title={'last fetched'}
+                  title={t('updated')}
                   loading={requestStatus === 'loading'}
                   value={
                     gage.updatedAt
@@ -119,7 +122,7 @@ export const GageDetail = () => {
           {gage.source === GageSource.USGS && (
             <RiverForm
               siteId={gage.siteId}
-              siteDescription={'Flow Forecast'}
+              siteDescription={t('forecast')}
               historicalAverageChartVisible={false}
               dividerVisible={false}
             />

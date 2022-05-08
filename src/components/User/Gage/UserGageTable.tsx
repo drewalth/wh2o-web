@@ -3,7 +3,7 @@ import { Gage, GageReading } from '../../../types'
 import { Button, Table, Tooltip, Typography } from 'antd'
 import { ReadingSelect } from '../../Gage/ReadingSelect'
 import moment from 'moment'
-import { ArrowRightOutlined, DeleteOutlined } from '@ant-design/icons'
+import { DeleteOutlined } from '@ant-design/icons'
 import { removeUserGage } from '../../../controllers'
 import { useUserContext } from '../UserContext'
 import { useNavigate } from 'react-router-dom'
@@ -16,9 +16,14 @@ export const UserGageTable = () => {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: (name: string) => (
+      render: (name: string, gage: Gage) => (
         <Tooltip title={name} placement={'top'}>
-          <Typography.Text ellipsis>{name}</Typography.Text>
+          <Typography.Link
+            ellipsis
+            onClick={() => navigate(`/gage/${gage.state}/${gage.id}`)}
+          >
+            {name}
+          </Typography.Link>
         </Tooltip>
       ),
     },
@@ -56,9 +61,10 @@ export const UserGageTable = () => {
     {
       dataIndex: 'id',
       key: 'id',
-      render: (id: number, gage: Gage) => (
+      render: (id: number) => (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
+            title={'Remove bookmark'}
             danger
             size={'small'}
             onClick={() => removeUserGage(id, user?.id || 0)}
@@ -66,11 +72,6 @@ export const UserGageTable = () => {
           >
             <DeleteOutlined />
           </Button>
-          <Button
-            size={'small'}
-            onClick={() => navigate(`/gage/${gage.state}/${id}`)}
-            icon={<ArrowRightOutlined />}
-          />
         </div>
       ),
     },

@@ -7,6 +7,7 @@ import { canadianProvinces, StateEntry, usStates } from '../../lib'
 import { SyncOutlined } from '@ant-design/icons'
 import debounce from 'lodash.debounce'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 export const Gage = (): JSX.Element => {
   const navigate = useNavigate()
@@ -15,6 +16,7 @@ export const Gage = (): JSX.Element => {
   const formRef = useRef<HTMLFormElement>(null)
   const { searchParams, setSearchParams, resetPagination, reset } =
     useGagesContext()
+  const { t } = useTranslation()
 
   const handleResize = () => {
     setWindowWidth(window.innerWidth)
@@ -85,9 +87,9 @@ export const Gage = (): JSX.Element => {
 
   const getStateInputLabel = () => {
     if (searchParams.country === Country.CA) {
-      return 'Province'
+      return t('province')
     }
-    return 'State'
+    return t('state')
   }
 
   const handleOnValuesChange = debounce((val) => {
@@ -105,7 +107,7 @@ export const Gage = (): JSX.Element => {
 
   return (
     <>
-      <PageHeader title={'Search'} onBack={() => navigate('/')} />
+      <PageHeader title={t('search')} onBack={() => navigate('/')} />
       <Card>
         <Form
           // @ts-ignore
@@ -114,7 +116,7 @@ export const Gage = (): JSX.Element => {
           initialValues={searchParams}
           onValuesChange={handleOnValuesChange}
         >
-          <Form.Item name={'country'} label={'Country'}>
+          <Form.Item name={'country'} label={t('country')}>
             <Select>
               {Object.values(Country).map((country) => (
                 <Select.Option key={country} value={country}>
@@ -145,7 +147,7 @@ export const Gage = (): JSX.Element => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name={'source'} label={'Source'}>
+          <Form.Item name={'source'} label={t('source')}>
             <Select>
               {properties[searchParams.country].sources.map((source) => (
                 <Select.Option key={source} value={source}>
@@ -154,13 +156,13 @@ export const Gage = (): JSX.Element => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name={'searchTerm'} label={'Gage name'}>
-            <Input placeholder={'Gage Name'} allowClear />
+          <Form.Item name={'searchTerm'} label={t('gageName')}>
+            <Input placeholder={t('gageName')} allowClear />
           </Form.Item>
           <Form.Item>
             <Button
               type={'ghost'}
-              title={'Reset Search'}
+              title={t('resetSearch')}
               onClick={() => {
                 reset()
                 setFormAttributes(Country.US)

@@ -1,7 +1,6 @@
 import { getToken } from './token'
 
-const baseUrl =
-  process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000/api'
+const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000'
 
 const getHeaders = () => {
   const defaultHeaders = {

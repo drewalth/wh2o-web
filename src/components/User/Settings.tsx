@@ -41,10 +41,18 @@ const Settings = () => {
       const payload = Object.assign({}, userConfig, val)
       setUserConfig(payload)
       await updateUser(payload)
+      notification.success({
+        message: 'Settings updated',
+        placement: 'bottomRight',
+      })
     } catch (e) {
       console.error(e)
+      notification.error({
+        message: 'Failed to update settings',
+        placement: 'bottomRight',
+      })
     }
-  }, 250)
+  }, 750)
 
   const deleteConfirmed = deleteConfirmInput === user?.email
 
@@ -109,7 +117,11 @@ const Settings = () => {
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item name={'telephone'} label={'Telephone'}>
+              <Form.Item
+                name={'telephone'}
+                label={'Telephone'}
+                help={'Country code required.'}
+              >
                 <Input />
               </Form.Item>
             </Form>

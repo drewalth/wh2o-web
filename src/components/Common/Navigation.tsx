@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import Logo from './wh2o-logo'
 import { Layout, Menu, Typography } from 'antd'
+import { useTranslation } from 'react-i18next'
 import 'antd/dist/antd.css'
 import {
   DashboardOutlined,
@@ -28,60 +29,66 @@ export type NavItem = {
   icon: ReactNode
 }
 
-const baseNavItems: NavItem[] = [
-  {
-    path: '/prophet',
-    text: 'Prophet',
-    icon: <EyeOutlined />,
-  },
-  {
-    path: '/gage',
-    text: 'Search',
-    icon: <SearchOutlined />,
-  },
-  {
-    path: '/contact',
-    text: 'Contact',
-    icon: <MailOutlined />,
-  },
-]
-
-const getNavItems = (user: User | undefined): NavItem[] => {
-  if (!!user) {
-    return [
-      {
-        path: '/user/dashboard',
-        text: 'Dashboard',
-        icon: <DashboardOutlined />,
-      },
-      ...baseNavItems,
-      {
-        path: '/user/settings',
-        text: 'Account',
-        icon: <UserOutlined />,
-      },
-      {
-        path: '/auth/logout',
-        text: 'Sign Out',
-        icon: <ExportOutlined />,
-      },
-    ]
-  }
-
-  return [
-    ...baseNavItems,
-    {
-      path: '/auth/login',
-      text: 'Sign In',
-      icon: <ImportOutlined />,
-    },
-  ]
-}
-
 export const Navigation = ({ children }: NavigationProps) => {
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useUserContext()
+  const { t } = useTranslation()
+
+  const baseNavItems: NavItem[] = [
+    {
+      path: '/gage',
+      text: t('search'),
+      icon: <SearchOutlined />,
+    },
+    {
+      path: '/prophet',
+      text: t('prophet'),
+      icon: <EyeOutlined />,
+    },
+    {
+      path: '/contact',
+      text: t('contact'),
+      icon: <MailOutlined />,
+    },
+  ]
+
+  const getNavItems = (user: User | undefined): NavItem[] => {
+    if (!!user) {
+      return [
+        ...baseNavItems,
+        {
+          path: '',
+          text: 'divider',
+          icon: <></>,
+        },
+        {
+          path: '/user/dashboard',
+          text: t('dashboard'),
+          icon: <DashboardOutlined />,
+        },
+        {
+          path: '/user/settings',
+          text: t('account'),
+          icon: <UserOutlined />,
+        },
+        {
+          path: '/auth/logout',
+          text: t('signOut'),
+          icon: <ExportOutlined />,
+        },
+      ]
+    }
+
+    return [
+      ...baseNavItems,
+      {
+        path: '/auth/login',
+        text: t('signIn'),
+        icon: <ImportOutlined />,
+      },
+    ]
+  }
 
   const navItems = getNavItems(user)
 
@@ -122,13 +129,19 @@ export const Navigation = ({ children }: NavigationProps) => {
           selectedKeys={getSelectedItems()}
           onSelect={({ key }) => navigate(key, { replace: false })}
         >
-          {navItems.map((item) => (
-            <Menu.Item key={item.path} icon={item.icon}>
-              {item.text}
-            </Menu.Item>
-          ))}
+          {navItems.map((item) => {
+            if (item.text === 'divider') {
+              return <Menu.Divider />
+            }
+
+            return (
+              <Menu.Item key={item.path} icon={item.icon}>
+                {item.text}
+              </Menu.Item>
+            )
+          })}
           <Menu.Item style={{ position: 'absolute', bottom: 0 }} key={'/legal'}>
-            Disclaimer
+            {t('disclaimer')}
           </Menu.Item>
         </Menu>
       </Sider>

@@ -1,7 +1,12 @@
 import React, { useRef, useState } from 'react'
 import { canadianProvinces, StateEntry, usStates } from '../../../lib'
 import { Button, Divider, Form, Input, Modal, notification, Select } from 'antd'
-import { Country, GageSource } from '../../../types'
+import {
+  Country,
+  GageSearchParams,
+  GageSource,
+  RequestStatus,
+} from '../../../types'
 import { useGagesContext } from '../../Provider/GageProvider'
 import { addUserGage } from '../../../controllers'
 import { UserGageTable } from './UserGageTable'
@@ -10,103 +15,91 @@ import debounce from 'lodash.debounce'
 
 export const UserGages = (): JSX.Element => {
   const formRef = useRef<HTMLFormElement>(null)
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>('success')
   const [createModalVisible, setCreateModalVisible] = useState(false)
   const [selectedGageSiteId, setSelectedGageSiteId] = useState<number>()
   const { searchParams, setSearchParams, resetPagination, gages } =
     useGagesContext()
-  const { user, reload } = useUserContext()
-
-  const stateOptions: StateEntry[] =
-    searchParams.country === Country.CA ? canadianProvinces : usStates
-
-  const sourceOptions: GageSource[] =
-    searchParams.country === Country.CA
-      ? [GageSource.ENVIRONMENT_CANADA]
-      : [GageSource.USGS]
+  const { user, reload, canBookmarkGages } = useUserContext()
 
   const setFormAttributes = (country: Country) => {
     if (formRef && formRef.current) {
       const form = formRef.current
-
-      switch (country) {
-        case Country.US:
-          form.setFields([
-            {
-              name: 'country',
-              value: 'US',
-            },
-            {
-              name: 'state',
-              value: 'AL',
-            },
-            {
-              name: 'source',
-              value: 'USGS',
-            },
-          ])
-          return
-        default:
-        case Country.CA:
-          form.setFields([
-            {
-              name: 'country',
-              value: 'CA',
-            },
-            {
-              name: 'state',
-              value: 'BC',
-            },
-            {
-              name: 'source',
-              value: 'ENVIRONMENT_CANADA',
-            },
-          ])
-
-          return
-      }
+      form.setFields([
+        {
+          name: 'country',
+          value: country,
+        },
+        {
+          name: 'state',
+          value: properties[country].states[0].abbreviation,
+        },
+        {
+          name: 'source',
+          value: properties[country].sources[0],
+        },
+      ])
     }
   }
 
+  const handleCountryChange = (val: GageSearchParams, country: Country) => {
+    resetPagination()
+    setSearchParams(
+      Object.assign({}, searchParams, {
+        ...val,
+        source: properties[country].sources[0],
+        state: properties[country].states[0].abbreviation,
+        country,
+      }),
+    )
+  }
+
+  const properties = {
+    [Country.CA]: {
+      states: canadianProvinces,
+      sources: [GageSource.ENVIRONMENT_CANADA],
+      setFields: () => setFormAttributes(Country.CA),
+      setParams: (val: GageSearchParams) =>
+        handleCountryChange(val, Country.CA),
+    },
+    [Country.US]: {
+      states: usStates,
+      sources: [GageSource.USGS],
+      setFields: () => setFormAttributes(Country.US),
+      setParams: (val: GageSearchParams) =>
+        handleCountryChange(val, Country.US),
+    },
+    [Country.NZ]: {
+      states: [{ abbreviation: '--', name: '--' }] as StateEntry[],
+      sources: [GageSource.ENVIRONMENT_AUCKLAND],
+      setFields: () => setFormAttributes(Country.NZ),
+      setParams: (val: GageSearchParams) =>
+        handleCountryChange(val, Country.NZ),
+    },
+  }
+
   const handleOnValuesChange = debounce((val) => {
-    try {
-      if (searchParams.country === Country.US && val.country === Country.CA) {
-        resetPagination()
-        setSearchParams(
-          Object.assign({}, searchParams, {
-            ...val,
-            source: GageSource.ENVIRONMENT_CANADA,
-            state: 'BC',
-          }),
-        )
-        setFormAttributes(Country.CA)
-        return
-      }
-
-      if (searchParams.country === Country.CA && val.country === Country.US) {
-        resetPagination()
-        setSearchParams(
-          Object.assign({}, searchParams, {
-            ...val,
-            source: GageSource.USGS,
-            state: 'AL',
-          }),
-        )
-        setFormAttributes(Country.US)
-        return
-      }
-
-      if (searchParams.state !== val.state) {
-        resetPagination()
-      }
-
-      setSearchParams(Object.assign({}, searchParams, val))
-    } catch (e) {
-      console.error(e)
+    if (val.country) {
+      properties[val.country].setParams(val)
+      properties[val.country].setFields()
+    } else {
+      setSearchParams(
+        Object.assign({}, searchParams, {
+          ...val,
+        }),
+      )
     }
   }, 300)
 
   const handleClose = () => {
     setCreateModalVisible(false)
+  }
+
+  const getStateInputLabel = () => {
+    if (searchParams.country === Country.CA) {
+      return 'Province'
+    }
+    return 'State'
   }
 
   const handleOk = async () => {
@@ -117,8 +110,10 @@ export const UserGages = (): JSX.Element => {
         console.error('no selected gage')
         return
       }
+      setRequestStatus('loading')
       await addUserGage(selectedGageSiteId, user.id)
       await reload()
+      setRequestStatus('success')
       notification.success({
         message: 'Gage Created',
         placement: 'bottomRight',
@@ -126,6 +121,11 @@ export const UserGages = (): JSX.Element => {
       handleClose()
     } catch (e) {
       console.log(e)
+      setRequestStatus('failure')
+      notification.error({
+        message: 'Failed to bookmark gage',
+        placement: 'bottomRight',
+      })
     }
   }
 
@@ -136,6 +136,7 @@ export const UserGages = (): JSX.Element => {
         visible={createModalVisible}
         onOk={handleOk}
         onCancel={handleClose}
+        confirmLoading={requestStatus === 'loading'}
       >
         <Form
           preserve={false}
@@ -159,16 +160,16 @@ export const UserGages = (): JSX.Element => {
           </Form.Item>
           <Form.Item label={'Source'} name={'source'}>
             <Select>
-              {sourceOptions.map((val, index) => (
+              {properties[searchParams.country].sources.map((val, index) => (
                 <Select.Option value={val} key={index}>
                   {val}
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
-          <Form.Item label={'State'} name={'state'}>
+          <Form.Item label={getStateInputLabel()} name={'state'}>
             <Select>
-              {stateOptions.map((val, index) => (
+              {properties[searchParams.country].states.map((val, index) => (
                 <Select.Option value={val.abbreviation} key={index}>
                   {val.name}
                 </Select.Option>
@@ -207,7 +208,7 @@ export const UserGages = (): JSX.Element => {
       >
         <Button
           type={'primary'}
-          disabled={gages.length >= 15}
+          disabled={!canBookmarkGages}
           onClick={() => setCreateModalVisible(true)}
         >
           Bookmark Gage

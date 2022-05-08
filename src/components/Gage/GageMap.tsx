@@ -3,6 +3,7 @@ import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import './gage-map.scss'
 import { Typography } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN
 
@@ -15,6 +16,7 @@ export type GageMapProps = {
 
 export const GageMap = ({ latitude, longitude }: GageMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (!mapboxToken || !mapRef.current || !longitude || !latitude) return
@@ -49,7 +51,7 @@ export const GageMap = ({ latitude, longitude }: GageMapProps) => {
           backgroundColor: '#ccc',
         }}
       >
-        <Typography.Text>No geospatial data available</Typography.Text>
+        <Typography.Text>{t('noLocationDataAvailable')}</Typography.Text>
       </div>
     )
   }

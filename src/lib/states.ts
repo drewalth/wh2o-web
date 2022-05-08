@@ -243,6 +243,10 @@ export const usStates: StateEntry[] = [
 // { name: string; abbreviation: string }
 export const canadianProvinces: StateEntry[] = [
   {
+    name: 'Alberta',
+    abbreviation: 'AB',
+  },
+  {
     name: 'British Columbia',
     abbreviation: 'BC',
   },
@@ -251,8 +255,8 @@ export const canadianProvinces: StateEntry[] = [
     abbreviation: 'ON',
   },
   {
-    name: 'Alberta',
-    abbreviation: 'AB',
+    name: 'Quebec',
+    abbreviation: 'QC',
   },
 ]
 

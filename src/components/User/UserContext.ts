@@ -8,6 +8,7 @@ export type UserContextData = {
   reset: () => void
   appendUserAlerts: (alert: Alert) => void
   reload: () => Promise<void>
+  canBookmarkGages: boolean
 }
 
 export const UserContext = createContext({} as UserContextData)
