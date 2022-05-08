@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { authLogin } from '../../controllers'
 import { setToken } from '../../lib/token'
 import { useUserContext } from '../../components/User/UserContext'
-// import { useAppContext } from '../../components/App/AppContext'
+import { useTranslation } from 'react-i18next'
 
 type LoginForm = { email: string; password: string }
 
@@ -17,13 +17,13 @@ const DEFAULT_FORM: LoginForm = {
 }
 
 export const Login = () => {
+  const { t } = useTranslation()
   const recaptchaSiteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY
   const recaptchaRef = useRef(null)
   const [form, setForm] = useState<LoginForm>(DEFAULT_FORM)
   const { reload } = useUserContext()
   const navigate = useNavigate()
   let redirectTimer
-  // const { env } = useAppContext()
 
   const [humanDetected, setHumanDetected] = useState(false)
   const [formSubmitted, setFormSubmitted] = useState(false)
@@ -78,13 +78,13 @@ export const Login = () => {
     <Row justify={'center'}>
       <Col {...authColSpan}>
         <Card
-          title={'Login'}
+          title={t('signIn')}
           actions={[
             <Link to={'/auth/register'}>
-              <Typography.Link>Register</Typography.Link>
+              <Typography.Link>{t('register')}</Typography.Link>
             </Link>,
             <Link to={'/auth/forgot'}>
-              <Typography.Link>Forgot Password</Typography.Link>
+              <Typography.Link>{t('forgotPassword')}</Typography.Link>
             </Link>,
           ]}
         >
@@ -103,25 +103,25 @@ export const Login = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Invalid email',
+                  message: t('invalidEmail'),
                   type: 'email',
                 },
               ]}
             >
-              <Input placeholder={'Email'} />
+              <Input placeholder={t('email')} />
             </Form.Item>
 
             <Form.Item
               name="password"
               rules={[
-                { required: true, message: 'Please input your password!' },
+                { required: true, message: t('pleaseInputYourPassword') },
               ]}
             >
-              <Input.Password placeholder={'Password'} />
+              <Input.Password placeholder={t('password')} />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Submit
+                {t('submit')}
               </Button>
             </Form.Item>
           </Form>

@@ -7,7 +7,7 @@ import { validateEmail } from '../../lib'
 import { authForgot } from '../../controllers'
 import { RequestStatus } from '../../types'
 import { Link } from 'react-router-dom'
-// import { useAppContext } from '../../components/App/AppContext'
+import { useTranslation } from 'react-i18next'
 
 type ForgotForm = { email: string }
 
@@ -16,10 +16,10 @@ const DEFAULT_FORM: ForgotForm = {
 }
 
 export const Forgot = () => {
+  const { t } = useTranslation()
   const recaptchaSiteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY
   const recaptchaRef = useRef(null)
   const [form, setForm] = useState<ForgotForm>(DEFAULT_FORM)
-  // const { env } = useAppContext()
 
   const [humanDetected, setHumanDetected] = useState(false)
   const [formSubmitted, setFormSubmitted] = useState(false)
@@ -65,7 +65,7 @@ export const Forgot = () => {
   if (requestStatus === 'success') {
     return (
       <Row>
-        <Col>Yay</Col>
+        <Col>{t('yay')}</Col>
       </Row>
     )
   }
@@ -74,13 +74,13 @@ export const Forgot = () => {
     <Row justify={'center'}>
       <Col {...authColSpan}>
         <Card
-          title={'Forgot Password'}
+          title={t('forgotPassword')}
           actions={[
             <Link to={'/auth/register'}>
-              <Typography.Link>Register</Typography.Link>
+              <Typography.Link>{t('register')}</Typography.Link>
             </Link>,
             <Link to={'/auth/login'}>
-              <Typography.Link>Login</Typography.Link>
+              <Typography.Link>{t('signIn')}</Typography.Link>
             </Link>,
           ]}
         >
@@ -95,7 +95,7 @@ export const Forgot = () => {
             onValuesChange={(val) => setForm(Object.assign({}, form, val))}
           >
             <Form.Item name="email">
-              <Input placeholder={'Email'} />
+              <Input placeholder={t('email')} />
             </Form.Item>
             <Form.Item>
               <Button
@@ -104,7 +104,7 @@ export const Forgot = () => {
                 disabled={!emailValid}
                 loading={requestStatus === 'loading'}
               >
-                Submit
+                {t('submit')}
               </Button>
             </Form.Item>
           </Form>

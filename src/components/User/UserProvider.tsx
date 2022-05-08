@@ -23,7 +23,9 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   }
 
   useEffect(() => {
-    reload()
+    ;(async () => {
+      await reload()
+    })()
   }, [])
 
   const appendUserAlerts = (alert: Alert) => {

@@ -3,6 +3,7 @@ import {
   Card,
   Col,
   Divider,
+  notification,
   PageHeader,
   Result,
   Row,
@@ -43,6 +44,10 @@ export const GageDetail = () => {
       } catch (e) {
         console.error(e)
         setRequestStatus('failure')
+        notification.error({
+          message: t('failedToLoadEntity', { entity: t('gage') }),
+          placement: 'bottomRight',
+        })
       }
     })()
   }, [])

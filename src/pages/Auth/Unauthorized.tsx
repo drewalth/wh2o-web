@@ -1,26 +1,28 @@
 import { Button, Result } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 export const Unauthorized = () => {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   return (
     <div>
       <Result
         status="403"
         title="403"
-        subTitle="Sorry, you are not authorized to access this page."
+        subTitle={t('unauthorized')}
         extra={
           <>
             <Button
               onClick={() => navigate('/auth/login', { replace: true })}
               type="primary"
             >
-              Sign In
+              {t('signIn')}
             </Button>
             <Button
               onClick={() => navigate('/auth/register', { replace: true })}
             >
-              Sign Up
+              {t('register')}
             </Button>
           </>
         }

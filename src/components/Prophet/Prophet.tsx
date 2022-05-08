@@ -3,8 +3,10 @@ import { useState } from 'react'
 import { RiverForm } from './RiverForm'
 import { Alert, Col, PageHeader, Row } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 export const Prophet = () => {
+  const { t } = useTranslation()
   const [siteId, setSiteId] = useState('06719505')
   const [siteDescription, setSiteDescription] = useState(
     'CLEAR CREEK AT GOLDEN, CO',
@@ -19,11 +21,11 @@ export const Prophet = () => {
   return (
     <>
       <PageHeader
-        title={'Prophet'}
+        title={t('prophet')}
         onBack={() => navigate('/')}
         extra={
           <Alert
-            message="Currently available for USGS gages only"
+            message={t('currentlyAvailableForUSGSOnly')}
             type="info"
             showIcon
           />

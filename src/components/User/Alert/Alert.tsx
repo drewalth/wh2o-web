@@ -15,6 +15,7 @@ import { AlertChannel, AlertCriteria, AlertInterval } from '../../../enums'
 import { createAlert } from '../../../controllers'
 import moment from 'moment'
 import { useUserContext } from '../UserContext'
+import { useTranslation } from 'react-i18next'
 
 const defaultCreateForm: CreateAlertDto = {
   name: '',
@@ -33,12 +34,12 @@ const defaultCreateForm: CreateAlertDto = {
 
 export const Alert = (): JSX.Element => {
   const { user, reload } = useUserContext()
-
+  const { t } = useTranslation()
   const userUnverified = user && !user.verified
   const userHasAlertLimit = user && user.verified && user.alerts.length >= 15
   const addTooltipMessage = userUnverified
-    ? 'Please verify your account'
-    : 'Maximum number of alerts already created'
+    ? t('pleaseVerifyYourAccount')
+    : t('maximumNumberOfAlertsCreated')
   const addAlertButtonDisabled = userUnverified || userHasAlertLimit
 
   const [modalVisible, setModalVisible] = useState(false)
@@ -63,13 +64,13 @@ export const Alert = (): JSX.Element => {
       await reload()
       setRequestStatus('success')
       notification.success({
-        message: 'Alert Created',
+        message: t('entityCreateSuccess', { entity: t('alert') }),
         placement: 'bottomRight',
       })
     } catch (e) {
       setRequestStatus('failure')
       notification.error({
-        message: 'Failed to create alert',
+        message: t('entityCreateError', { entity: t('alert') }),
         placement: 'bottomRight',
       })
     } finally {
@@ -88,10 +89,12 @@ export const Alert = (): JSX.Element => {
       <Modal
         visible={modalVisible}
         destroyOnClose={true}
-        title={'Add Alert'}
+        title={t('addEntity', { entity: t('alert') })}
         onOk={handleOk}
         onCancel={handleCancel}
         confirmLoading={requestStatus === 'loading'}
+        okText={t('ok')}
+        cancelText={t('cancel')}
       >
         <Form
           layout={'vertical'}
@@ -103,20 +106,20 @@ export const Alert = (): JSX.Element => {
           }
           initialValues={defaultCreateForm}
         >
-          <Form.Item name={'name'} label={'Name'}>
+          <Form.Item name={'name'} label={t('name')}>
             <Input />
           </Form.Item>
 
-          <Form.Item name={'interval'} label={'Interval'}>
+          <Form.Item name={'interval'} label={t('interval')}>
             <Select>
               {Object.values(AlertInterval).map((interval) => (
                 <Select.Option key={interval} value={interval}>
-                  {interval}
+                  {t(interval.toLocaleLowerCase())}
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name={'channel'} label={'Channel'}>
+          <Form.Item name={'channel'} label={t('channel')}>
             <Select>
               {Object.values(AlertChannel).map((el) => (
                 <Select.Option
@@ -127,14 +130,14 @@ export const Alert = (): JSX.Element => {
                     createForm.interval === AlertInterval.DAILY
                   }
                 >
-                  {el}
+                  {t(el.toLocaleLowerCase())}
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
           <Form.Item
             name={'gageID'}
-            label={'Gage'}
+            label={t('gage')}
             hidden={createForm.interval === AlertInterval.DAILY}
           >
             <Select>
@@ -147,27 +150,32 @@ export const Alert = (): JSX.Element => {
           </Form.Item>
           <Form.Item
             name={'notifyTime'}
-            label={'Time'}
+            label={t('time')}
             hidden={createForm.interval === AlertInterval.IMMEDIATE}
           >
-            <TimePicker use12Hours format="h:mm a" minuteStep={5} />
+            <TimePicker
+              use12Hours
+              format="h:mm a"
+              minuteStep={5}
+              placeholder={t('selectTime')}
+            />
           </Form.Item>
           <Form.Item
             name={'criteria'}
-            label={'Criteria'}
+            label={t('criteria')}
             hidden={createForm.interval === 'DAILY'}
           >
             <Select>
               {Object.values(AlertCriteria).map((el) => (
                 <Select.Option key={el} value={el}>
-                  {el}
+                  {t(el.toLocaleLowerCase())}
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
           <Form.Item
             name={'value'}
-            label={'Value'}
+            label={t('value')}
             hidden={
               createForm.interval === 'DAILY' ||
               createForm.criteria === 'BETWEEN'
@@ -177,7 +185,7 @@ export const Alert = (): JSX.Element => {
           </Form.Item>
           <Form.Item
             name={'minimum'}
-            label={'Minimum'}
+            label={t('minimum')}
             hidden={
               createForm.interval === 'DAILY' ||
               createForm.criteria !== 'BETWEEN'
@@ -187,7 +195,7 @@ export const Alert = (): JSX.Element => {
           </Form.Item>
           <Form.Item
             name={'maximum'}
-            label={'Maximum'}
+            label={t('maximum')}
             hidden={
               createForm.interval === 'DAILY' ||
               createForm.criteria !== 'BETWEEN'
@@ -197,7 +205,7 @@ export const Alert = (): JSX.Element => {
           </Form.Item>
           <Form.Item
             name={'metric'}
-            label={'Metric'}
+            label={t('metric')}
             hidden={createForm.interval === 'DAILY'}
           >
             <Select>

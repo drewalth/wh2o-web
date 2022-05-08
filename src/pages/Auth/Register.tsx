@@ -24,6 +24,7 @@ import { useUserContext } from '../../components/User/UserContext'
 import { RequestStatus } from '../../types'
 import Recaptcha from 'react-google-invisible-recaptcha'
 import { LegalModal } from '../Legal'
+import { useTranslation } from 'react-i18next'
 
 type RegisterForm = {
   name: string
@@ -38,6 +39,7 @@ type RegisterForm = {
 export const Register = () => {
   const recaptchaSiteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY
   const { reload } = useUserContext()
+  const { t } = useTranslation()
   const schema = new PasswordValidator()
   schema
     .is()
@@ -75,10 +77,10 @@ export const Register = () => {
     telephone: '',
     termsAgreed: false,
   })
-  const DEFAULT_PASS_ERR_MSG = 'Please input your password!'
+  const DEFAULT_PASS_ERR_MSG = t('pleaseInputYourPassword')
   const [passwordErrMsg, setPasswordErrMsg] = useState(DEFAULT_PASS_ERR_MSG)
 
-  const DEFAULT_PASS_CONFIRM_ERR_MSG = 'Please confirm password'
+  const DEFAULT_PASS_CONFIRM_ERR_MSG = t('pleaseConfirmPassword')
   const [passwordConfirmErrMsg, setPasswordConfirmErrMsg] = useState(
     DEFAULT_PASS_CONFIRM_ERR_MSG,
   )
@@ -121,7 +123,7 @@ export const Register = () => {
       })
       setRequestStatus('success')
       notification.success({
-        message: 'Account created',
+        message: t('entityCreateSuccess', { entity: t('account') }),
         placement: 'bottomRight',
       })
       await reload()
@@ -133,7 +135,7 @@ export const Register = () => {
       } else {
         setRequestStatus('failure')
         notification.error({
-          message: 'Failed to create account',
+          message: t('entityCreateError', { entity: t('account') }),
           placement: 'bottomRight',
         })
       }
@@ -143,7 +145,7 @@ export const Register = () => {
 
   const validatePasswordConfirm = (rule, value, callback) => {
     if (value && value !== form.password) {
-      setPasswordConfirmErrMsg('Passwords do not match')
+      setPasswordConfirmErrMsg(t('passwordsDoNotMatch'))
       callback('Error!')
     } else {
       callback()
@@ -163,23 +165,23 @@ export const Register = () => {
       const msg: string[] = []
 
       if (passwordErrorsList.includes('digits')) {
-        msg.push('Must include one number')
+        msg.push(t('mustContainOneNumber'))
       }
 
       if (passwordErrorsList.includes('min')) {
-        msg.push('Minimum 8 characters')
+        msg.push(t('minimumEightCharacters'))
       }
 
       if (passwordErrorsList.includes('uppercase')) {
-        msg.push('Must contain uppercase')
+        msg.push(t('mustContainUppercase'))
       }
 
       if (passwordErrorsList.includes('lowercase')) {
-        msg.push('Must contain lowercase')
+        msg.push(t('mustContainLowercase'))
       }
 
       if (passwordErrorsList.includes('symbols')) {
-        msg.push('Must contain special character')
+        msg.push(t('mustContainSpecialCharacter'))
       }
 
       const val = msg.join(', ')
@@ -204,13 +206,13 @@ export const Register = () => {
     <Row justify={'center'}>
       <Col {...authColSpan}>
         <Card
-          title={'Register'}
+          title={t('register')}
           actions={[
             <Link to={'/auth/forgot'}>
-              <Typography.Link>Forgot Password</Typography.Link>
+              <Typography.Link>{t('forgotPassword')}</Typography.Link>
             </Link>,
             <Link to={'/auth/login'}>
-              <Typography.Link>Login</Typography.Link>
+              <Typography.Link>{t('signIn')}</Typography.Link>
             </Link>,
           ]}
         >
@@ -229,45 +231,33 @@ export const Register = () => {
           >
             <Form.Item
               name="name"
-              rules={[{ required: true, message: 'Please input your name' }]}
+              rules={[{ required: true, message: t('pleaseInputYourName') }]}
             >
-              <Input placeholder={'Name'} />
+              <Input placeholder={t('name')} />
             </Form.Item>
             <Form.Item
               name="email"
-              help={
-                duplicateEmailProvided
-                  ? 'Account with provided email already exists.'
-                  : ''
-              }
+              help={duplicateEmailProvided ? t('accountExists') : ''}
               rules={[
                 {
                   required: true,
-                  message: 'Invalid email',
+                  message: t('invalidEmail'),
                   type: 'email',
                 },
               ]}
             >
               <Input
-                placeholder={'Email'}
+                placeholder={t('email')}
                 status={duplicateEmailProvided ? 'error' : ''}
               />
             </Form.Item>
             <Form.Item
               name={'telephone'}
-              help={
-                form.telephone.length > 0
-                  ? "Please include country code. I.e. '+1'"
-                  : ''
-              }
+              help={form.telephone.length > 0 ? t('telephoneHelpText') : ''}
             >
               <Space direction={'horizontal'}>
-                <Input placeholder={'Telephone'} />
-                <HelpTooltip
-                  title={
-                    'Optional. Used for SMS alerts that you create. You can add this later.'
-                  }
-                />
+                <Input placeholder={t('telephone')} />
+                <HelpTooltip title={t('telephoneTooltip')} />
               </Space>
             </Form.Item>
             <Form.Item name={'timezone'}>
@@ -289,7 +279,7 @@ export const Register = () => {
                 },
               ]}
             >
-              <Input.Password placeholder={'Password'} />
+              <Input.Password placeholder={t('password')} />
             </Form.Item>
             <Form.Item
               name="passwordConfirm"
@@ -301,7 +291,7 @@ export const Register = () => {
                 },
               ]}
             >
-              <Input.Password placeholder={'Confirm Password'} />
+              <Input.Password placeholder={t('confirmPassword')} />
             </Form.Item>
             <Form.Item
               name={'termsAgreed'}
@@ -316,7 +306,7 @@ export const Register = () => {
                   }}
                 >
                   {' '}
-                  Terms and Conditions
+                  {t('termsAndConditions')}
                 </Typography.Link>
               </Checkbox>
             </Form.Item>
@@ -327,7 +317,7 @@ export const Register = () => {
                 disabled={!formValid}
                 loading={requestStatus === 'loading'}
               >
-                Submit
+                {t('submit')}
               </Button>
             </Form.Item>
           </Form>

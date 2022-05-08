@@ -12,6 +12,7 @@ import { addUserGage } from '../../../controllers'
 import { UserGageTable } from './UserGageTable'
 import { useUserContext } from '../UserContext'
 import debounce from 'lodash.debounce'
+import { useTranslation } from 'react-i18next'
 
 export const UserGages = (): JSX.Element => {
   const formRef = useRef<HTMLFormElement>(null)
@@ -21,6 +22,7 @@ export const UserGages = (): JSX.Element => {
   const { searchParams, setSearchParams, resetPagination, gages } =
     useGagesContext()
   const { user, reload, canBookmarkGages } = useUserContext()
+  const { t } = useTranslation()
 
   const setFormAttributes = (country: Country) => {
     if (formRef && formRef.current) {
@@ -97,9 +99,9 @@ export const UserGages = (): JSX.Element => {
 
   const getStateInputLabel = () => {
     if (searchParams.country === Country.CA) {
-      return 'Province'
+      return t('province')
     }
-    return 'State'
+    return t('state')
   }
 
   const handleOk = async () => {
@@ -115,7 +117,7 @@ export const UserGages = (): JSX.Element => {
       await reload()
       setRequestStatus('success')
       notification.success({
-        message: 'Gage Created',
+        message: t('entityCreateSuccess', { entity: t('gage') }),
         placement: 'bottomRight',
       })
       handleClose()
@@ -123,7 +125,7 @@ export const UserGages = (): JSX.Element => {
       console.log(e)
       setRequestStatus('failure')
       notification.error({
-        message: 'Failed to bookmark gage',
+        message: t('failedToAction', { action: t('bookmarkGage') }),
         placement: 'bottomRight',
       })
     }
@@ -135,6 +137,8 @@ export const UserGages = (): JSX.Element => {
         destroyOnClose
         visible={createModalVisible}
         onOk={handleOk}
+        okText={t('ok')}
+        cancelText={t('cancel')}
         onCancel={handleClose}
         confirmLoading={requestStatus === 'loading'}
       >
@@ -149,7 +153,7 @@ export const UserGages = (): JSX.Element => {
           onValuesChange={handleOnValuesChange}
           initialValues={searchParams}
         >
-          <Form.Item label={'Country'} name={'country'}>
+          <Form.Item label={t('country')} name={'country'}>
             <Select>
               {Object.values(Country).map((val, index) => (
                 <Select.Option value={val} key={index}>
@@ -158,7 +162,7 @@ export const UserGages = (): JSX.Element => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item label={'Source'} name={'source'}>
+          <Form.Item label={t('source')} name={'source'}>
             <Select>
               {properties[searchParams.country].sources.map((val, index) => (
                 <Select.Option value={val} key={index}>
@@ -176,14 +180,13 @@ export const UserGages = (): JSX.Element => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name={'searchTerm'} label={'Search'}>
-            <Input placeholder={'Gage Name'} allowClear />
+          <Form.Item name={'searchTerm'} label={t('search')}>
+            <Input placeholder={t('gageName')} allowClear />
           </Form.Item>
           <Divider />
-          <Form.Item name={'id'} label={'Gage Search Results'}>
+          <Form.Item name={'id'} label={t('gageSearchResults')}>
             <Select
               onSelect={(value) => {
-                console.log('value: ', value)
                 setSelectedGageSiteId(value)
               }}
             >
@@ -211,7 +214,7 @@ export const UserGages = (): JSX.Element => {
           disabled={!canBookmarkGages}
           onClick={() => setCreateModalVisible(true)}
         >
-          Bookmark Gage
+          {t('bookmarkGage')}
         </Button>
       </div>
       <UserGageTable />

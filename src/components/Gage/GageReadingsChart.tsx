@@ -5,6 +5,7 @@ import moment from 'moment'
 import { Card, Divider, Form, Select } from 'antd'
 import { DateFormat } from '../../enums'
 import { HelpTooltip } from '../Common'
+import { useTranslation } from 'react-i18next'
 
 export type GageReadingsChartProps = {
   readings: GageReading[]
@@ -23,6 +24,7 @@ export const GageReadingsChart = ({
   const [chartWidth, setChartWidth] = useState(500)
   const [activeMetric, setActiveMetric] = useState<GageMetric>(metric)
   const [dateFormat, setDateFormat] = useState<DateFormat>(DateFormat.LLLL)
+  const { t } = useTranslation()
 
   const getAvailableMetrics = () => {
     const m = new Set(readings.map((r) => r.metric))
@@ -134,7 +136,7 @@ export const GageReadingsChart = ({
           <>
             <Divider />
             <Form layout={'inline'}>
-              <Form.Item label={'Chart metric'}>
+              <Form.Item label={t('chartMetric')}>
                 <Select
                   value={activeMetric}
                   onSelect={(metric: GageMetric) => setActiveMetric(metric)}
@@ -146,7 +148,7 @@ export const GageReadingsChart = ({
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item label={'Date format'}>
+              <Form.Item label={t('dateFormat')}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Select
                     style={{ marginRight: 8 }}

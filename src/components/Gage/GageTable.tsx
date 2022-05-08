@@ -17,6 +17,7 @@ import {
   ShareAltOutlined,
   TwitterOutlined,
 } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 
 const shareButtons = (gage: Gage) => {
   const url = `https://wh2o.io/gage/${gage.state}/${gage.id}`
@@ -39,10 +40,15 @@ const shareButtons = (gage: Gage) => {
   )
 }
 
-const gageShare = (gage: Gage) => {
+type GageShareProps = {
+  gage: Gage
+}
+
+const GageShare = ({ gage }: GageShareProps) => {
+  const { t } = useTranslation()
   return (
     <Popover content={shareButtons(gage)} trigger="click">
-      <Button style={{ marginRight: 8 }} title={'Share'}>
+      <Button style={{ marginRight: 8 }} title={t('share')}>
         <ShareAltOutlined />
       </Button>
     </Popover>
@@ -59,10 +65,11 @@ const GageTable = (): JSX.Element => {
     requestStatus,
   } = useGagesContext()
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const columns = [
     {
-      title: 'Name',
+      title: t('name'),
       dataIndex: 'name',
       key: 'name',
       render: (name: string, gage: Gage) => (
@@ -77,7 +84,7 @@ const GageTable = (): JSX.Element => {
       ),
     },
     {
-      title: 'Latest Reading',
+      title: t('latestReading'),
       dataIndex: 'reading',
       key: 'reading',
       render: (reading: number, gage: Gage) => (
@@ -87,7 +94,7 @@ const GageTable = (): JSX.Element => {
       ),
     },
     {
-      title: 'Updated',
+      title: t('updated'),
       dataIndex: 'updatedAt',
       key: 'updatedAt',
       render: (val: Date) => {
@@ -110,7 +117,7 @@ const GageTable = (): JSX.Element => {
       key: 'id',
       render: (id: number, gage: Gage) => (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          {gageShare(gage)}
+          <GageShare gage={gage} />
           <GageBookmarkToggle gageId={id} type={'icon'} />
         </div>
       ),

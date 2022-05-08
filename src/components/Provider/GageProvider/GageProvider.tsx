@@ -12,12 +12,14 @@ import {
 } from '../../../types'
 import { gageSearch } from '../../../controllers'
 import { notification } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 type GageProviderProps = {
   children: ReactNode
 }
 
 export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
+  const { t } = useTranslation()
   const [gages, setGages] = useState<Gage[]>([])
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
   const [pagination, setPagination] =
@@ -65,7 +67,7 @@ export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
       } catch (e) {
         setRequestStatus('failure')
         notification.error({
-          message: 'Failed to load gages',
+          message: t('failedToLoadGages'),
           placement: 'bottomRight',
         })
       }

@@ -7,6 +7,7 @@ import {
   NotificationOutlined,
 } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const colProps = {
   span: 24,
@@ -18,41 +19,41 @@ const colProps = {
 
 const Home = () => {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   return (
     <>
       <Hero />
       <Row className={'feature-row'} justify={'center'}>
         <Col {...colProps} className={'feature-col'}>
           <AreaChartOutlined style={{ fontSize: 48, marginBottom: 8 }} />
-          <Typography.Title level={2}>River Flow Data</Typography.Title>
+          <Typography.Title level={2}>{t('hero.colOneTitle')}</Typography.Title>
           <Typography.Paragraph style={{ fontSize: '1.125rem' }}>
-            View historical river water level data sourced from the United
-            States Geological Survey and The Government of Canada.
+            {t('hero.colOneText')}
           </Typography.Paragraph>
           <Button onClick={() => navigate('/gage')} type={'ghost'}>
-            Search Gages
+            {t('hero.colOneAction')}
           </Button>
         </Col>
         <Col {...colProps} className={'feature-col'}>
           <EyeOutlined style={{ fontSize: 48, marginBottom: 8 }} />
-          <Typography.Title level={2}>Forecasting</Typography.Title>
+          <Typography.Title level={2}>{t('hero.colTwoTitle')}</Typography.Title>
           <Typography.Paragraph style={{ fontSize: '1.125rem' }}>
-            Analyze a river's historical water levels with machine learning to
-            help you plan your next trip.
+            {t('hero.colTwoText')}
           </Typography.Paragraph>
           <Button onClick={() => navigate('/prophet')} type={'ghost'}>
-            Consult Prophet
+            {t('hero.colTwoAction')}
           </Button>
         </Col>
         <Col {...colProps} className={'feature-col'}>
           <NotificationOutlined style={{ fontSize: 48, marginBottom: 8 }} />
-          <Typography.Title level={2}>Reports</Typography.Title>
+          <Typography.Title level={2}>
+            {t('hero.colThreeTitle')}
+          </Typography.Title>
           <Typography.Paragraph style={{ fontSize: '1.125rem' }}>
-            Create scheduled and immediate alerts summarizing your saved gages
-            or latest gage reading via email or SMS.
+            {t('hero.colThreeText')}
           </Typography.Paragraph>
           <Button onClick={() => navigate('/auth/login')} type={'ghost'}>
-            Get Started
+            {t('hero.colThreeAction')}
           </Button>
         </Col>
       </Row>

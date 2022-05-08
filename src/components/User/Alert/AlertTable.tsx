@@ -12,15 +12,17 @@ import { Alert } from '../../../types'
 import { DeleteOutlined } from '@ant-design/icons'
 import { deleteAlert, updateAlert } from '../../../controllers'
 import moment from 'moment'
-import { AlertInterval } from '../../../enums'
+import { AlertChannel, AlertCriteria, AlertInterval } from '../../../enums'
 import { useUserContext } from '../UserContext'
+import { useTranslation } from 'react-i18next'
 
 export const AlertTable = (): JSX.Element => {
   const { user, reload } = useUserContext()
+  const { t } = useTranslation()
 
   const getIntervalTag = (alert: Alert): JSX.Element => {
     return (
-      <Tag color={alert.interval === 'DAILY' ? 'blue' : 'red'}>
+      <Tag color={alert.interval === AlertInterval.DAILY ? 'blue' : 'red'}>
         {alert.interval}
       </Tag>
     )
@@ -28,7 +30,7 @@ export const AlertTable = (): JSX.Element => {
 
   const getChannelTag = (alert: Alert): JSX.Element => {
     return (
-      <Tag color={alert.channel === 'EMAIL' ? 'green' : 'orange'}>
+      <Tag color={alert.channel === AlertChannel.EMAIL ? 'green' : 'orange'}>
         {alert.channel}
       </Tag>
     )
@@ -37,7 +39,7 @@ export const AlertTable = (): JSX.Element => {
   const getAlertDescription = (alert: Alert) => {
     let msg = `${alert.criteria}`
 
-    if (alert.criteria === 'BETWEEN') {
+    if (alert.criteria === AlertCriteria.BETWEEN) {
       msg += ` ${alert.minimum}-${alert.minimum}`
     } else {
       msg += ` ${alert.value}`
@@ -50,13 +52,13 @@ export const AlertTable = (): JSX.Element => {
     try {
       await deleteAlert(val)
       notification.success({
-        message: 'Alert deleted',
+        message: t('entityDeleted', { entity: t('alert') }),
         placement: 'bottomRight',
       })
       await reload()
     } catch (e) {
       notification.error({
-        message: 'Failed to Delete Alert',
+        message: t('entityDeleteError', { entity: t('alert') }),
         placement: 'bottomRight',
       })
     }
@@ -64,12 +66,12 @@ export const AlertTable = (): JSX.Element => {
 
   const columns = [
     {
-      title: 'Name',
+      title: t('name'),
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Description',
+      title: t('description'),
       dataIndex: 'id',
       key: 'description',
       render: (val: number, alert: Alert) => {
@@ -88,9 +90,9 @@ export const AlertTable = (): JSX.Element => {
               <>
                 <Typography.Text type={'secondary'}>when</Typography.Text>
                 <span>&nbsp;</span>
-                <Tooltip title={alert?.gage?.name || 'Gage Name'}>
+                <Tooltip title={alert?.gage?.name || t('gage')}>
                   <Typography.Text ellipsis>
-                    {alert?.gage?.name || 'Gage Name'}
+                    {alert?.gage?.name || t('gage')}
                   </Typography.Text>
                 </Tooltip>
                 <span>&nbsp;</span>
@@ -104,7 +106,7 @@ export const AlertTable = (): JSX.Element => {
       },
     },
     {
-      title: 'Last Sent',
+      title: t('lastSent'),
       dataIndex: 'lastSent',
       key: 'lastSent',
       render: (val: Date | string) => {
@@ -113,7 +115,7 @@ export const AlertTable = (): JSX.Element => {
       },
     },
     {
-      title: 'Active',
+      title: t('active'),
       dataIndex: 'active',
       key: 'active',
       render: (active: boolean, alert: Alert) => (

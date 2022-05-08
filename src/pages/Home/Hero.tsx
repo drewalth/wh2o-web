@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Col, Popover, Row, Typography, Grid, Tag } from 'antd'
+import { Button, Col, Popover, Row, Typography, Grid } from 'antd'
 import cover from '../../assets/john-huisjen-cover.jpeg'
 import { CameraOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 
 const { useBreakpoint } = Grid
 
 export const Hero = () => {
+  const { t } = useTranslation()
   const [titleFontSize, setTitleFontSize] = useState(0)
   const breakpoints = useBreakpoint()
   const currentBreakpoints = Object.keys(breakpoints).filter(
@@ -41,11 +43,10 @@ export const Hero = () => {
               paddingTop: 24,
             }}
           >
-            w.H<sub>2</sub>O<Tag color={'orange'}>Alpha</Tag>
+            w.H<sub>2</sub>O
           </Typography.Title>
           <Typography.Title type={'secondary'} style={{ color: '#fff' }}>
-            Historical river flow data, forecasting, and custom reporting for
-            rivers in the United States and Canada.
+            {t('hero.primary')}
           </Typography.Title>
         </Col>
       </Row>

@@ -11,6 +11,7 @@ import {
   XAxis,
 } from 'recharts'
 import { Spin, Typography } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 export type HistoricAverageChartProps = {
   data: DailyAverage[]
@@ -21,13 +22,14 @@ export const HistoricAverageChart = ({
   data,
   requestStatus,
 }: HistoricAverageChartProps) => {
+  const { t } = useTranslation()
   if (requestStatus === 'loading') {
     return (
       <div className={'prophet-chart loading'}>
         <div className={'loading-content'}>
           <Spin />
           <Typography.Title level={5} type={'secondary'}>
-            Loading Daily Averages...
+            {t('loadingDailyAverages')}
           </Typography.Title>
         </div>
       </div>
@@ -40,11 +42,15 @@ export const HistoricAverageChart = ({
         <ComposedChart data={data} syncId={'dailyData'}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="index" height={40}>
-            <Label value="Day of the Year" position="insideBottom" offset={3} />
+            <Label
+              value={t('dayOfTheYear')}
+              position="insideBottom"
+              offset={3}
+            />
           </XAxis>
           <YAxis>
             <Label
-              value={'Cubic Feet Per Second (CFS)'}
+              value={t('cubicFeetPerSecond')}
               angle={-90}
               position="insideBottomLeft"
               offset={10}
@@ -68,11 +74,13 @@ export const HistoricAverageChart = ({
             formatter={(value, name, props) => {
               if (name === 'middleFifty') {
                 return [
-                  `Middle 50%: ${props.payload.middleFifty[0]} - ${props.payload.middleFifty[1]} cfs`,
+                  `${t('middle')} 50%: ${props.payload.middleFifty[0]} - ${
+                    props.payload.middleFifty[1]
+                  } cfs`,
                   '',
                 ]
               } else {
-                return [`Average: ${Math.round(value)} cfs`, '']
+                return [`${t('average')}: ${Math.round(value)} cfs`, '']
               }
             }}
             itemSorter={(item) => item.name}

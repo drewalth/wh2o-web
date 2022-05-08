@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { RequestStatus } from '../../types'
 import { Result, Spin, Typography } from 'antd'
 import { authVerify } from '../../controllers'
+import { useTranslation } from 'react-i18next'
 
 export const Verify = () => {
   const [params] = useSearchParams()
@@ -10,6 +11,7 @@ export const Verify = () => {
   const email = params.get('email')
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   useEffect(() => {
     ;(async () => {
@@ -42,18 +44,15 @@ export const Verify = () => {
         >
           <Spin />
           <Typography.Title level={5} style={{ marginLeft: 16 }}>
-            Verifying your account...
+            {t('verifyingYourAccount')}
           </Typography.Title>
         </div>
       )}
       {requestStatus === 'failure' && (
-        <Result
-          title={'Failed to verify your account. Redirecting...'}
-          status={'error'}
-        />
+        <Result title={t('failedToVerifyAccount')} status={'error'} />
       )}
       {requestStatus === 'success' && (
-        <Result title={'Account verified. Redirecting...'} status={'success'} />
+        <Result title={t('accountVerified')} status={'success'} />
       )}
     </>
   )

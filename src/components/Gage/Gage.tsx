@@ -123,12 +123,12 @@ export const Gage = (): JSX.Element => {
                   {(() => {
                     switch (country) {
                       case Country.NZ:
-                        return 'New Zealand'
+                        return t('newZealand')
                       case Country.US:
-                        return 'United States'
+                        return t('unitedStates')
                       default:
                       case Country.CA:
-                        return 'Canada'
+                        return t('canada')
                     }
                   })()}
                 </Select.Option>

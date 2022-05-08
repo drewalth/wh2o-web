@@ -1,12 +1,14 @@
 import { MapContainer, TileLayer, Tooltip, Marker, Popup } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import gaugeData from './all_sites_filtered_on_mean.json'
+import { useTranslation } from 'react-i18next'
 
 export type GageMapProps = {
   onSelectGauge: (siteNo: string, siteNm: string) => void
 }
 
 export const GageMap = ({ onSelectGauge }: GageMapProps) => {
+  const { t } = useTranslation()
   return (
     <MapContainer
       center={[36.705, -97.0]}
@@ -29,8 +31,12 @@ export const GageMap = ({ onSelectGauge }: GageMapProps) => {
               },
             }}
           >
-            <Popup>Graph generated for gauge: {gauge.station_nm}</Popup>
-            <Tooltip>Description: {gauge.station_nm}</Tooltip>
+            <Popup>
+              {t('graphGeneratedForGage')}: {gauge.station_nm}
+            </Popup>
+            <Tooltip>
+              {t('description')}: {gauge.station_nm}
+            </Tooltip>
           </Marker>
         ))}
       </MarkerClusterGroup>

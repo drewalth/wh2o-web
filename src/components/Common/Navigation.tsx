@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import Logo from './wh2o-logo'
-import { Layout, Menu, Typography } from 'antd'
+import { Layout, Menu, Select, Typography } from 'antd'
 import { useTranslation } from 'react-i18next'
 import 'antd/dist/antd.css'
 import {
@@ -16,6 +16,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 import { useUserContext } from '../User/UserContext'
 import { User } from '../../types'
+import { languages } from '../../lib/languages'
+import './navigation.scss'
 
 type NavigationProps = {
   children: ReactNode
@@ -33,7 +35,7 @@ export const Navigation = ({ children }: NavigationProps) => {
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useUserContext()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const baseNavItems: NavItem[] = [
     {
@@ -127,11 +129,14 @@ export const Navigation = ({ children }: NavigationProps) => {
           mode="inline"
           defaultSelectedKeys={['dashboard']}
           selectedKeys={getSelectedItems()}
-          onSelect={({ key }) => navigate(key, { replace: false })}
+          onSelect={({ key }) => {
+            if (['lang'].includes(key)) return
+            navigate(key, { replace: false })
+          }}
         >
           {navItems.map((item) => {
             if (item.text === 'divider') {
-              return <Menu.Divider />
+              return <Menu.Divider className={'nav-divider'} />
             }
 
             return (
@@ -140,6 +145,18 @@ export const Navigation = ({ children }: NavigationProps) => {
               </Menu.Item>
             )
           })}
+          <Menu.Divider className={'nav-divider'} />
+          <Menu.Item key={'lang'}>
+            <Select
+              className={'language-select'}
+              value={i18n.language}
+              onSelect={(val) => i18n.changeLanguage(val)}
+            >
+              {languages.map((l) => (
+                <Select.Option key={l.value}>{l.text}</Select.Option>
+              ))}
+            </Select>
+          </Menu.Item>
           <Menu.Item style={{ position: 'absolute', bottom: 0 }} key={'/legal'}>
             {t('disclaimer')}
           </Menu.Item>

@@ -10,6 +10,7 @@ import {
   YAxis,
   XAxis,
 } from 'recharts'
+import { useTranslation } from 'react-i18next'
 
 export type ForecastChartProps = {
   data: ForeCastDataPoint[]
@@ -17,13 +18,14 @@ export type ForecastChartProps = {
 }
 
 export const ForecastChart = ({ data, requestStatus }: ForecastChartProps) => {
+  const { t } = useTranslation()
   if (requestStatus === 'loading') {
     return (
       <div className={'prophet-chart loading'}>
         <div className={'loading-content'}>
           <Spin />
           <Typography.Title level={5} type={'secondary'}>
-            Loading Flow Predictions...
+            {t('loadingFlowPredictions')}
           </Typography.Title>
         </div>
       </div>
@@ -36,11 +38,15 @@ export const ForecastChart = ({ data, requestStatus }: ForecastChartProps) => {
         <ComposedChart data={data} syncId={'dailyData'}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="index" height={40}>
-            <Label value="Day of the Year" position="insideBottom" offset={3} />
+            <Label
+              value={t('dayOfTheYear')}
+              position="insideBottom"
+              offset={3}
+            />
           </XAxis>
           <YAxis>
             <Label
-              value={'Cubic Feet Per Second (CFS)'}
+              value={t('cubicFeetPerSecond')}
               angle={-90}
               position="insideBottomLeft"
               offset={10}
@@ -64,9 +70,9 @@ export const ForecastChart = ({ data, requestStatus }: ForecastChartProps) => {
             label=""
             formatter={(value, name, props) => {
               if (name === 'past_value') {
-                return [`Flow: ${Math.round(value)} cfs`, '']
+                return [`${t('flow')}: ${Math.round(value)} cfs`, '']
               } else {
-                return [`Forecast: ${Math.round(value)} cfs`, '']
+                return [`${t('forecast')}: ${Math.round(value)} cfs`, '']
               }
             }}
             itemSorter={(item) => item.name}

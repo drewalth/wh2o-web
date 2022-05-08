@@ -19,9 +19,11 @@ import debounce from 'lodash.debounce'
 import { useLocalNavGuard } from '../../hooks'
 import { useUserContext } from './UserContext'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const Settings = () => {
   useLocalNavGuard()
+  const { t } = useTranslation()
   const { user } = useUserContext()
   const [deleteModalVisible, setDeleteModalVisible] = useState(false)
   const [deleteConfirmInput, setDeleteConfirmInput] = useState('')
@@ -42,13 +44,13 @@ const Settings = () => {
       setUserConfig(payload)
       await updateUser(payload)
       notification.success({
-        message: 'Settings updated',
+        message: t('settingsUpdated'),
         placement: 'bottomRight',
       })
     } catch (e) {
       console.error(e)
       notification.error({
-        message: 'Failed to update settings',
+        message: t('failedToAction', { action: t('updateSettings') }),
         placement: 'bottomRight',
       })
     }
@@ -61,7 +63,7 @@ const Settings = () => {
     try {
       await deleteUser(user.id)
       notification.success({
-        message: 'Account deleted',
+        message: t('entityDeleted', { entity: t('account') }),
         placement: 'bottomRight',
       })
       setDeleteConfirmInput('')
@@ -72,7 +74,7 @@ const Settings = () => {
       setDeleteConfirmInput('')
       setDeleteModalVisible(false)
       notification.error({
-        message: 'Failed to delete account',
+        message: t('failedToAction', { action: t('deleteAccount') }),
         placement: 'bottomRight',
       })
     }
@@ -96,19 +98,19 @@ const Settings = () => {
     <>
       <Row justify={'center'}>
         <Col span={24} sm={20} md={16} lg={16} xl={10}>
-          <Card title={'Account'}>
+          <Card title={t('account')}>
             <Form
               initialValues={user}
               onValuesChange={handleValueChange}
               layout={'vertical'}
             >
-              <Form.Item name={'name'} label={'Name'}>
+              <Form.Item name={'name'} label={t('name')}>
                 <Input />
               </Form.Item>
-              <Form.Item name={'email'} label={'Email'}>
+              <Form.Item name={'email'} label={t('email')}>
                 <Input />
               </Form.Item>
-              <Form.Item name={'timezone'} label={'Timezone'}>
+              <Form.Item name={'timezone'} label={t('timezone')}>
                 <Select>
                   {timezones.map((tz) => (
                     <Select.Option value={tz} key={tz}>
@@ -119,8 +121,8 @@ const Settings = () => {
               </Form.Item>
               <Form.Item
                 name={'telephone'}
-                label={'Telephone'}
-                help={'Country code required.'}
+                label={t('telephone')}
+                help={t('telephoneHelpText')}
               >
                 <Input />
               </Form.Item>
@@ -131,7 +133,7 @@ const Settings = () => {
               danger
               onClick={() => setDeleteModalVisible(true)}
             >
-              Delete Account
+              {t('deleteAccount')}
             </Button>
           </Card>
         </Col>
@@ -146,14 +148,14 @@ const Settings = () => {
           danger: true,
           disabled: !deleteConfirmed,
         }}
-        okText={'Delete Account'}
+        okText={t('deleteAccount')}
+        cancelText={t('cancel')}
         onOk={handleDelete}
       >
         <div style={{ maxWidth: '80%' }}>
           <Typography.Title level={4}>Are you sure?</Typography.Title>
           <Typography.Text>
-            Account deletion cannot be undone. <br /> Please enter your email to
-            confirm: <b>{user.email}</b>
+            {t('pleaseEnterYourEmailtoConfirm')}: <b>{user.email}</b>
           </Typography.Text>
           <Input
             style={{ marginBottom: 16, marginTop: 16 }}

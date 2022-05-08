@@ -14,6 +14,7 @@ import {
 } from '../types'
 import { createContactSubmission } from '../controllers/contact'
 import { getCountryStates, usStates } from '../lib'
+import { useTranslation } from 'react-i18next'
 
 const DEFAULT_FORM: CreateContactDto = {
   description: '',
@@ -26,6 +27,7 @@ const DEFAULT_FORM: CreateContactDto = {
 }
 
 export const Contact = () => {
+  const { t } = useTranslation()
   const recaptchaSiteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY
   const recaptchaRef = useRef(null)
   const [form, setForm] = useState<CreateContactDto>(DEFAULT_FORM)
@@ -63,7 +65,7 @@ export const Contact = () => {
       })
       setRequestStatus('success')
       notification.success({
-        message: 'Submission created',
+        message: t('messageSent'),
         placement: 'bottomRight',
       })
       await new Promise((resolve) => setTimeout(resolve, 500))
@@ -71,7 +73,7 @@ export const Contact = () => {
     } catch (e) {
       console.error(e)
       notification.error({
-        message: 'Failed to submit',
+        message: t('failedToAction', { action: t('sendMessage') }),
         placement: 'bottomRight',
       })
       setRequestStatus('failure')
@@ -89,7 +91,7 @@ export const Contact = () => {
   return (
     <Row justify={'center'}>
       <Col {...authColSpan}>
-        <Card title={'Contact'}>
+        <Card title={t('contact')}>
           <Form
             preserve={false}
             name="basic"
@@ -106,12 +108,12 @@ export const Contact = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please your email',
+                  message: t('pleaseInputYourEmail'),
                   type: 'email',
                 },
               ]}
             >
-              <Input placeholder={'Email'} />
+              <Input placeholder={t('email')} />
             </Form.Item>
             <Form.Item name={'type'}>
               <Select>
@@ -127,11 +129,11 @@ export const Contact = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please include title',
+                  message: t('pleaseIncludeTitle'),
                 },
               ]}
             >
-              <Input placeholder={'Title'} />
+              <Input placeholder={t('title')} />
             </Form.Item>
             <Form.Item
               name="description"
@@ -139,12 +141,12 @@ export const Contact = () => {
               rules={[
                 {
                   required: form.type !== ContactType.MISSING_GAGE,
-                  message: 'Please provide description',
+                  message: t('pleaseProvide', { value: t('description') }),
                 },
               ]}
             >
               <Input.TextArea
-                placeholder={'Description'}
+                placeholder={t('description')}
                 showCount
                 style={{ height: 150 }}
                 maxLength={200}
@@ -156,11 +158,11 @@ export const Contact = () => {
               rules={[
                 {
                   required: form.type === ContactType.MISSING_GAGE,
-                  message: 'Please provide gage site ID',
+                  message: t('pleaseProvide', { value: t('gageSiteId') }),
                 },
               ]}
             >
-              <Input placeholder={'Station ID'} />
+              <Input placeholder={t('gageSiteId')} />
             </Form.Item>
             <Form.Item
               name={'country'}
@@ -205,7 +207,7 @@ export const Contact = () => {
                 loading={requestStatus === 'loading'}
                 disabled={!inputsProvided}
               >
-                Submit
+                {t('submit')}
               </Button>
             </Form.Item>
           </Form>

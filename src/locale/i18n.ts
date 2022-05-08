@@ -2,7 +2,7 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import { en } from './en'
 import { fr } from './fr'
-// import { es } from './es'
+import { es } from './es'
 
 // the translations
 // (tip move them in a JSON file and import them,
@@ -18,11 +18,11 @@ const resources = {
       ...fr,
     },
   },
-  // es: {
-  //   translation: {
-  //     ...es,
-  //   },
-  // },
+  es: {
+    translation: {
+      ...es,
+    },
+  },
 }
 
 i18n

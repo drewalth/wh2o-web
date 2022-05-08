@@ -4,6 +4,7 @@ import { addUserGage, removeUserGage } from '../../controllers'
 import { useUserContext } from '../User/UserContext'
 import { HeartFilled, HeartOutlined, LoadingOutlined } from '@ant-design/icons'
 import { RequestStatus } from '../../types'
+import { useTranslation } from 'react-i18next'
 
 type BookmarkButtonOptions = {
   text: string
@@ -23,15 +24,16 @@ export const GageBookmarkToggle = ({
 }: GageBookmarkToggleProps) => {
   const { user, reload, canBookmarkGages } = useUserContext()
   const [requestStatus, setRequestStatus] = useState<RequestStatus>()
+  const { t } = useTranslation()
 
   const bookMarkButtonoptions: BookmarkButtonOptions = (() => {
     const exists = user?.gages.find((g) => g.id === gageId)
 
     const getText = () => {
       if (!user) {
-        return 'Bookmark Gage'
+        return t('bookmarkGage')
       }
-      return !!exists ? 'Remove Bookmark' : 'Bookmark Gage'
+      return !!exists ? t('removeBookmark') : t('bookmarkGage')
     }
 
     const getIcon = () => {
@@ -55,14 +57,14 @@ export const GageBookmarkToggle = ({
           await fn(gageId, user.id)
           setRequestStatus('success')
           notification.success({
-            message: !!exists ? 'Bookmark removed' : 'Bookmark added',
+            message: !!exists ? t('bookmarkRemoved') : t('bookmarkAdded'),
             placement: 'bottomRight',
           })
           await reload()
         } catch (e) {
           setRequestStatus('failure')
           notification.error({
-            message: 'Something went wrong',
+            message: t('somethingWentWrong'),
             placement: 'bottomRight',
           })
         }
@@ -73,7 +75,7 @@ export const GageBookmarkToggle = ({
   const getButtonBase = () => {
     if (!user) {
       return (
-        <Tooltip title={'Log in to bookmark gage'}>
+        <Tooltip title={t('signInToBookmarkGage')}>
           <Button
             type={type === 'icon' ? 'ghost' : 'primary'}
             disabled

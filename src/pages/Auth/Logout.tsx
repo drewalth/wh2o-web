@@ -5,11 +5,13 @@ import { useUserContext } from '../../components/User/UserContext'
 import { RequestStatus } from '../../types'
 import { CheckCircleTwoTone } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 export const Logout = () => {
   const { reset } = useUserContext()
   const navigate = useNavigate()
   const [status, setStatus] = useState<RequestStatus>('loading')
+  const { t } = useTranslation()
   useEffect(() => {
     ;(async () => {
       clearToken()
@@ -37,14 +39,14 @@ export const Logout = () => {
               <>
                 <Spin />
                 <Typography.Text type={'secondary'}>
-                  Clearing session data...
+                  {t('clearingSessionData')}
                 </Typography.Text>
               </>
             ) : (
               <>
                 <CheckCircleTwoTone size={32} />
                 <Typography.Text type={'secondary'}>
-                  Cleared. See ya!
+                  {t('goodBye')}
                 </Typography.Text>
               </>
             )}
