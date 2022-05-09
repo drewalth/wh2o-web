@@ -21,7 +21,7 @@ type GageProviderProps = {
 export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
   const { t } = useTranslation()
   const [gages, setGages] = useState<Gage[]>([])
-  const [gagesRefreshing, setGagesRefreshing] = useState(false)
+  // const [gagesRefreshing, setGagesRefreshing] = useState(false)
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
   const [pagination, setPagination] =
     useState<TablePagination>(DEFAULT_PAGINATION)
@@ -55,23 +55,21 @@ export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
   }
 
   const loadGages = async () => {
-    let isRefreshing = false
+    // let isRefreshing = false
     try {
-      if (!gagesRefreshing) {
-        setRequestStatus('loading')
-      }
+      // if (!gagesRefreshing) {
+      //
+      // }
+      setRequestStatus('loading')
       // @todo debounce
-      const { gages, total, refreshing } = await gageSearch(
-        searchParams,
-        pagination,
-      )
+      const { gages, total } = await gageSearch(searchParams, pagination)
       setGages(gages)
       // pagination kinda busted...
 
       setPagination({ ...pagination, total: getTotal(total) })
       setRequestStatus('success')
-      setGagesRefreshing(refreshing)
-      isRefreshing = refreshing
+      // setGagesRefreshing(refreshing)
+      // isRefreshing = refreshing
     } catch (e) {
       setRequestStatus('failure')
       notification.error({
@@ -79,10 +77,10 @@ export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
         placement: 'bottomRight',
       })
     } finally {
-      if (isRefreshing) {
-        await new Promise((resolve) => setTimeout(resolve, 5000 * 2))
-        await loadGages()
-      }
+      // if (isRefreshing) {
+      //   await new Promise((resolve) => setTimeout(resolve, 5000 * 2))
+      //   await loadGages()
+      // }
     }
   }
 
@@ -103,7 +101,6 @@ export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
         resetPagination,
         reset,
         setPagination,
-        gagesRefreshing,
       }}
     >
       {children}
