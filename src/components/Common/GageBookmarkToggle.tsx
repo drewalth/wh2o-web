@@ -2,7 +2,7 @@ import { Button, notification, Tooltip } from 'antd'
 import React, { ReactNode, useState } from 'react'
 import { addUserGage, removeUserGage } from '../../controllers'
 import { useUserContext } from '../User/UserContext'
-import { HeartFilled, HeartOutlined, LoadingOutlined } from '@ant-design/icons'
+import { HeartFilled, HeartOutlined } from '@ant-design/icons'
 import { RequestStatus } from '../../types'
 import { useTranslation } from 'react-i18next'
 
@@ -37,9 +37,6 @@ export const GageBookmarkToggle = ({
     }
 
     const getIcon = () => {
-      if (requestStatus === 'loading') {
-        return <LoadingOutlined />
-      }
       return !!exists ? <HeartFilled /> : <HeartOutlined />
     }
 

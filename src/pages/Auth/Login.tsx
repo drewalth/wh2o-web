@@ -8,6 +8,7 @@ import { authLogin } from '../../controllers'
 import { setToken } from '../../lib/token'
 import { useUserContext } from '../../components/User/UserContext'
 import { useTranslation } from 'react-i18next'
+import { RequestStatus } from '../../types'
 
 type LoginForm = { email: string; password: string }
 
@@ -22,6 +23,7 @@ export const Login = () => {
   const recaptchaRef = useRef(null)
   const [form, setForm] = useState<LoginForm>(DEFAULT_FORM)
   const { reload } = useUserContext()
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>()
   const navigate = useNavigate()
   let redirectTimer
 
@@ -48,6 +50,7 @@ export const Login = () => {
 
   const handleSubmit = async () => {
     try {
+      setRequestStatus('loading')
       const { token } = await authLogin(form)
       setToken(token)
       await reload()
@@ -59,6 +62,7 @@ export const Login = () => {
       })
       navigate('/user/dashboard')
     } catch (e) {
+      setRequestStatus('failure')
       console.error(e)
     }
   }
@@ -120,7 +124,11 @@ export const Login = () => {
               <Input.Password placeholder={t('password')} />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={requestStatus === 'loading'}
+              >
                 {t('submit')}
               </Button>
             </Form.Item>

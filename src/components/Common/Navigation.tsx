@@ -136,7 +136,9 @@ export const Navigation = ({ children }: NavigationProps) => {
         >
           {navItems.map((item) => {
             if (item.text === 'divider') {
-              return <Menu.Divider className={'nav-divider'} />
+              return (
+                <Menu.Divider className={'nav-divider'} key={'divider-two'} />
+              )
             }
 
             return (
@@ -145,7 +147,7 @@ export const Navigation = ({ children }: NavigationProps) => {
               </Menu.Item>
             )
           })}
-          <Menu.Divider className={'nav-divider'} />
+          <Menu.Divider className={'nav-divider'} key={'divider'} />
           <Menu.Item key={'lang'}>
             <Select
               className={'language-select'}

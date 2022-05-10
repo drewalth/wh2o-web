@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Button,
   notification,
@@ -8,7 +8,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd'
-import { Alert } from '../../../types'
+import { Alert, RequestStatus } from '../../../types'
 import { DeleteOutlined } from '@ant-design/icons'
 import { deleteAlert, updateAlert } from '../../../controllers'
 import moment from 'moment'
@@ -19,6 +19,18 @@ import { useTranslation } from 'react-i18next'
 export const AlertTable = (): JSX.Element => {
   const { user, reload } = useUserContext()
   const { t } = useTranslation()
+  const [deleteRequestStatus, setDeleteRequestStatus] = useState<{
+    status: RequestStatus
+    id: number
+  }>({ id: 0, status: 'success' })
+
+  const getGageName = (gageId: number): string => {
+    if (!user) return ''
+
+    const g = user.gages.find((gage) => gage.id === gageId)
+
+    return g?.name || ''
+  }
 
   const getIntervalTag = (alert: Alert): JSX.Element => {
     return (
@@ -50,13 +62,25 @@ export const AlertTable = (): JSX.Element => {
 
   const handleDelete = async (val: number) => {
     try {
+      setDeleteRequestStatus({
+        id: val,
+        status: 'loading',
+      })
       await deleteAlert(val)
+      setDeleteRequestStatus({
+        id: 0,
+        status: 'success',
+      })
       notification.success({
         message: t('entityDeleted', { entity: t('alert') }),
         placement: 'bottomRight',
       })
       await reload()
     } catch (e) {
+      setDeleteRequestStatus({
+        id: 0,
+        status: 'failure',
+      })
       notification.error({
         message: t('entityDeleteError', { entity: t('alert') }),
         placement: 'bottomRight',
@@ -90,10 +114,12 @@ export const AlertTable = (): JSX.Element => {
               <>
                 <Typography.Text type={'secondary'}>when</Typography.Text>
                 <span>&nbsp;</span>
-                <Tooltip title={alert?.gage?.name || t('gage')}>
-                  <Typography.Text ellipsis>
-                    {alert?.gage?.name || t('gage')}
-                  </Typography.Text>
+                <Tooltip title={getGageName(alert.gageId)}>
+                  <div style={{ maxWidth: 150 }}>
+                    <Typography.Text ellipsis>
+                      {getGageName(alert.gageId)}
+                    </Typography.Text>
+                  </div>
                 </Tooltip>
                 <span>&nbsp;</span>
                 <Typography.Text ellipsis>
@@ -139,6 +165,10 @@ export const AlertTable = (): JSX.Element => {
             onClick={() => handleDelete(val)}
             icon={<DeleteOutlined />}
             danger
+            loading={
+              deleteRequestStatus.id === val &&
+              deleteRequestStatus.status === 'loading'
+            }
           />
         </div>
       ),
