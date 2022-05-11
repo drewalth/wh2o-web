@@ -1,6 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { AlertChannel, AlertCriteria, AlertInterval } from './enums'
 
+export type AuthResetDto = {
+  email: string
+  password: string
+  passwordConfirm: string
+  token: string
+}
+
 export enum ContactType {
   BETA_WAITLIST = 'BETA_WAITLIST',
   MISSING_GAGE = 'MISSING_GAGE',

@@ -1,6 +1,6 @@
 import { checkResponse, http } from '../lib'
 import { Endpoints } from '../enums'
-import { AuthLoginResponse } from '../types'
+import { AuthLoginResponse, AuthResetDto } from '../types'
 
 export const authLogin = async (payload): Promise<AuthLoginResponse> => {
   return http
@@ -22,6 +22,14 @@ export const authForgot = async (email: string) => {
   return http
     .post(Endpoints.AUTH + '/forgot', {
       body: JSON.stringify({ email }),
+    })
+    .then((res) => checkResponse(res))
+}
+
+export const authReset = (dto: AuthResetDto) => {
+  return http
+    .post(Endpoints.AUTH + '/reset', {
+      body: JSON.stringify(dto),
     })
     .then((res) => checkResponse(res))
 }

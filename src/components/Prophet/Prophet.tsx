@@ -2,12 +2,16 @@ import { GageMap } from './GageMap'
 import { useState } from 'react'
 import { RiverForm } from './RiverForm'
 import { Alert, Col, PageHeader, Row } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 export const Prophet = () => {
   const { t } = useTranslation()
-  const [siteId, setSiteId] = useState('06719505')
+  const [params] = useSearchParams()
+
+  const paramSiteId = params.get('siteId')
+
+  const [siteId, setSiteId] = useState(paramSiteId || '06719505')
   const [siteDescription, setSiteDescription] = useState(
     'CLEAR CREEK AT GOLDEN, CO',
   )

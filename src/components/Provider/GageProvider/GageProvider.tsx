@@ -13,6 +13,7 @@ import {
 import { gageSearch } from '../../../controllers'
 import { notification } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { SyncOutlined } from '@ant-design/icons'
 
 type GageProviderProps = {
   children: ReactNode
@@ -21,7 +22,7 @@ type GageProviderProps = {
 export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
   const { t } = useTranslation()
   const [gages, setGages] = useState<Gage[]>([])
-  // const [gagesRefreshing, setGagesRefreshing] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
   const [pagination, setPagination] =
     useState<TablePagination>(DEFAULT_PAGINATION)
@@ -55,21 +56,34 @@ export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
   }
 
   const loadGages = async () => {
-    // let isRefreshing = false
+    let isRefreshing = false
     try {
       // if (!gagesRefreshing) {
       //
       // }
       setRequestStatus('loading')
       // @todo debounce
-      const { gages, total } = await gageSearch(searchParams, pagination)
+      const { gages, total, refreshing } = await gageSearch(
+        searchParams,
+        pagination,
+      )
       setGages(gages)
       // pagination kinda busted...
 
       setPagination({ ...pagination, total: getTotal(total) })
       setRequestStatus('success')
       // setGagesRefreshing(refreshing)
-      // isRefreshing = refreshing
+      isRefreshing = refreshing
+
+      setRefreshing(refreshing)
+
+      if (refreshing) {
+        notification.info({
+          icon: <SyncOutlined spin />,
+          message: 'Refreshing gages',
+          duration: 5,
+        })
+      }
     } catch (e) {
       setRequestStatus('failure')
       notification.error({
@@ -77,10 +91,10 @@ export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
         placement: 'bottomRight',
       })
     } finally {
-      // if (isRefreshing) {
-      //   await new Promise((resolve) => setTimeout(resolve, 5000 * 2))
-      //   await loadGages()
-      // }
+      if (isRefreshing) {
+        await new Promise((resolve) => setTimeout(resolve, 5000))
+        await loadGages()
+      }
     }
   }
 
@@ -101,6 +115,7 @@ export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
         resetPagination,
         reset,
         setPagination,
+        refreshing,
       }}
     >
       {children}

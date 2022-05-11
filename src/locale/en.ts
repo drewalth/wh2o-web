@@ -101,6 +101,7 @@ export const en = {
   readings: 'Readings',
   register: 'Register',
   removeBookmark: 'Remove bookmark',
+  resetPassword: 'Reset password',
   resetSearch: 'Reset search',
   search: 'Search',
   selectTime: 'Select time',

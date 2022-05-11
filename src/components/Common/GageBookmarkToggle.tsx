@@ -72,7 +72,7 @@ export const GageBookmarkToggle = ({
   const getButtonBase = () => {
     if (!user) {
       return (
-        <Tooltip title={t('signInToBookmarkGage')}>
+        <Tooltip title={t('signInToBookmarkGage')} placement={'left'}>
           <Button
             type={type === 'icon' ? 'ghost' : 'primary'}
             disabled

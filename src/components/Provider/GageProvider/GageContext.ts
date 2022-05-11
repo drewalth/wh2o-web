@@ -30,7 +30,7 @@ type GageContextData = {
   pagination: TablePagination
   setPagination: (pagination: TablePagination) => void
   resetPagination: () => void
-  // gagesRefreshing: boolean
+  refreshing: boolean
 }
 
 export const GageContext = createContext({} as GageContextData)

@@ -6,11 +6,11 @@ import { Country, GageSearchParams, GageSource } from '../../types'
 import { canadianProvinces, StateEntry, usStates } from '../../lib'
 import { SyncOutlined } from '@ant-design/icons'
 import debounce from 'lodash.debounce'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 export const Gage = (): JSX.Element => {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const isMobile = windowWidth <= 900
   const formRef = useRef<HTMLFormElement>(null)
@@ -107,17 +107,7 @@ export const Gage = (): JSX.Element => {
 
   return (
     <>
-      <PageHeader
-        title={t('search')}
-        onBack={() => navigate('/')}
-        // extra={
-        //   gagesRefreshing && (
-        //     <Tag icon={<SyncOutlined spin />} color="processing">
-        //       Refreshing gages
-        //     </Tag>
-        //   )
-        // }
-      />
+      <PageHeader title={`${t('gage')}  ${t('search')}`} />
       <Card>
         <Form
           // @ts-ignore
@@ -125,6 +115,7 @@ export const Gage = (): JSX.Element => {
           layout={isMobile ? 'vertical' : 'inline'}
           initialValues={searchParams}
           onValuesChange={handleOnValuesChange}
+          style={{ marginBottom: 24 }}
         >
           <Form.Item name={'country'} label={t('country')}>
             <Select>
@@ -182,8 +173,8 @@ export const Gage = (): JSX.Element => {
             </Button>
           </Form.Item>
         </Form>
+        <GageTable />
       </Card>
-      <GageTable />
     </>
   )
 }

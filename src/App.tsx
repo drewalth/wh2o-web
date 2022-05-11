@@ -21,6 +21,7 @@ import { Prophet } from './components/Prophet/Prophet'
 import { Forgot } from './pages/Auth/Forgot'
 import { Contact } from './pages/Contact'
 import { Legal } from './pages/Legal'
+import { Reset } from './pages/Auth/Reset'
 
 function App() {
   return (
@@ -39,12 +40,13 @@ function App() {
               }
             />
             <Route path="/gage" element={<Gage />} />
+            <Route path="/hero" element={<Home />} />
             <Route path="/prophet" element={<Prophet />} />
             <Route path="/gage/:state/:id" element={<GageDetail />} />
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/logout" element={<Logout />} />
             <Route path="/auth/forgot" element={<Forgot />} />
-            <Route path="/auth/reset" element={<Login />} />
+            <Route path="/auth/reset" element={<Reset />} />
             <Route path="/auth/register" element={<Register />} />
             <Route path="/auth/verify" element={<Verify />} />
             <Route path="/auth/unauthorized" element={<Unauthorized />} />
@@ -52,7 +54,7 @@ function App() {
             <Route path="/admin" element={<Admin />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/legal" element={<Legal />} />
-            <Route index element={<Home />} />
+            <Route index element={<Gage />} />
           </Routes>
         </Navigation>
       </AppProvider>
