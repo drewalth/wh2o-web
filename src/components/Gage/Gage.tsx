@@ -8,9 +8,11 @@ import { SyncOutlined } from '@ant-design/icons'
 import debounce from 'lodash.debounce'
 // import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useAnalytics } from '../../hooks/useAnalytics'
 
 export const Gage = (): JSX.Element => {
   // const navigate = useNavigate()
+  useAnalytics()
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const isMobile = windowWidth <= 900
   const formRef = useRef<HTMLFormElement>(null)

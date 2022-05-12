@@ -25,6 +25,7 @@ import { RequestStatus } from '../../types'
 import Recaptcha from 'react-google-invisible-recaptcha'
 import { LegalModal } from '../Legal'
 import { useTranslation } from 'react-i18next'
+import { useAnalytics } from '../../hooks/useAnalytics'
 
 type RegisterForm = {
   name: string
@@ -37,6 +38,7 @@ type RegisterForm = {
 }
 
 export const Register = () => {
+  useAnalytics()
   const recaptchaSiteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY
   const { reload } = useUserContext()
   const { t } = useTranslation()

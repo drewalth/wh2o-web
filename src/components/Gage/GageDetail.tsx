@@ -21,12 +21,14 @@ import { GageBookmarkToggle } from '../Common/GageBookmarkToggle'
 import { RiverForm } from '../Prophet/RiverForm'
 
 import { useTranslation } from 'react-i18next'
+import { useAnalytics } from '../../hooks/useAnalytics'
 
 const whiteBg: CSSProperties = {
   backgroundColor: '#fff',
 }
 
 export const GageDetail = () => {
+  useAnalytics()
   const [gage, setGage] = useState<Gage>()
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
   const navigate = useNavigate()
