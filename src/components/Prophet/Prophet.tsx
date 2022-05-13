@@ -4,10 +4,8 @@ import { RiverForm } from './RiverForm'
 import { Alert, Col, PageHeader, Row } from 'antd'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useAnalytics } from '../../hooks/useAnalytics'
 
 export const Prophet = () => {
-  useAnalytics()
   const { t } = useTranslation()
   const [params] = useSearchParams()
 

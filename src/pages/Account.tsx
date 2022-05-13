@@ -3,7 +3,6 @@ import { Alert } from '../components/User/Alert/Alert'
 import { useState } from 'react'
 import { UserGages } from '../components/User/Gage/UserGages'
 import { useTranslation } from 'react-i18next'
-import { useAnalytics } from '../hooks/useAnalytics'
 
 type Tab = '1' | '2'
 
@@ -12,7 +11,6 @@ const { Content, Sider } = Layout
 const Account = () => {
   const [selectedTab, setSelectedTab] = useState<Tab>('1')
   const { t } = useTranslation()
-  useAnalytics()
 
   return (
     <Layout

@@ -15,7 +15,6 @@ import {
 import { createContactSubmission } from '../controllers/contact'
 import { getCountryStates, usStates } from '../lib'
 import { useTranslation } from 'react-i18next'
-import { useAnalytics } from '../hooks/useAnalytics'
 
 const DEFAULT_FORM: CreateContactDto = {
   description: '',
@@ -28,7 +27,6 @@ const DEFAULT_FORM: CreateContactDto = {
 }
 
 export const Contact = () => {
-  useAnalytics()
   const { t } = useTranslation()
   const recaptchaSiteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY
   const recaptchaRef = useRef(null)

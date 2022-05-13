@@ -9,7 +9,6 @@ import { setToken } from '../../lib/token'
 import { useUserContext } from '../../components/User/UserContext'
 import { useTranslation } from 'react-i18next'
 import { RequestStatus } from '../../types'
-import { useAnalytics } from '../../hooks/useAnalytics'
 
 type LoginForm = { email: string; password: string }
 
@@ -19,7 +18,6 @@ const DEFAULT_FORM: LoginForm = {
 }
 
 export const Login = () => {
-  useAnalytics()
   const { t } = useTranslation()
   const recaptchaSiteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY
   const recaptchaRef = useRef(null)

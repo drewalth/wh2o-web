@@ -1,9 +1,7 @@
 import { Card, Col, Modal, Row, Typography } from 'antd'
 import { Link } from 'react-router-dom'
-import { useAnalytics } from '../hooks/useAnalytics'
 
 export const LegalContent = () => {
-  useAnalytics()
   return (
     <>
       <Typography.Title level={1}>Legal</Typography.Title>
