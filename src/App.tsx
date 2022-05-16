@@ -40,7 +40,6 @@ function App() {
               }
             />
             <Route path="/gage" element={<Gage />} />
-            <Route path="/hero" element={<Home />} />
             <Route path="/prophet" element={<Prophet />} />
             <Route path="/gage/:state/:id" element={<GageDetail />} />
             <Route path="/auth/login" element={<Login />} />
@@ -54,7 +53,7 @@ function App() {
             <Route path="/admin" element={<Admin />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/legal" element={<Legal />} />
-            <Route index element={<Gage />} />
+            <Route index element={<Home />} />
           </Routes>
         </Navigation>
       </AppProvider>
