@@ -1,6 +1,6 @@
 import { Hero } from './Hero'
 import './Home.scss'
-import { Button, Col, Collapse, Row, Typography } from 'antd'
+import { Button, Col, Row, Typography } from 'antd'
 import {
   AreaChartOutlined,
   EyeOutlined,
@@ -8,7 +8,6 @@ import {
 } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import GageTable from '../../components/Gage/GageTable'
 import React from 'react'
 
 const colProps = {
@@ -26,11 +25,6 @@ const Home = () => {
   return (
     <>
       <Hero />
-      <Collapse defaultActiveKey={['1']} ghost>
-        <Collapse.Panel key={'gage-table'} header={'test'}>
-          <GageTable />
-        </Collapse.Panel>
-      </Collapse>
       <Row className={'feature-row'} justify={'center'}>
         <Col {...colProps} className={'feature-col'}>
           <AreaChartOutlined style={{ fontSize: 48, marginBottom: 8 }} />
