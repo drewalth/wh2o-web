@@ -39,7 +39,7 @@ export const Navigation = ({ children }: NavigationProps) => {
 
   const baseNavItems: NavItem[] = [
     {
-      path: '/',
+      path: '/gage',
       text: t('search'),
       icon: <SearchOutlined />,
     },
