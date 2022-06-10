@@ -74,6 +74,6 @@ export const createUser = async (
   createUserDto: UserCreateDto,
 ): Promise<AuthLoginResponse> => {
   return http
-    .post('/user/new', { body: JSON.stringify(createUserDto) })
+    .post('/user', { body: JSON.stringify(createUserDto) })
     .then((res) => checkResponse(res))
 }
