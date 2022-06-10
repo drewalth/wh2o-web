@@ -116,7 +116,15 @@ export const Register = () => {
   const handleSubmit = async () => {
     try {
       setRequestStatus('loading')
-      const { token } = await createUser(form)
+
+      const { token } = await createUser({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        telephone: form.telephone,
+        timezone: form.timezone,
+        termsAgreed: form.termsAgreed,
+      })
       setToken(token)
       await new Promise((resolve) => setTimeout(resolve, 1000)).catch((e) => {
         console.error(e)

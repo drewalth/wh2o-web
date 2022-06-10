@@ -109,6 +109,7 @@ export type UserUpdateDto = Omit<
 
 export type UserCreateDto = Omit<UserUpdateDto, 'id'> & {
   password: string
+  termsAgreed: boolean
 }
 
 export type Alert = {
