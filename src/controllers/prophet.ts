@@ -27,4 +27,5 @@ export const getForecast = async (
   return http
     .get(`/prophet/forecast?siteId=${siteId}`)
     .then((res) => checkResponse(res))
+    .then((result) => result.data)
 }
