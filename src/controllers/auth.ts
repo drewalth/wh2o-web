@@ -10,7 +10,10 @@ export const authLogin = async (payload): Promise<AuthLoginResponse> => {
     .then((res) => checkResponse(res))
 }
 
-export const authVerify = async (token: string, email: string) => {
+export const authVerify = async (
+  token: string,
+  email: string,
+): Promise<AuthLoginResponse> => {
   return http
     .post(Endpoints.AUTH + '/verify', {
       body: JSON.stringify({ token, email }),
