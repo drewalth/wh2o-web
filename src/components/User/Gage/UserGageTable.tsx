@@ -22,7 +22,7 @@ export const UserGageTable = () => {
         <Tooltip title={name} placement={'top'}>
           <Typography.Link
             ellipsis
-            onClick={() => navigate(`/gage/${gage.state}/${gage.id}`)}
+            onClick={() => navigate(`/gage/${gage.id}`)}
           >
             {name}
           </Typography.Link>
