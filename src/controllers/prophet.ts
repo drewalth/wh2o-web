@@ -7,6 +7,7 @@ export const getDailyAverage = async (
   return http
     .get(`/prophet/daily-average?siteId=${siteId}`)
     .then((res) => checkResponse(res))
+    .then((result) => JSON.parse(result.body))
 }
 
 export const getRunnablePercentage = async (
@@ -27,5 +28,5 @@ export const getForecast = async (
   return http
     .get(`/prophet/forecast?siteId=${siteId}`)
     .then((res) => checkResponse(res))
-    .then((result) => result.data)
+    .then((result) => JSON.parse(result.data))
 }
