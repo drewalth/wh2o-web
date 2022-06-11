@@ -37,16 +37,38 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     })
   }
 
+  const removeUserAlert = (id: number) => {
+    if (!user) return
+
+    const alertsCopy = [...user.alerts].filter((a) => a.id !== id)
+
+    setUser({ ...user, alerts: alertsCopy })
+  }
+
+  const updateUserAlerts = (alert: Alert) => {
+    if (!user) return
+
+    const alertsCopy = [...user.alerts]
+    const index = alertsCopy.findIndex((a) => a.id === alert.id)
+
+    if (index !== -1) {
+      alertsCopy[index] = alert
+      setUser({ ...user, alerts: alertsCopy })
+    }
+  }
+
   return (
     <UserContext.Provider
       value={{
-        user,
-        reload,
         appendUserAlerts,
-        setUser: (user: User) => setUser(user),
+        canBookmarkGages: (user && user.gages.length < 15) || false,
+        reload,
+        removeUserAlert,
         requestStatus,
         reset: () => setUser(undefined),
-        canBookmarkGages: (user && user.gages.length < 15) || false,
+        setUser: (user: User) => setUser(user),
+        updateUserAlerts,
+        user,
       }}
     >
       {children}

@@ -46,9 +46,12 @@ export const getAlerts = async () => {
   return http.get(Endpoints.ALERT).then((res) => checkResponse(res))
 }
 
-export const updateAlert = async (updateAlertDto: UpdateAlertDto) => {
+export const updateAlert = async (
+  alertId: number,
+  updateAlertDto: UpdateAlertDto,
+): Promise<Alert> => {
   return http
-    .put(Endpoints.ALERT, { body: JSON.stringify(updateAlertDto) })
+    .put(`/alert/${alertId}`, { body: JSON.stringify(updateAlertDto) })
     .then((res) => checkResponse(res))
 }
 

@@ -17,7 +17,7 @@ import { useUserContext } from '../UserContext'
 import { useTranslation } from 'react-i18next'
 
 export const AlertTable = (): JSX.Element => {
-  const { user, reload } = useUserContext()
+  const { user, updateUserAlerts, removeUserAlert } = useUserContext()
   const { t } = useTranslation()
   const [deleteRequestStatus, setDeleteRequestStatus] = useState<{
     status: RequestStatus
@@ -62,11 +62,13 @@ export const AlertTable = (): JSX.Element => {
 
   const handleDelete = async (val: number) => {
     try {
+      if (!user) return
       setDeleteRequestStatus({
         id: val,
         status: 'loading',
       })
       await deleteAlert(val)
+      removeUserAlert(val)
       setDeleteRequestStatus({
         id: 0,
         status: 'success',
@@ -75,7 +77,6 @@ export const AlertTable = (): JSX.Element => {
         message: t('entityDeleted', { entity: t('alert') }),
         placement: 'bottomRight',
       })
-      await reload()
     } catch (e) {
       setDeleteRequestStatus({
         id: 0,
@@ -148,10 +149,11 @@ export const AlertTable = (): JSX.Element => {
         <Switch
           checked={active}
           onChange={async (active) => {
-            await updateAlert({
+            const result = await updateAlert(alert.id, {
               ...alert,
               active,
             })
+            updateUserAlerts(result)
           }}
         />
       ),
@@ -175,5 +177,11 @@ export const AlertTable = (): JSX.Element => {
     },
   ]
 
-  return <Table columns={columns} dataSource={user?.alerts || []} />
+  return (
+    <Table
+      rowKey={(record) => record.id}
+      columns={columns}
+      dataSource={user?.alerts || []}
+    />
+  )
 }

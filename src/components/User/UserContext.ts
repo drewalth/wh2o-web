@@ -2,13 +2,15 @@ import { createContext, useContext } from 'react'
 import { Alert, RequestStatus, User } from '../../types'
 
 export type UserContextData = {
-  user?: User
-  requestStatus: RequestStatus
-  setUser: (user: User) => void
-  reset: () => void
   appendUserAlerts: (alert: Alert) => void
-  reload: () => Promise<void>
   canBookmarkGages: boolean
+  reload: () => Promise<void>
+  removeUserAlert: (id: number) => void
+  requestStatus: RequestStatus
+  reset: () => void
+  setUser: (user: User) => void
+  updateUserAlerts: (alert: Alert) => void
+  user?: User
 }
 
 export const UserContext = createContext({} as UserContextData)
