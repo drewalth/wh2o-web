@@ -41,7 +41,7 @@ function App() {
             />
             <Route path="/gage" element={<Gage />} />
             <Route path="/prophet" element={<Prophet />} />
-            <Route path="/gage/:state/:id" element={<GageDetail />} />
+            <Route path="/gage/:id" element={<GageDetail />} />
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/logout" element={<Logout />} />
             <Route path="/auth/forgot" element={<Forgot />} />

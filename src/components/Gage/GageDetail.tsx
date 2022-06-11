@@ -30,7 +30,7 @@ export const GageDetail = () => {
   const [gage, setGage] = useState<Gage>()
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
   const navigate = useNavigate()
-  const { id: gageId, state: gageState } = useParams()
+  const { id: gageId } = useParams()
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export const GageDetail = () => {
       try {
         setRequestStatus('loading')
         if (!gageId) return
-        const result = await getGage(gageState || '', parseInt(gageId, 10))
+        const result = await getGage(parseInt(gageId, 10))
         setGage(result)
         setRequestStatus('success')
       } catch (e) {

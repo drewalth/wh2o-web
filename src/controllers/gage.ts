@@ -8,8 +8,8 @@ import {
 import { http, checkResponse } from '../lib'
 import { Endpoints } from '../enums'
 
-export const getGage = async (state: string, id: number): Promise<Gage> => {
-  return http.get(`/gage/${state}/${id}`).then((res) => checkResponse(res))
+export const getGage = async (id: number): Promise<Gage> => {
+  return http.get(`/gage/${id}`).then((res) => checkResponse(res))
 }
 
 export const updateGage = async (updateGageDto: UpdateGageDto) => {

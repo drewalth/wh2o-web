@@ -20,7 +20,7 @@ import {
 import { useTranslation } from 'react-i18next'
 
 const shareButtons = (gage: Gage) => {
-  const url = `https://wh2o.io/gage/${gage.state}/${gage.id}`
+  const url = `https://wh2o.io/gage/${gage.id}`
   return (
     <div style={{ fontSize: '2rem', display: 'flex' }}>
       <EmailShareButton
@@ -76,7 +76,7 @@ const GageTable = (): JSX.Element => {
         <Tooltip title={name} placement={'top'}>
           <Typography.Link
             ellipsis
-            onClick={() => navigate(`/gage/${gage.state}/${gage.id}`)}
+            onClick={() => navigate(`/gage/${gage.id}`)}
           >
             {name}
           </Typography.Link>
