@@ -4,9 +4,14 @@ import { DailyAverage, ForeCastDataPoint, RunnablePercentage } from '../types'
 export const getDailyAverage = async (
   siteId: string,
 ): Promise<DailyAverage[]> => {
-  return http
-    .get(`/prophet/daily-average?siteId=${siteId}`)
-    .then((res) => checkResponse(res))
+  return http.get(`/prophet/daily-average?siteId=${siteId}`).then((res) =>
+    checkResponse(res).then((result) => {
+      if (typeof result === 'string') {
+        return JSON.parse(result)
+      }
+      return result
+    }),
+  )
 }
 
 export const getRunnablePercentage = async (
@@ -27,4 +32,10 @@ export const getForecast = async (
   return http
     .get(`/prophet/forecast?siteId=${siteId}`)
     .then((res) => checkResponse(res))
+    .then((result) => {
+      if (typeof result === 'string') {
+        return JSON.parse(result)
+      }
+      return result
+    })
 }
