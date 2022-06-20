@@ -155,7 +155,7 @@ export enum Country {
 }
 
 export type GageSearchParams = {
-  searchTerm?: string
+  name?: string
   state: string
   country: string
   source: GageSource

@@ -102,8 +102,10 @@ export const AlertTable = (): JSX.Element => {
       render: (val: number, alert: Alert) => {
         return (
           <div style={{ maxWidth: 550, display: 'flex' }}>
-            {getIntervalTag(alert)}
-            {getChannelTag(alert)}
+            <div>
+              {getIntervalTag(alert)}
+              {getChannelTag(alert)}
+            </div>
             {alert.interval !== AlertInterval.IMMEDIATE ? (
               <>
                 <Typography.Text type={'secondary'}>@ &nbsp;</Typography.Text>
@@ -167,6 +169,7 @@ export const AlertTable = (): JSX.Element => {
             onClick={() => handleDelete(val)}
             icon={<DeleteOutlined />}
             danger
+            size={'small'}
             loading={
               deleteRequestStatus.id === val &&
               deleteRequestStatus.status === 'loading'
@@ -178,10 +181,20 @@ export const AlertTable = (): JSX.Element => {
   ]
 
   return (
-    <Table
-      rowKey={(record) => record.id}
-      columns={columns}
-      dataSource={user?.alerts || []}
-    />
+    <div
+      style={{
+        position: 'relative',
+        width: '100%',
+        overflowX: 'scroll',
+        maxWidth: '100%',
+        backgroundColor: '#fff',
+      }}
+    >
+      <Table
+        rowKey={(record) => record.id}
+        columns={columns}
+        dataSource={user?.alerts || []}
+      />
+    </div>
   )
 }

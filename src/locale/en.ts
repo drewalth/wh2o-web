@@ -36,6 +36,7 @@ export const en = {
   delete: 'Delete',
   deleteAccount: 'Delete account',
   description: 'Description',
+  developer: 'Developer',
   disclaimer: 'Disclaimer',
   email: 'Email',
   entityCreateError: 'Failed to create {{entity}}',

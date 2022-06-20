@@ -17,7 +17,7 @@ export const DEFAULT_PAGINATION: TablePagination = {
 export const DEFAULT_GAGE_SEARCH_PARAMS: GageSearchParams = {
   state: 'AL',
   country: Country.US,
-  searchTerm: '',
+  name: '',
   source: GageSource.USGS,
 }
 

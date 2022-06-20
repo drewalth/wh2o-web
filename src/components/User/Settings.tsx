@@ -11,7 +11,7 @@ import {
   notification,
   Typography,
 } from 'antd'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { UserUpdateDto } from '../../types'
 import { timezones } from '../../lib'
 import { deleteUser, updateUser } from '../../controllers'
@@ -110,7 +110,7 @@ const Settings = () => {
               <Form.Item name={'email'} label={t('email')}>
                 <Input />
               </Form.Item>
-              <Form.Item name={'timezone'} label={t('timezone')}>
+              <Form.Item name={'timezone'} label={t('timeZone')}>
                 <Select>
                   {timezones.map((tz) => (
                     <Select.Option value={tz} key={tz}>

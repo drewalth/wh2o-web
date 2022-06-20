@@ -180,7 +180,7 @@ export const UserGages = (): JSX.Element => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name={'searchTerm'} label={t('search')}>
+          <Form.Item name={'name'} label={t('search')}>
             <Input placeholder={t('gageName')} allowClear />
           </Form.Item>
           <Divider />

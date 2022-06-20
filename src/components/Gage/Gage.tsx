@@ -1,31 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import GageTable from './GageTable'
-import { Button, Card, Form, Input, PageHeader, Select } from 'antd'
+import { Button, Card, Collapse, Form, Input, PageHeader, Select } from 'antd'
 import { useGagesContext } from '../Provider/GageProvider'
 import { Country, GageSearchParams, GageSource } from '../../types'
 import { canadianProvinces, StateEntry, usStates } from '../../lib'
 import { SyncOutlined } from '@ant-design/icons'
 import debounce from 'lodash.debounce'
 import { useTranslation } from 'react-i18next'
+import { useBreakpoint } from '../../hooks'
 
 export const Gage = (): JSX.Element => {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
-  const isMobile = windowWidth <= 900
+  const { isMobile } = useBreakpoint()
   const formRef = useRef<HTMLFormElement>(null)
   const { searchParams, setSearchParams, resetPagination, reset } =
     useGagesContext()
   const { t } = useTranslation()
-
-  const handleResize = () => {
-    setWindowWidth(window.innerWidth)
-  }
-  useEffect(() => {
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
 
   const setFormAttributes = (country: Country) => {
     if (formRef && formRef.current) {
@@ -103,74 +92,89 @@ export const Gage = (): JSX.Element => {
     }
   }, 300)
 
+  const filtersForm = (
+    <Form
+      // @ts-ignore
+      ref={formRef}
+      layout={isMobile ? 'vertical' : 'inline'}
+      initialValues={searchParams}
+      onValuesChange={handleOnValuesChange}
+      style={{ marginBottom: 24 }}
+    >
+      <Form.Item name={'country'} label={t('country')}>
+        <Select>
+          {Object.values(Country).map((country) => (
+            <Select.Option key={country} value={country}>
+              {(() => {
+                switch (country) {
+                  case Country.NZ:
+                    return t('newZealand')
+                  case Country.US:
+                    return t('unitedStates')
+                  default:
+                  case Country.CA:
+                    return t('canada')
+                }
+              })()}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+      <Form.Item name={'state'} label={getStateInputLabel()}>
+        <Select>
+          {properties[searchParams.country].states.map((state) => (
+            <Select.Option key={state.abbreviation} value={state.abbreviation}>
+              {state.name}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+      <Form.Item name={'source'} label={t('source')}>
+        <Select>
+          {properties[searchParams.country].sources.map((source) => (
+            <Select.Option key={source} value={source}>
+              {source}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+      <Form.Item name={'searchTerm'} label={t('gageName')}>
+        <Input placeholder={t('gageName')} allowClear />
+      </Form.Item>
+      <Form.Item>
+        <Button
+          type={'ghost'}
+          title={t('resetSearch')}
+          onClick={() => {
+            reset()
+            setFormAttributes(Country.US)
+          }}
+        >
+          <SyncOutlined />
+        </Button>
+      </Form.Item>
+    </Form>
+  )
+
+  const getFiltersForm = () => {
+    if (isMobile) {
+      return (
+        <Collapse style={{ marginBottom: 24 }}>
+          <Collapse.Panel key={'form'} header={'Filters'}>
+            {filtersForm}
+          </Collapse.Panel>
+        </Collapse>
+      )
+    }
+
+    return filtersForm
+  }
+
   return (
     <>
       <PageHeader title={`${t('gage')}  ${t('search')}`} />
       <Card>
-        <Form
-          // @ts-ignore
-          ref={formRef}
-          layout={isMobile ? 'vertical' : 'inline'}
-          initialValues={searchParams}
-          onValuesChange={handleOnValuesChange}
-          style={{ marginBottom: 24 }}
-        >
-          <Form.Item name={'country'} label={t('country')}>
-            <Select>
-              {Object.values(Country).map((country) => (
-                <Select.Option key={country} value={country}>
-                  {(() => {
-                    switch (country) {
-                      case Country.NZ:
-                        return t('newZealand')
-                      case Country.US:
-                        return t('unitedStates')
-                      default:
-                      case Country.CA:
-                        return t('canada')
-                    }
-                  })()}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item name={'state'} label={getStateInputLabel()}>
-            <Select>
-              {properties[searchParams.country].states.map((state) => (
-                <Select.Option
-                  key={state.abbreviation}
-                  value={state.abbreviation}
-                >
-                  {state.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item name={'source'} label={t('source')}>
-            <Select>
-              {properties[searchParams.country].sources.map((source) => (
-                <Select.Option key={source} value={source}>
-                  {source}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item name={'searchTerm'} label={t('gageName')}>
-            <Input placeholder={t('gageName')} allowClear />
-          </Form.Item>
-          <Form.Item>
-            <Button
-              type={'ghost'}
-              title={t('resetSearch')}
-              onClick={() => {
-                reset()
-                setFormAttributes(Country.US)
-              }}
-            >
-              <SyncOutlined />
-            </Button>
-          </Form.Item>
-        </Form>
+        {getFiltersForm()}
         <GageTable />
       </Card>
     </>

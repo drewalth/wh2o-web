@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useState } from 'react'
 import Logo from './wh2o-logo'
 import { Layout, Menu, Select, Typography } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -36,6 +36,7 @@ export const Navigation = ({ children }: NavigationProps) => {
   const location = useLocation()
   const { user } = useUserContext()
   const { t, i18n } = useTranslation()
+  const [navOpen, setNavOpen] = useState(false)
 
   const baseNavItems: NavItem[] = [
     {
@@ -115,9 +116,13 @@ export const Navigation = ({ children }: NavigationProps) => {
   return (
     <Layout
       style={{ minHeight: '100vh', maxHeight: '100vh' }}
-      className={'navigation'}
+      className={classNames('navigation', navOpen && 'open')}
     >
-      <Sider breakpoint="lg" collapsedWidth="0">
+      <Sider
+        breakpoint="lg"
+        collapsedWidth="0"
+        onCollapse={(val) => setNavOpen(!val)}
+      >
         <div className={'sider'}>
           <Logo onClick={() => navigate('/', { replace: false })} />
           <Typography.Title level={5} style={{ color: '#fff', lineHeight: 1 }}>
@@ -130,6 +135,11 @@ export const Navigation = ({ children }: NavigationProps) => {
           defaultSelectedKeys={['dashboard']}
           selectedKeys={getSelectedItems()}
           onSelect={({ key }) => {
+            if (key === '/developer') {
+              window?.open('https://wh2o-docs.com/', '_blank')?.focus()
+              return
+            }
+
             if (['lang'].includes(key)) return
             navigate(key, { replace: false })
           }}
@@ -162,9 +172,10 @@ export const Navigation = ({ children }: NavigationProps) => {
               ))}
             </Select>
           </Menu.Item>
-          <Menu.Item style={{ position: 'absolute', bottom: 0 }} key={'/legal'}>
-            {t('disclaimer')}
-          </Menu.Item>
+          <Menu.ItemGroup style={{ position: 'absolute', bottom: 0 }}>
+            <Menu.Item key={'/developer'}>{t('developer')}</Menu.Item>
+            <Menu.Item key={'/legal'}>{t('disclaimer')}</Menu.Item>
+          </Menu.ItemGroup>
         </Menu>
       </Sider>
       <Layout>

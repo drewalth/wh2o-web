@@ -11,8 +11,6 @@ import {
   TablePagination,
 } from '../../../types'
 import { gageSearch } from '../../../controllers'
-import { notification } from 'antd'
-import { SyncOutlined } from '@ant-design/icons'
 
 type GageProviderProps = {
   children: ReactNode
@@ -75,13 +73,13 @@ export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
 
       setRefreshing(refreshing)
 
-      if (refreshing) {
-        notification.info({
-          icon: <SyncOutlined spin />,
-          message: 'Refreshing gages',
-          duration: 5,
-        })
-      }
+      // if (refreshing) {
+      //   notification.info({
+      //     icon: <SyncOutlined spin />,
+      //     message: 'Refreshing gages',
+      //     duration: 5,
+      //   })
+      // }
     } catch (e) {
       setRequestStatus('failure')
       console.error(e)

@@ -37,6 +37,7 @@ export const fr = {
   delete: 'Supprimer',
   deleteAccount: 'Supprimer le compte',
   description: 'La description',
+  developer: 'Développeur',
   disclaimer: 'Avertissement',
   email: 'E-mail',
   entityCreateError: 'Échec de la création de {{entité}}',
