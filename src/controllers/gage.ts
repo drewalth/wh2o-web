@@ -35,4 +35,10 @@ export const gageSearch = async (
   return http.get(`/gage/search?${params}`).then((res) => checkResponse(res))
 }
 
-export const createGage = async (createGageDto: CreateGageDto) => {}
+export const createGage = async (createGageDto: CreateGageDto) => {
+  return http
+    .post('/gage', {
+      body: JSON.stringify(createGageDto),
+    })
+    .then((res) => checkResponse(res))
+}

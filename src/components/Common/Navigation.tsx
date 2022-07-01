@@ -15,7 +15,7 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 import { useUserContext } from '../User/UserContext'
-import { User } from '../../types'
+import { User, UserRole } from '../../types'
 import { languages } from '../../lib/languages'
 import './navigation.scss'
 
@@ -173,6 +173,11 @@ export const Navigation = ({ children }: NavigationProps) => {
             </Select>
           </Menu.Item>
           <Menu.ItemGroup style={{ position: 'absolute', bottom: 0 }}>
+            {user &&
+              (user.role === UserRole.ADMIN ||
+                user.role === UserRole.SUPERADMIN) && (
+                <Menu.Item key={'/admin'}>{t('administrator')}</Menu.Item>
+              )}
             <Menu.Item key={'/developer'}>{t('developer')}</Menu.Item>
             <Menu.Item key={'/legal'}>{t('disclaimer')}</Menu.Item>
           </Menu.ItemGroup>

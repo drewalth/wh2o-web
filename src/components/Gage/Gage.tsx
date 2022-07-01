@@ -32,6 +32,10 @@ export const Gage = (): JSX.Element => {
           name: 'source',
           value: properties[country].sources[0],
         },
+        {
+          name: 'name',
+          value: '',
+        },
       ])
     }
   }
@@ -57,6 +61,13 @@ export const Gage = (): JSX.Element => {
       setFields: () => setFormAttributes(Country.NZ),
       setParams: (val: GageSearchParams) =>
         handleCountryChange(val, Country.NZ),
+    },
+    [Country.CL]: {
+      states: [{ abbreviation: '--', name: '--' }] as StateEntry[],
+      sources: [GageSource.ENVIRONMENT_CHILE],
+      setFields: () => setFormAttributes(Country.CL),
+      setParams: (val: GageSearchParams) =>
+        handleCountryChange(val, Country.CL),
     },
   }
 
@@ -111,6 +122,8 @@ export const Gage = (): JSX.Element => {
                     return t('newZealand')
                   case Country.US:
                     return t('unitedStates')
+                  case Country.CL:
+                    return t('chile')
                   default:
                   case Country.CA:
                     return t('canada')
@@ -138,7 +151,7 @@ export const Gage = (): JSX.Element => {
           ))}
         </Select>
       </Form.Item>
-      <Form.Item name={'searchTerm'} label={t('gageName')}>
+      <Form.Item name={'name'} label={t('gageName')}>
         <Input placeholder={t('gageName')} allowClear />
       </Form.Item>
       <Form.Item>

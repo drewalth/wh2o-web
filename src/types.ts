@@ -146,12 +146,14 @@ export enum GageSource {
   USGS = 'USGS',
   ENVIRONMENT_CANADA = 'ENVIRONMENT_CANADA',
   ENVIRONMENT_AUCKLAND = 'ENVIRONMENT_AUCKLAND',
+  ENVIRONMENT_CHILE = 'ENVIRONMENT_CHILE',
 }
 
 export enum Country {
   US = 'US',
   CA = 'CA',
   NZ = 'NZ',
+  CL = 'CL',
 }
 
 export type GageSearchParams = {
