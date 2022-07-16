@@ -141,12 +141,12 @@ export const Register = () => {
       if (String(e).includes('Account with email')) {
         setDuplicateEmailProvided(true)
       } else {
-        setRequestStatus('failure')
         notification.error({
           message: t('entityCreateError', { entity: t('account') }),
           placement: 'bottomRight',
         })
       }
+      setRequestStatus('failure')
       setSubmitted(false)
     }
   }

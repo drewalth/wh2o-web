@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react'
 import { UserContext } from './UserContext'
-import { Alert, RequestStatus, User } from '../../types'
+import { Alert, RequestStatus, User, UserRole } from '../../types'
 import { whoAmI } from '../../controllers'
 
 type UserProviderProps = {
@@ -57,6 +57,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     }
   }
 
+  const canContribute = !!(user && user.role !== UserRole.GENERAL)
+
   return (
     <UserContext.Provider
       value={{
@@ -69,6 +71,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         setUser: (user: User) => setUser(user),
         updateUserAlerts,
         user,
+        canContribute,
       }}
     >
       {children}

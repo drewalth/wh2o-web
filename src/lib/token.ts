@@ -1,13 +1,8 @@
 const tokenName = 'wh2o-token'
 
-export const getToken = (): string => {
-  return localStorage.getItem(tokenName) || ''
-}
+export const getToken = (): string => localStorage.getItem(tokenName) || ''
 
-export const setToken = (token: string) => {
+export const setToken = (token: string) =>
   localStorage.setItem(tokenName, token)
-}
 
-export const clearToken = () => {
-  localStorage.removeItem(tokenName)
-}
+export const clearToken = () => localStorage.removeItem(tokenName)

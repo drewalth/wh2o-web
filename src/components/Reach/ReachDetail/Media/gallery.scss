@@ -1,0 +1,13 @@
+.gallery-slide {
+  display: flex;
+  flex-flow: row nowrap;
+  .img-wrapper {
+    max-width: 100%;
+    img {
+      max-width: 100%;
+    }
+  }
+  .info-panel {
+    width: 350px;
+  }
+}

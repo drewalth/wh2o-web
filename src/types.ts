@@ -269,3 +269,132 @@ export enum GageMetric {
   CMS = 'CMS',
   M = 'M',
 }
+
+export enum Locale {
+  EN = 'EN',
+  ES = 'ES',
+  FR = 'FR',
+}
+
+export type Feature = {
+  id: number
+  name: string
+  distance: number
+  latitude: number
+  longitude: number
+  grade?: string
+  reachId: number
+  media: Media[]
+  description: string
+  rapid: boolean
+  hazard: boolean
+  poi: boolean
+  campsite: boolean
+  waterfall: boolean
+  surf: boolean
+  putIn: boolean
+  takeOut: boolean
+  accessPoint: boolean
+  rangerStation: boolean
+  translations: FeatureTranslation[]
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type FeatureUpdateDto = Omit<
+  Feature,
+  'createdAt' | 'updatedAt' | 'translations'
+>
+
+export type FeatureCreateDto = Omit<FeatureUpdateDto, 'id'>
+
+export type FeatureTranslation = {
+  id: number
+  description: string
+  name: string
+  featureId: number
+  lang: Locale
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type FeatureTranslationUpdateDto = Omit<
+  FeatureTranslation,
+  'createdAt' | 'updatedAt'
+>
+
+export type FeatureTranslationCreateDto = Omit<
+  FeatureTranslationUpdateDto,
+  'id'
+>
+
+export type ReachTranslation = {
+  id: number
+  description: string
+  access: string
+  lang: Locale
+  reachId: number
+  createdAt: Date
+  updatedAt: Date
+}
+
+export enum MediaType {
+  VIDEO = 'VIDEO',
+  IMAGE = 'IMAGE',
+  VIMEO = 'VIMEO',
+  YOUTUBE = 'YOUTUBE',
+}
+
+export type Media = {
+  id: number
+  title: string
+  subTitle: string
+  description: string
+  hero: boolean
+  reachId: number
+  featureId?: number
+  userId: number
+  url: string
+  type: MediaType
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type MediaUpdateDto = Omit<Media, 'createdAt' | 'updatedAt'>
+
+export type MediaCreateDto = Omit<MediaUpdateDto, 'id' | 'hero'>
+
+export enum DataSource {
+  WH2O = 'WH2O',
+  AMERICAN_WHITEWATER = 'AMERICAN_WHITEWATER',
+  BC_WHITEWATER = 'BC_WHITEWATER',
+}
+
+export type Reach = {
+  id: number
+  name: string
+  section: string
+  grade: string
+  length: number
+  description: string
+  access: string
+  country: Country
+  latitude: number
+  longitude: number
+  state: string
+  dataSource: DataSource
+  dataSourceUrl: string
+  media: Media[]
+  gages: Gage[]
+  subscribers: User[]
+  translations: ReachTranslation[]
+  features: Feature[]
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type ReachSearchParams = {
+  name?: string
+  country: Country
+  state: string
+}

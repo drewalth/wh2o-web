@@ -72,6 +72,8 @@ export const en = {
   loadingFlowPredictions: 'Loading flow predictions',
   maximum: 'Maximum',
   maximumNumberOfAlertsCreated: 'Maximum number of alerts already created',
+  media: 'Media',
+  mediaType: 'Media Type',
   messageSent: 'Message sent',
   sendMessage: 'Send message',
   metric: 'Metric',
@@ -120,6 +122,7 @@ export const en = {
   state: 'State',
   stationId: 'Station ID',
   submit: 'Submit',
+  subTitle: 'Subtitle',
   telephone: 'Telephone',
   telephoneHelpText: 'Country code required',
   telephoneTooltip:

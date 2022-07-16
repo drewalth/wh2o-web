@@ -45,6 +45,11 @@ export const Navigation = ({ children }: NavigationProps) => {
       icon: <SearchOutlined />,
     },
     {
+      path: '/reach',
+      text: 'Rivers',
+      icon: <SearchOutlined />,
+    },
+    {
       path: '/prophet',
       text: t('prophet'),
       icon: <EyeOutlined />,
@@ -172,7 +177,10 @@ export const Navigation = ({ children }: NavigationProps) => {
               ))}
             </Select>
           </Menu.Item>
-          <Menu.ItemGroup style={{ position: 'absolute', bottom: 0 }}>
+          <Menu.ItemGroup
+            key={'bottom-items'}
+            style={{ position: 'absolute', bottom: 0 }}
+          >
             {user &&
               (user.role === UserRole.ADMIN ||
                 user.role === UserRole.SUPERADMIN) && (

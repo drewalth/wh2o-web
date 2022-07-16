@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import { GageProvider } from '../Provider/GageProvider'
+import { ReachProvider } from '../Provider/ReachProvider/ReachProvider'
 import { UserProvider } from '../User/UserProvider'
 import { AppContext, NodeEnv } from './AppContext'
 
@@ -15,7 +16,9 @@ const AppProvider = ({ children }: AppProviderProps): JSX.Element => (
     }}
   >
     <UserProvider>
-      <GageProvider>{children}</GageProvider>
+      <ReachProvider>
+        <GageProvider>{children}</GageProvider>
+      </ReachProvider>
     </UserProvider>
   </AppContext.Provider>
 )
