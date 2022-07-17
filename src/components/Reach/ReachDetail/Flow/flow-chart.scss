@@ -1,0 +1,10 @@
+.flow-chart-wrapper {
+  width: 100%;
+  display: block;
+  height: 300px;
+  max-width: 100%;
+  overflow-x: scroll;
+  &:first-child {
+    min-width: 500px;
+  }
+}

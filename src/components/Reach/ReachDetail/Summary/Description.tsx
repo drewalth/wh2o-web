@@ -1,5 +1,5 @@
 import { Typography } from 'antd'
-import { useReachDetailContext } from './ReachDetailContext'
+import { useReachDetailContext } from '../ReachDetailContext'
 
 export const Description = () => {
   const { reach } = useReachDetailContext()

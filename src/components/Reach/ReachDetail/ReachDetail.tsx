@@ -3,17 +3,20 @@ import { Layout, Menu, MenuProps, Tabs } from 'antd'
 import { useParams } from 'react-router-dom'
 import { Hero } from './Hero'
 import { useBreakpoint } from '../../../hooks'
-import { Description } from './Description'
+import { Summary } from './Summary/Summary'
 import { Features } from './Features/Features'
 import { Media } from './Media/Media'
 import { ReachDetailProvider } from './ReachDetailProvider'
 import { Access } from './Access/Access'
+import { useTranslation } from 'react-i18next'
+import { Flow } from './Flow/Flow'
 
 type Tab = '1' | '2' | '3' | '4' | '5' | '6'
 
 const { Sider, Content } = Layout
 
 export const ReachDetail = () => {
+  const { t } = useTranslation()
   const { id: reachId } = useParams()
   const [selectedTab, setSelectedTab] = useState<Tab>('1')
   const { isMobile } = useBreakpoint()
@@ -28,25 +31,28 @@ export const ReachDetail = () => {
   }
 
   const tabs: string[] = [
-    'Summary',
-    'Features',
-    'Media',
-    'Access',
+    t('summary'),
+    t('flow'),
+    t('features'),
+    t('media'),
+    t('access'),
     // 'Posts',
     // 'Subscribers',
   ]
 
   const getSelectedTab = () => {
     switch (selectedTab) {
-      case '4':
-        return <Access />
-      case '3':
-        return <Media />
-      case '2':
-        return <Features />
       case '1':
       default:
-        return <Description />
+        return <Summary />
+      case '2':
+        return <Flow />
+      case '3':
+        return <Features />
+      case '4':
+        return <Media />
+      case '5':
+        return <Access />
     }
   }
 

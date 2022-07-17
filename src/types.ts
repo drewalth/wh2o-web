@@ -206,6 +206,7 @@ export type Gage = {
   reading: number
   state: string
   disabled: boolean
+  primary: boolean
   country: string
   latitude?: number
   longitude?: number
@@ -231,6 +232,7 @@ export type CreateGageDto = Omit<
   | 'reading'
   | 'lastFetch'
   | 'delta'
+  | 'primary'
 >
 
 export interface GageUpdateDTO {

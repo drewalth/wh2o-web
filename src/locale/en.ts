@@ -1,5 +1,6 @@
 export const en = {
   above: 'Above',
+  access: 'Access',
   account: 'Account',
   accountExists: 'Account with provided email already exists',
   active: 'Active',
@@ -50,6 +51,7 @@ export const en = {
   failedToLoadEntity: 'Failed to load {{entity}}',
   failedToLoadGages: 'Failed to load gages', // ^ use above with plurals
   featureRequest: 'Feature request',
+  features: 'Features',
   flow: 'Flow',
   flowRanges: 'Flow ranges',
   forecast: 'Forecast',
@@ -123,6 +125,7 @@ export const en = {
   stationId: 'Station ID',
   submit: 'Submit',
   subTitle: 'Subtitle',
+  summary: 'Summary',
   telephone: 'Telephone',
   telephoneHelpText: 'Country code required',
   telephoneTooltip:
