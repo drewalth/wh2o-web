@@ -1,6 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Form, Input, Modal, Select } from 'antd'
-import { MediaCreateDto, MediaType, RequestStatus } from '../../../../types'
+import {
+  Feature,
+  MediaCreateDto,
+  MediaType,
+  RequestStatus,
+} from '../../../../types'
 import { useTranslation } from 'react-i18next'
 import { UploadFile } from './UploadFile'
 import { notify } from '../../../../lib'
@@ -12,6 +17,7 @@ export type CreateMediaModalProps = {
   reachId: number
   userId: number
   onSuccess: () => Promise<void>
+  features: Feature[]
 }
 
 export const CreateMediaModal = ({
@@ -20,6 +26,7 @@ export const CreateMediaModal = ({
   reachId,
   userId,
   onSuccess,
+  features,
 }: CreateMediaModalProps) => {
   const DEFAULT_FORM: MediaCreateDto = {
     type: MediaType.IMAGE,
@@ -57,17 +64,13 @@ export const CreateMediaModal = ({
 
       setRequestStatus('success')
       notify.success('Media created')
-      onSuccess()
+      await onSuccess()
     } catch (e) {
       console.error(e)
       notify.error('failed to create media')
       setRequestStatus('failure')
     }
   }
-
-  useEffect(() => {
-    console.log('form: ', form)
-  }, [form])
 
   return (
     <Modal
@@ -94,7 +97,7 @@ export const CreateMediaModal = ({
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label={t('title')} name={'title'}>
+        <Form.Item label={t('title')} name={'title'} required>
           <Input />
         </Form.Item>
         <Form.Item label={t('subTitle')} name={'subTitle'}>
@@ -102,6 +105,20 @@ export const CreateMediaModal = ({
         </Form.Item>
         <Form.Item label={t('description')} name={'description'}>
           <Input.TextArea />
+        </Form.Item>
+        <Form.Item
+          label={t('feature')}
+          name={'featureId'}
+          hidden={features.length === 0}
+        >
+          <Select>
+            {features.length > 0 &&
+              features.map((ft) => (
+                <Select.Option key={ft.id} value={ft.id}>
+                  {ft.name}
+                </Select.Option>
+              ))}
+          </Select>
         </Form.Item>
         <Form.Item
           hidden={

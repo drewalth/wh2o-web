@@ -1,6 +1,9 @@
 .feature-media {
   max-width: 100%;
-  &.empty {
-    background-color: #ccc;
+  .image-thumb {
+    img {
+      max-width: 100%;
+      object-fit: contain;
+    }
   }
 }

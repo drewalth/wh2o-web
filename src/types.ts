@@ -308,7 +308,7 @@ export type FeatureUpdateDto = Omit<
   'createdAt' | 'updatedAt' | 'translations'
 >
 
-export type FeatureCreateDto = Omit<FeatureUpdateDto, 'id'>
+export type FeatureCreateDto = Omit<FeatureUpdateDto, 'id' | 'media'>
 
 export type FeatureTranslation = {
   id: number
@@ -394,6 +394,13 @@ export type Reach = {
   createdAt: Date
   updatedAt: Date
 }
+
+export type ReachUpdateDto = Omit<
+  Reach,
+  'createdAt' | 'updatedAt' | 'subscribers' | 'features'
+>
+
+export type ReachCreateDto = Omit<ReachUpdateDto, 'id' | 'translations'>
 
 export type ReachSearchParams = {
   name?: string

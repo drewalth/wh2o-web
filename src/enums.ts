@@ -31,3 +31,15 @@ export enum DateFormat {
   DDHHMMA = 'dd hh:mm a',
   LLLL = 'llll',
 }
+
+export enum GradeRating {
+  I = 'I',
+  II = 'II',
+  II_PLUS = 'II+',
+  III = 'III',
+  III_PLUS = 'III+',
+  IV = 'IV',
+  IV_PLUS = 'IV+',
+  V = 'V',
+  V_PLUS = 'V+',
+}

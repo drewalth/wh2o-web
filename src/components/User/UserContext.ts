@@ -12,6 +12,7 @@ export type UserContextData = {
   updateUserAlerts: (alert: Alert) => void
   user?: User
   canContribute: boolean
+  isAdmin: boolean
 }
 
 export const UserContext = createContext({} as UserContextData)

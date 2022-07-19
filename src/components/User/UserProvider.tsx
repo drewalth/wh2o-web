@@ -58,6 +58,10 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   }
 
   const canContribute = !!(user && user.role !== UserRole.GENERAL)
+  const isAdmin = !!(
+    user &&
+    (user.role === UserRole.SUPERADMIN || user.role === UserRole.ADMIN)
+  )
 
   return (
     <UserContext.Provider
@@ -71,6 +75,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         setUser: (user: User) => setUser(user),
         updateUserAlerts,
         user,
+        isAdmin,
         canContribute,
       }}
     >

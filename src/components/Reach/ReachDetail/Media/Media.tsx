@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Button, Typography } from 'antd'
+import { Button } from 'antd'
 import { useUserContext } from '../../../User/UserContext'
 import { CreateMediaModal } from './CreateMediaModal'
 import { useTranslation } from 'react-i18next'
 import { Gallery } from './Gallery'
 import { useReachDetailContext } from '../ReachDetailContext'
+import { EmptyBlock } from '../../../Common'
 
 export const Media = () => {
   const { t } = useTranslation()
@@ -15,6 +16,7 @@ export const Media = () => {
   const { reach, load } = useReachDetailContext()
 
   const media = reach?.media || []
+  const features = reach?.features || []
 
   return (
     <div>
@@ -32,6 +34,7 @@ export const Media = () => {
           </Button>
           <CreateMediaModal
             visible={modalVisible}
+            features={features}
             onCancel={() => setModalVisible(false)}
             reachId={reach?.id || 0}
             userId={user?.id || 0}
@@ -44,9 +47,9 @@ export const Media = () => {
       )}
 
       {media.length === 0 ? (
-        <Typography.Text>No media available</Typography.Text>
+        <EmptyBlock />
       ) : (
-        <Gallery media={media} />
+        <Gallery media={media} onSuccess={load} />
       )}
     </div>
   )

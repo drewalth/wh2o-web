@@ -7,7 +7,7 @@ export const Description = () => {
   const description = reach?.description
 
   return (
-    <Typography.Paragraph>
+    <Typography.Paragraph id={'reach-description'}>
       {description || 'Description unavailable'}
     </Typography.Paragraph>
   )

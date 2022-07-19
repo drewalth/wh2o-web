@@ -20,5 +20,11 @@ export const ReachTable = () => {
     },
   ]
 
-  return <Table columns={columns} dataSource={reaches} />
+  return (
+    <Table
+      columns={columns}
+      dataSource={reaches}
+      rowKey={(record) => record.id}
+    />
+  )
 }

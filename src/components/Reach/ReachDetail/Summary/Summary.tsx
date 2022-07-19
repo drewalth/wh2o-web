@@ -1,4 +1,4 @@
-import { Col, Row, Statistic, Divider } from 'antd'
+import { Col, Divider, Row, Statistic } from 'antd'
 import { Gage } from '../../../../types'
 import { useReachDetailContext } from '../ReachDetailContext'
 import { Description } from './Description'
@@ -21,26 +21,37 @@ export const Summary = () => {
     span: 8,
   }
 
+  const getLengthLabel = () => {
+    if (!reach) return '-'
+
+    if (reach.length > 1) {
+      return `${reach.length} miles`
+    }
+    if (reach.length === 1) {
+      return `1 mile`
+    }
+
+    return `${reach.length} miles`
+  }
+
   const primaryGage: Gage | undefined = (() => {
     if (reach && reach.gages.length > 0) {
       if (reach.gages.length === 1) {
         return reach.gages[0]
       }
 
-      const primaryG = reach.gages.find((g) => g.primary)
-
-      return primaryG
+      return reach.gages.find((g) => g.primary)
     }
   })()
 
   return (
-    <>
+    <div id={'reach-summary'}>
       <Row {...rowProps}>
         <Col {...colProps}>
           <Statistic title={'Grade'} value={reach?.grade || '-'} />
         </Col>
         <Col {...colProps}>
-          <Statistic title={'Length'} value={reach?.length || '-'} />
+          <Statistic title={'Length'} value={getLengthLabel()} />
         </Col>
         <Col {...colProps}>
           <Statistic title={'Avg. Gradient'} value={'-'} />
@@ -63,6 +74,6 @@ export const Summary = () => {
           <Description />
         </Col>
       </Row>
-    </>
+    </div>
   )
 }

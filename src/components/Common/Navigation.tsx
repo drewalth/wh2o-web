@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react'
 import Logo from './wh2o-logo'
-import { Layout, Menu, Select, Typography } from 'antd'
+import { Layout, Menu, MenuProps, Typography, Divider, Select } from 'antd'
 import { useTranslation } from 'react-i18next'
 import 'antd/dist/antd.css'
 import {
@@ -8,14 +8,14 @@ import {
   ExportOutlined,
   EyeOutlined,
   ImportOutlined,
-  MailOutlined,
   SearchOutlined,
   UserOutlined,
+  MailOutlined,
+  CodeOutlined,
 } from '@ant-design/icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 import { useUserContext } from '../User/UserContext'
-import { User, UserRole } from '../../types'
 import { languages } from '../../lib/languages'
 import './navigation.scss'
 
@@ -25,11 +25,23 @@ type NavigationProps = {
 
 const { Content, Sider } = Layout
 
-export type NavItem = {
-  path: string
-  text: string
-  icon: ReactNode
+type MenuItem = Required<MenuProps>['items'][number]
+
+function getItem(
+  label: React.ReactNode,
+  key?: React.Key | null,
+  icon?: React.ReactNode,
+  children?: MenuItem[],
+): MenuItem {
+  return {
+    key,
+    icon,
+    children,
+    label,
+  } as MenuItem
 }
+
+const externalLinks: string[] = ['docs']
 
 export const Navigation = ({ children }: NavigationProps) => {
   const navigate = useNavigate()
@@ -38,73 +50,34 @@ export const Navigation = ({ children }: NavigationProps) => {
   const { t, i18n } = useTranslation()
   const [navOpen, setNavOpen] = useState(false)
 
-  const baseNavItems: NavItem[] = [
-    {
-      path: '/gage',
-      text: t('search'),
-      icon: <SearchOutlined />,
-    },
-    {
-      path: '/reach',
-      text: 'Rivers',
-      icon: <SearchOutlined />,
-    },
-    {
-      path: '/prophet',
-      text: t('prophet'),
-      icon: <EyeOutlined />,
-    },
-    {
-      path: '/contact',
-      text: t('contact'),
-      icon: <MailOutlined />,
-    },
-  ]
-
-  const getNavItems = (user: User | undefined): NavItem[] => {
-    if (!!user) {
-      return [
-        ...baseNavItems,
-        {
-          path: '',
-          text: 'divider',
-          icon: <></>,
-        },
-        {
-          path: '/user/dashboard',
-          text: t('dashboard'),
-          icon: <DashboardOutlined />,
-        },
-        {
-          path: '/user/settings',
-          text: t('account'),
-          icon: <UserOutlined />,
-        },
-        {
-          path: '/auth/logout',
-          text: t('signOut'),
-          icon: <ExportOutlined />,
-        },
+  const authItems: MenuItem[] = user
+    ? [
+        getItem(t('dashboard'), 'user/dashboard', <DashboardOutlined />),
+        getItem(t('account'), 'user/settings', <UserOutlined />),
+        getItem(t('signOut'), 'auth/logout', <ExportOutlined />),
       ]
-    }
+    : [getItem(t('signIn'), '6', <ImportOutlined />)]
 
-    return [
-      ...baseNavItems,
-      {
-        path: '/auth/login',
-        text: t('signIn'),
-        icon: <ImportOutlined />,
-      },
-    ]
-  }
-
-  const navItems = getNavItems(user)
-
-  const getSelectedItems = (): string[] => {
-    return [
-      navItems.find((item) => location.pathname === item.path)?.path || '/',
-    ]
-  }
+  const items: MenuItem[] = [
+    getItem(t('search'), 'sub1', <SearchOutlined />, [
+      getItem(t('gages'), 'gage'),
+      getItem(t('reaches'), 'reach'),
+    ]),
+    getItem(t('prophet'), 'prophet', <EyeOutlined />),
+    getItem(t('contact'), 'contact', <MailOutlined />),
+    getItem(
+      <a
+        href="https://wh2o-docs.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Developer
+      </a>,
+      'docs',
+      <CodeOutlined />,
+    ),
+    ...authItems,
+  ]
 
   const currentPath = location.pathname
 
@@ -135,61 +108,28 @@ export const Navigation = ({ children }: NavigationProps) => {
           </Typography.Title>
         </div>
         <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={['dashboard']}
-          selectedKeys={getSelectedItems()}
+          defaultOpenKeys={['sub1']}
+          mode={'inline'}
+          theme={'dark'}
+          items={items}
           onSelect={({ key }) => {
-            if (key === '/developer') {
-              window?.open('https://wh2o-docs.com/', '_blank')?.focus()
-              return
-            }
-
-            if (['lang'].includes(key)) return
-            navigate(key, { replace: false })
+            if (externalLinks.includes(key)) return
+            navigate(`/${key}`)
+          }}
+        />
+        <Divider style={{ backgroundColor: '#fff' }} />
+        <Select
+          className={'language-select'}
+          value={i18n.language}
+          onSelect={async (val) => {
+            await i18n.changeLanguage(val)
+            localStorage.setItem('wh2o-lang', val)
           }}
         >
-          {navItems.map((item) => {
-            if (item.text === 'divider') {
-              return (
-                <Menu.Divider className={'nav-divider'} key={'divider-two'} />
-              )
-            }
-
-            return (
-              <Menu.Item key={item.path} icon={item.icon}>
-                {item.text}
-              </Menu.Item>
-            )
-          })}
-          <Menu.Divider className={'nav-divider'} key={'divider'} />
-          <Menu.Item key={'lang'}>
-            <Select
-              className={'language-select'}
-              value={i18n.language}
-              onSelect={async (val) => {
-                await i18n.changeLanguage(val)
-                localStorage.setItem('wh2o-lang', val)
-              }}
-            >
-              {languages.map((l) => (
-                <Select.Option key={l.value}>{l.text}</Select.Option>
-              ))}
-            </Select>
-          </Menu.Item>
-          <Menu.ItemGroup
-            key={'bottom-items'}
-            style={{ position: 'absolute', bottom: 0 }}
-          >
-            {user &&
-              (user.role === UserRole.ADMIN ||
-                user.role === UserRole.SUPERADMIN) && (
-                <Menu.Item key={'/admin'}>{t('administrator')}</Menu.Item>
-              )}
-            <Menu.Item key={'/developer'}>{t('developer')}</Menu.Item>
-            <Menu.Item key={'/legal'}>{t('disclaimer')}</Menu.Item>
-          </Menu.ItemGroup>
-        </Menu>
+          {languages.map((l) => (
+            <Select.Option key={l.value}>{l.text}</Select.Option>
+          ))}
+        </Select>
       </Sider>
       <Layout>
         <Content className={contentWrapperClasses}>

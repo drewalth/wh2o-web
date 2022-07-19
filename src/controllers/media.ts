@@ -1,15 +1,5 @@
 import { checkResponse, http } from '../lib'
-import { MediaCreateDto } from '../types'
-
-export const singleFileUpload = async () => {
-  return http
-    .post('/media/single-upload', {
-      headers: {
-        ['content-type']: 'multipart/form-data',
-      },
-    })
-    .then((res) => checkResponse(res))
-}
+import { MediaCreateDto, MediaUpdateDto } from '../types'
 
 export const createMedia = async (dto: MediaCreateDto) => {
   return http
@@ -18,3 +8,11 @@ export const createMedia = async (dto: MediaCreateDto) => {
     })
     .then((res) => checkResponse(res))
 }
+
+export const deleteMedia = async (id: number) =>
+  http.delete(`/media/${id}`).then((res) => checkResponse(res))
+
+export const updateMedia = async (id: number, dto: MediaUpdateDto) =>
+  http
+    .put(`/media/${id}`, { body: JSON.stringify(dto) })
+    .then((res) => checkResponse(res))

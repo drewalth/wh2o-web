@@ -3,12 +3,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import Recaptcha from 'react-google-invisible-recaptcha'
 import { Button, Card, Col, Form, Input, Row, Typography } from 'antd'
 import { authColSpan } from './defaults'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { authLogin } from '../../controllers'
 import { setToken } from '../../lib/token'
 import { useUserContext } from '../../components/User/UserContext'
 import { useTranslation } from 'react-i18next'
 import { RequestStatus } from '../../types'
+import { notify } from '../../lib'
 
 type LoginForm = { email: string; password: string }
 
@@ -64,6 +65,7 @@ export const Login = () => {
     } catch (e) {
       setRequestStatus('failure')
       console.error(e)
+      notify.error(t('somethingWentWrong'))
     }
   }
 
@@ -84,12 +86,12 @@ export const Login = () => {
         <Card
           title={t('signIn')}
           actions={[
-            <Link to={'/auth/register'}>
-              <Typography.Link>{t('register')}</Typography.Link>
-            </Link>,
-            <Link to={'/auth/forgot'}>
-              <Typography.Link>{t('forgotPassword')}</Typography.Link>
-            </Link>,
+            <Typography.Link onClick={() => navigate('/auth/register')}>
+              {t('register')}
+            </Typography.Link>,
+            <Typography.Link onClick={() => navigate('/auth/forgot')}>
+              {t('forgotPassword')}
+            </Typography.Link>,
           ]}
         >
           <Form
