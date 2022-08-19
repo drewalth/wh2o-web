@@ -36,8 +36,8 @@ export const Media = () => {
             visible={modalVisible}
             features={features}
             onCancel={() => setModalVisible(false)}
-            reachId={reach?.id || 0}
-            userId={user?.id || 0}
+            reachId={reach?.id || ''}
+            userId={user?.id || ''}
             onSuccess={async () => {
               setModalVisible(false)
               await load()
@@ -47,7 +47,7 @@ export const Media = () => {
       )}
 
       {media.length === 0 ? (
-        <EmptyBlock />
+        <EmptyBlock title={'No Media. Log in to add some.'} />
       ) : (
         <Gallery media={media} onSuccess={load} />
       )}

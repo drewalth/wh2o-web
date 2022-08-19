@@ -28,8 +28,8 @@ const defaultCreateForm: CreateAlertDto = {
   metric: GageMetric.CFS,
   minimum: 1.0,
   maximum: 1.0,
-  userId: 0,
-  gageId: 1,
+  userId: '',
+  gageId: '',
 }
 
 export const Alert = (): JSX.Element => {
@@ -156,7 +156,7 @@ export const Alert = (): JSX.Element => {
             <TimePicker
               use12Hours
               format="h:mm a"
-              minuteStep={5}
+              minuteStep={15}
               placeholder={t('selectTime')}
             />
           </Form.Item>

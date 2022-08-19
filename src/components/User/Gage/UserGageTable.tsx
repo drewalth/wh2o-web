@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Gage, GageReading } from '../../../types'
 import { Button, Table, Tooltip, Typography } from 'antd'
 import { ReadingSelect } from '../../Gage/ReadingSelect'
@@ -8,11 +8,27 @@ import { removeUserGage } from '../../../controllers'
 import { useUserContext } from '../UserContext'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { notify } from '../../../lib'
 
 export const UserGageTable = () => {
-  const { user } = useUserContext()
+  const { user, removeUserGage: updateUserGages } = useUserContext()
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const [pendingDelete, setPendingDelete] = useState('')
+
+  const handleDeleteGage = async (id: string) => {
+    try {
+      setPendingDelete(id)
+      await removeUserGage(id, user?.id || '')
+      updateUserGages(id)
+      notify.success('Bookmark removed')
+    } catch (e) {
+      notify.error('Failed to remove bookmark')
+    } finally {
+      setPendingDelete('')
+    }
+  }
+
   const columns = [
     {
       title: t('name'),
@@ -63,14 +79,15 @@ export const UserGageTable = () => {
     {
       dataIndex: 'id',
       key: 'id',
-      render: (id: number) => (
+      render: (id: string) => (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
             title={t('removeBookmark')}
             danger
             size={'small'}
-            onClick={() => removeUserGage(id, user?.id || 0)}
+            onClick={() => handleDeleteGage(id)}
             style={{ marginRight: 8 }}
+            loading={id === pendingDelete}
           >
             <DeleteOutlined />
           </Button>

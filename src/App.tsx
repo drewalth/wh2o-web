@@ -22,8 +22,8 @@ import { Forgot } from './pages/Auth/Forgot'
 import { Contact } from './pages/Contact'
 import { Legal } from './pages/Legal'
 import { Reset } from './pages/Auth/Reset'
-import { ReachTable } from './components/Reach/ReachTable'
 import { ReachDetail } from './components/Reach/ReachDetail/ReachDetail'
+import { Reach } from './components/Reach/Reach'
 
 function App() {
   return (
@@ -42,7 +42,7 @@ function App() {
               }
             />
             <Route path="/gage" element={<Gage />} />
-            <Route path="/reach" element={<ReachTable />} />
+            <Route path="/reach" element={<Reach />} />
             <Route path="/reach/:id" element={<ReachDetail />} />
             <Route path="/prophet" element={<Prophet />} />
             <Route path="/gage/:id" element={<GageDetail />} />

@@ -56,14 +56,8 @@ const GageShare = ({ gage }: GageShareProps) => {
 }
 
 const GageTable = (): JSX.Element => {
-  const {
-    gages,
-    pagination,
-    setSearchParams,
-    searchParams,
-    setPagination,
-    requestStatus,
-  } = useGagesContext()
+  const { gages, pagination, requestStatus, fetchGages, searchParams } =
+    useGagesContext()
   const navigate = useNavigate()
   const { t } = useTranslation()
 
@@ -76,6 +70,7 @@ const GageTable = (): JSX.Element => {
         <Tooltip title={name} placement={'top'}>
           <Typography.Link
             ellipsis
+            id={gage.id.toString()}
             onClick={() => navigate(`/gage/${gage.id}`)}
           >
             {name}
@@ -115,7 +110,7 @@ const GageTable = (): JSX.Element => {
     {
       dataIndex: 'id',
       key: 'id',
-      render: (id: number, gage: Gage) => (
+      render: (id: string, gage: Gage) => (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <GageShare gage={gage} />
           <GageBookmarkToggle gageId={id} type={'icon'} />
@@ -135,7 +130,7 @@ const GageTable = (): JSX.Element => {
       }}
     >
       <Table
-        rowKey={(record) => record.id}
+        rowKey={(row) => row.id}
         expandable={{
           expandedRowRender: (g) => (
             <GageReadingsChart readings={g.readings || []} metric={g.metric} />
@@ -151,12 +146,8 @@ const GageTable = (): JSX.Element => {
           current: pagination.page,
           pageSize: pagination.page_size,
           pageSizeOptions: [10, 25, 50],
-          onChange: (page, page_size) => {
-            setSearchParams({
-              ...searchParams,
-            })
-            setPagination({ page_size, page, total: pagination.total })
-          },
+          onChange: (page, page_size) =>
+            fetchGages({ ...searchParams, page, page_size }),
         }}
       />
     </div>

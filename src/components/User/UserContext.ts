@@ -5,7 +5,7 @@ export type UserContextData = {
   appendUserAlerts: (alert: Alert) => void
   canBookmarkGages: boolean
   reload: () => Promise<void>
-  removeUserAlert: (id: number) => void
+  removeUserAlert: (id: string) => void
   requestStatus: RequestStatus
   reset: () => void
   setUser: (user: User) => void
@@ -13,6 +13,7 @@ export type UserContextData = {
   user?: User
   canContribute: boolean
   isAdmin: boolean
+  removeUserGage: (id: string) => void
 }
 
 export const UserContext = createContext({} as UserContextData)

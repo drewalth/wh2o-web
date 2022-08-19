@@ -30,7 +30,7 @@ const Settings = () => {
   const navigate = useNavigate()
   // these default values are problematic...
   const [userConfig, setUserConfig] = useState<UserUpdateDto>({
-    id: 0,
+    id: '',
     email: '',
     name: '',
     timezone: '',

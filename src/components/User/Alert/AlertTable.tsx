@@ -21,10 +21,10 @@ export const AlertTable = (): JSX.Element => {
   const { t } = useTranslation()
   const [deleteRequestStatus, setDeleteRequestStatus] = useState<{
     status: RequestStatus
-    id: number
-  }>({ id: 0, status: 'success' })
+    id: string
+  }>({ id: '', status: 'success' })
 
-  const getGageName = (gageId: number): string => {
+  const getGageName = (gageId: string): string => {
     if (!user) return ''
 
     const g = user.gages.find((gage) => gage.id === gageId)
@@ -60,7 +60,7 @@ export const AlertTable = (): JSX.Element => {
     return msg
   }
 
-  const handleDelete = async (val: number) => {
+  const handleDelete = async (val: string) => {
     try {
       if (!user) return
       setDeleteRequestStatus({
@@ -70,7 +70,7 @@ export const AlertTable = (): JSX.Element => {
       await deleteAlert(val)
       removeUserAlert(val)
       setDeleteRequestStatus({
-        id: 0,
+        id: '',
         status: 'success',
       })
       notification.success({
@@ -79,7 +79,7 @@ export const AlertTable = (): JSX.Element => {
       })
     } catch (e) {
       setDeleteRequestStatus({
-        id: 0,
+        id: '',
         status: 'failure',
       })
       notification.error({
@@ -163,7 +163,7 @@ export const AlertTable = (): JSX.Element => {
     {
       dataIndex: 'id',
       key: 'id',
-      render: (val: number) => (
+      render: (val: string) => (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
             onClick={() => handleDelete(val)}

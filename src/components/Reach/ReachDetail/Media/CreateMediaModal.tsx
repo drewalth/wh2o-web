@@ -14,8 +14,8 @@ import { createMedia } from '../../../../controllers'
 export type CreateMediaModalProps = {
   visible: boolean
   onCancel: () => void
-  reachId: number
-  userId: number
+  reachId: string
+  userId: string
   onSuccess: () => Promise<void>
   features: Feature[]
 }

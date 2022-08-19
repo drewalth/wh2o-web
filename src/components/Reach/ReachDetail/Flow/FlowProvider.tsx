@@ -40,9 +40,9 @@ export const FlowProvider = ({ children, gages }: FlowProviderProps) => {
   const [gage, setGage] = useState<Gage | undefined>(primaryGage)
 
   const mockReadings: GageReading[] = [...Array(100)].map((el, idx) => ({
-    id: idx + 1,
+    id: (idx + 1).toString(),
     siteId: gage?.siteId || '1234',
-    gageID: gage?.id || 1234,
+    gageID: gage?.id || '1234',
     gageName: gage?.name || 'mockGage',
     metric: GageMetric.CFS,
     value: Math.random(),

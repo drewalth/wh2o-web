@@ -8,7 +8,13 @@ export const Description = () => {
 
   return (
     <Typography.Paragraph id={'reach-description'}>
-      {description || 'Description unavailable'}
+      {description && (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: description,
+          }}
+        />
+      )}
     </Typography.Paragraph>
   )
 }

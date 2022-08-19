@@ -56,7 +56,7 @@ export const Navigation = ({ children }: NavigationProps) => {
         getItem(t('account'), 'user/settings', <UserOutlined />),
         getItem(t('signOut'), 'auth/logout', <ExportOutlined />),
       ]
-    : [getItem(t('signIn'), '6', <ImportOutlined />)]
+    : [getItem(t('signIn'), 'auth/login', <ImportOutlined />)]
 
   const items: MenuItem[] = [
     getItem(t('search'), 'sub1', <SearchOutlined />, [

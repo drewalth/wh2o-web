@@ -25,7 +25,6 @@ export const AccessEditModal = ({
   const handleSubmit = async () => {
     try {
       setRequestStatus('loading')
-      debugger
       await updateReach(reach.id, form)
       setRequestStatus('success')
       notify.success('Access edited')

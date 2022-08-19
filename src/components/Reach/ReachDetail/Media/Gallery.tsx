@@ -21,7 +21,7 @@ export const Gallery = ({ media, onSuccess }: GalleryProps) => {
     console.log(currentSlide)
   }
 
-  const handleDelete = async (mediaId: number) => {
+  const handleDelete = async (mediaId: string) => {
     try {
       setRequestStatus('loading')
       await deleteMedia(mediaId)

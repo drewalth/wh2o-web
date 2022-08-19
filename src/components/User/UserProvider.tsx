@@ -37,7 +37,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     })
   }
 
-  const removeUserAlert = (id: number) => {
+  const removeUserAlert = (id: string) => {
     if (!user) return
 
     const alertsCopy = [...user.alerts].filter((a) => a.id !== id)
@@ -63,9 +63,17 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     (user.role === UserRole.SUPERADMIN || user.role === UserRole.ADMIN)
   )
 
+  const removeUserGage = (id: string) => {
+    if (!user) return
+    const userGages = [...user.gages].filter((g) => g.id !== id)
+
+    setUser({ ...user, gages: userGages })
+  }
+
   return (
     <UserContext.Provider
       value={{
+        removeUserGage,
         appendUserAlerts,
         canBookmarkGages: (user && user.gages.length < 15) || false,
         reload,

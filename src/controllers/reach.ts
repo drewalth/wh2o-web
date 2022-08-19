@@ -1,7 +1,13 @@
 import { checkResponse, http } from '../lib'
-import { ReachSearchParams, ReachUpdateDto } from '../types'
+import {
+  ReachSearchParams,
+  ReachSearchResponse,
+  ReachUpdateDto,
+} from '../types'
 
-export const reachSearch = async (searchParams: ReachSearchParams) => {
+export const reachSearch = async (
+  searchParams: ReachSearchParams,
+): Promise<ReachSearchResponse> => {
   const params = new URLSearchParams()
 
   for (const p in searchParams) {
@@ -16,7 +22,7 @@ export const reachSearch = async (searchParams: ReachSearchParams) => {
 export const getReach = async (id: string) =>
   http.get(`/reach/${id}`).then((res) => checkResponse(res))
 
-export const updateReach = async (id: number, dto: ReachUpdateDto) =>
+export const updateReach = async (id: string, dto: ReachUpdateDto) =>
   http
     .put(`/reach/${id}`, { body: JSON.stringify(dto) })
     .then((res) => checkResponse(res))

@@ -9,7 +9,7 @@ export const createMedia = async (dto: MediaCreateDto) => {
     .then((res) => checkResponse(res))
 }
 
-export const deleteMedia = async (id: number) =>
+export const deleteMedia = async (id: string) =>
   http.delete(`/media/${id}`).then((res) => checkResponse(res))
 
 export const updateMedia = async (id: number, dto: MediaUpdateDto) =>

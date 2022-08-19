@@ -11,6 +11,7 @@ import {
   TablePagination,
 } from '../../../types'
 import { gageSearch } from '../../../controllers'
+import { notify } from '../../../lib'
 
 type GageProviderProps = {
   children: ReactNode
@@ -18,7 +19,6 @@ type GageProviderProps = {
 
 export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
   const [gages, setGages] = useState<Gage[]>([])
-  const [refreshing, setRefreshing] = useState(false)
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
   const [pagination, setPagination] =
     useState<TablePagination>(DEFAULT_PAGINATION)
@@ -51,51 +51,29 @@ export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
     return total
   }
 
-  const loadGages = async () => {
-    // let isRefreshing = false
+  const fetchGages = async (params: GageSearchParams) => {
     try {
-      // if (!gagesRefreshing) {
-      //
-      // }
       setRequestStatus('loading')
-      // @todo debounce
-      const { gages, total, refreshing } = await gageSearch(
-        searchParams,
-        pagination,
-      )
+      const { gages, total } = await gageSearch(params)
       setGages(gages)
-      // pagination kinda busted...
-
-      setPagination({ ...pagination, total: getTotal(total) })
+      setPagination({
+        page: params.page,
+        page_size: params.page_size,
+        total: getTotal(total),
+      })
       setRequestStatus('success')
-      // setGagesRefreshing(refreshing)
-      // isRefreshing = refreshing
-
-      setRefreshing(refreshing)
-
-      // if (refreshing) {
-      //   notification.info({
-      //     icon: <SyncOutlined spin />,
-      //     message: 'Refreshing gages',
-      //     duration: 5,
-      //   })
-      // }
     } catch (e) {
       setRequestStatus('failure')
       console.error(e)
-    } finally {
-      // if (isRefreshing) {
-      //   await new Promise((resolve) => setTimeout(resolve, 5000))
-      //   await loadGages()
-      // }
+      notify.error('Failed to load gages')
     }
   }
 
   useEffect(() => {
     ;(async () => {
-      await loadGages()
+      await fetchGages(searchParams)
     })()
-  }, [searchParams])
+  }, [])
 
   return (
     <GageContext.Provider
@@ -108,7 +86,7 @@ export const GageProvider = ({ children }: GageProviderProps): JSX.Element => {
         resetPagination,
         reset,
         setPagination,
-        refreshing,
+        fetchGages,
       }}
     >
       {children}

@@ -33,7 +33,7 @@ export const Features = () => {
   }
 
   // not a big fan of this...
-  const getFeatureMedia = (featureId: number) => {
+  const getFeatureMedia = (featureId: string) => {
     const media = reach?.media || []
 
     if (media.length > 0) {

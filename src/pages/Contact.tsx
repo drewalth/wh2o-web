@@ -61,7 +61,7 @@ export const Contact = () => {
       setRequestStatus('loading')
       await createContactSubmission({
         ...form,
-        userId: user ? user.id : 0,
+        userId: user ? user.id : '',
       })
       setRequestStatus('success')
       notification.success({

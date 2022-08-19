@@ -1,14 +1,8 @@
-import {
-  CreateGageDto,
-  Gage,
-  GageSearchParams,
-  TablePagination,
-  UpdateGageDto,
-} from '../types'
+import { CreateGageDto, Gage, GageSearchParams, UpdateGageDto } from '../types'
 import { http, checkResponse } from '../lib'
 import { Endpoints } from '../enums'
 
-export const getGage = async (id: number): Promise<Gage> => {
+export const getGage = async (id: string): Promise<Gage> => {
   return http.get(`/gage/${id}`).then((res) => checkResponse(res))
 }
 
@@ -20,16 +14,11 @@ export const updateGage = async (updateGageDto: UpdateGageDto) => {
 
 export const gageSearch = async (
   input: GageSearchParams,
-  pagination: TablePagination,
 ): Promise<{ gages: Gage[]; total: number; refreshing: boolean }> => {
   const params = new URLSearchParams()
 
   for (const val in input) {
     params.append(val, input[val])
-  }
-
-  for (const el in pagination) {
-    params.append(el, pagination[el])
   }
 
   return http.get(`/gage/search?${params}`).then((res) => checkResponse(res))

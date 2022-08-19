@@ -17,7 +17,7 @@ export enum ContactType {
 }
 
 export type Contact = {
-  id: number
+  id: string
   title: string
   description?: string
   siteId?: string
@@ -25,7 +25,7 @@ export type Contact = {
   state?: string
   source?: GageSource
   email: string
-  userId?: number
+  userId?: string
   type: ContactType
   createdAt: Date
   updatedAt: Date
@@ -36,7 +36,7 @@ export type CreateContactDto = Omit<Contact, 'id' | 'createdAt' | 'updatedAt'>
 export type AuthLoginResponse = {
   token: string
   user: {
-    id: number
+    id: string
     email: string
     name: string
     role: UserRole
@@ -63,7 +63,7 @@ export type DailyAverage = {
 }
 
 export type FlowRange = {
-  id: number
+  id: string
   name: string
   description: string
   minimum: number
@@ -82,7 +82,7 @@ export enum UserRole {
 }
 
 export type User = {
-  id: number
+  id: string
   email: string
   name: string
   telephone: string
@@ -113,7 +113,7 @@ export type UserCreateDto = Omit<UserUpdateDto, 'id'> & {
 }
 
 export type Alert = {
-  id: number
+  id: string
   name: string
   active: boolean
   criteria: AlertCriteria
@@ -123,8 +123,8 @@ export type Alert = {
   minimum?: number
   maximum?: number
   value: number
-  gageId: number
-  userId: number
+  gageId: string
+  userId: string
   notifyTime?: string
   lastSent?: Date
   updatedAt?: Date
@@ -161,12 +161,14 @@ export type GageSearchParams = {
   state: string
   country: string
   source: GageSource
+  page: number
+  page_size: number
 }
 
 export type TablePagination = {
   page: number
   page_size: number
-  total: number
+  total?: number
 }
 
 export enum CanadianProvinces {
@@ -186,18 +188,18 @@ export enum CanadianProvinces {
 }
 
 export type GageReading = {
-  id: number
+  id: string
   siteId: string
   value: number
   metric: GageMetric
-  gageID: number
+  gageID: string
   gageName: string
   createdAt?: Date
   updatedAt?: Date
 }
 
 export type Gage = {
-  id: number
+  id: string
   name: string
   description: string
   source: GageSource
@@ -239,7 +241,7 @@ export interface GageUpdateDTO {
   latitude: number
   longitude: number
   siteId: string
-  gageId: number
+  gageId: string
   metric: GageMetric
   name: string
   reading: number
@@ -279,13 +281,13 @@ export enum Locale {
 }
 
 export type Feature = {
-  id: number
+  id: string
   name: string
   distance: number
   latitude: number
   longitude: number
   grade?: string
-  reachId: number
+  reachId: string
   media: Media[]
   description: string
   rapid: boolean
@@ -311,10 +313,10 @@ export type FeatureUpdateDto = Omit<
 export type FeatureCreateDto = Omit<FeatureUpdateDto, 'id' | 'media'>
 
 export type FeatureTranslation = {
-  id: number
+  id: string
   description: string
   name: string
-  featureId: number
+  featureId: string
   lang: Locale
   createdAt: Date
   updatedAt: Date
@@ -331,11 +333,11 @@ export type FeatureTranslationCreateDto = Omit<
 >
 
 export type ReachTranslation = {
-  id: number
+  id: string
   description: string
   access: string
   lang: Locale
-  reachId: number
+  reachId: string
   createdAt: Date
   updatedAt: Date
 }
@@ -348,14 +350,14 @@ export enum MediaType {
 }
 
 export type Media = {
-  id: number
+  id: string
   title: string
   subTitle: string
   description: string
   hero: boolean
-  reachId: number
-  featureId?: number
-  userId: number
+  reachId: string
+  featureId?: string
+  userId: string
   url: string
   type: MediaType
   createdAt: Date
@@ -373,13 +375,14 @@ export enum DataSource {
 }
 
 export type Reach = {
-  id: number
+  id: string
   name: string
   section: string
   grade: string
   length: number
   description: string
   access: string
+  permit?: string
   country: Country
   latitude: number
   longitude: number
@@ -406,4 +409,11 @@ export type ReachSearchParams = {
   name?: string
   country: Country
   state: string
+  page: number
+  page_size: number
+}
+
+export type ReachSearchResponse = {
+  reaches: Reach[]
+  total: number
 }

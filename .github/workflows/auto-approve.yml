@@ -1,0 +1,36 @@
+name: Auto Approval
+on:
+  pull_request_target:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  approve:
+    name: Auto-approve dependabot PRs
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hmarr/auto-approve-action@v2.0.0
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+  merge-me:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - name: 'Wait for Status Checks'
+        id: waitforstatuschecks
+        uses: 'WyriHaximus/github-action-wait-for-status@v1.4'
+        with:
+          ignoreActions: merge-me
+          checkInterval: 10
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      - name: 'Merge me!'
+        uses: ridedott/merge-me-action@v2.9.30
+        if: steps.waitforstatuschecks.outputs.status == 'success'
+        with:
+          PRESET: DEPENDABOT_MINOR
+    timeout-minutes: 15

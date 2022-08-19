@@ -39,7 +39,7 @@ export const FeatureEditModal = ({
     putIn: false,
     rangerStation: false,
     rapid: true,
-    reachId: reach?.id || 0,
+    reachId: reach?.id || '',
     surf: false,
     takeOut: false,
     waterfall: false,

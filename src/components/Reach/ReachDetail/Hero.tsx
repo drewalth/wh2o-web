@@ -1,19 +1,19 @@
-import { Typography } from 'antd'
+import { PageHeader } from 'antd'
 import { useReachDetailContext } from './ReachDetailContext'
+import { ErrorBoundary } from '../../Common/ErrorBoundary'
+import { useNavigate } from 'react-router-dom'
 
 export const Hero = () => {
   const { reach } = useReachDetailContext()
+  const navigate = useNavigate()
 
   return (
-    <>
-      <Typography.Title
-        style={{ lineHeight: 1, marginBottom: 0, paddingBottom: 0 }}
-      >
-        {reach?.name}
-      </Typography.Title>
-      <Typography.Title style={{ marginTop: 0, marginBottom: 24 }} level={4}>
-        {reach?.section}
-      </Typography.Title>
-    </>
+    <ErrorBoundary>
+      <PageHeader
+        title={reach?.name || ''}
+        subTitle={reach?.section || ''}
+        onBack={() => navigate('/reach')}
+      />
+    </ErrorBoundary>
   )
 }

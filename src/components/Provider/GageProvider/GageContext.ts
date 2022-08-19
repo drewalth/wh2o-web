@@ -9,7 +9,6 @@ import {
 } from '../../../types'
 
 export const DEFAULT_PAGINATION: TablePagination = {
-  total: 0,
   page: 1,
   page_size: 10,
 }
@@ -19,6 +18,7 @@ export const DEFAULT_GAGE_SEARCH_PARAMS: GageSearchParams = {
   country: Country.US,
   name: '',
   source: GageSource.USGS,
+  ...DEFAULT_PAGINATION,
 }
 
 type GageContextData = {
@@ -30,7 +30,7 @@ type GageContextData = {
   pagination: TablePagination
   setPagination: (pagination: TablePagination) => void
   resetPagination: () => void
-  refreshing: boolean
+  fetchGages: (params: GageSearchParams) => Promise<void>
 }
 
 export const GageContext = createContext({} as GageContextData)

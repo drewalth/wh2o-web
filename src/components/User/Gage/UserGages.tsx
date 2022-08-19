@@ -18,9 +18,15 @@ export const UserGages = (): JSX.Element => {
   const formRef = useRef<HTMLFormElement>(null)
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('success')
   const [createModalVisible, setCreateModalVisible] = useState(false)
-  const [selectedGageSiteId, setSelectedGageSiteId] = useState<number>()
-  const { searchParams, setSearchParams, resetPagination, gages } =
-    useGagesContext()
+  const [selectedGageSiteId, setSelectedGageSiteId] = useState<string>()
+  const {
+    searchParams,
+    setSearchParams,
+    resetPagination,
+    gages,
+    fetchGages,
+    requestStatus: gageRequestStatus,
+  } = useGagesContext()
   const { user, reload, canBookmarkGages } = useUserContext()
   const { t } = useTranslation()
 
@@ -44,16 +50,19 @@ export const UserGages = (): JSX.Element => {
     }
   }
 
-  const handleCountryChange = (val: GageSearchParams, country: Country) => {
+  const handleCountryChange = async (
+    val: GageSearchParams,
+    country: Country,
+  ) => {
     resetPagination()
-    setSearchParams(
-      Object.assign({}, searchParams, {
-        ...val,
-        source: properties[country].sources[0],
-        state: properties[country].states[0].abbreviation,
-        country,
-      }),
-    )
+    const p = Object.assign({}, searchParams, {
+      ...val,
+      source: properties[country].sources[0],
+      state: properties[country].states[0].abbreviation,
+      country,
+    })
+    setSearchParams(p)
+    await fetchGages(p)
   }
 
   const properties = {
@@ -80,16 +89,17 @@ export const UserGages = (): JSX.Element => {
     },
   }
 
-  const handleOnValuesChange = debounce((val) => {
+  const handleOnValuesChange = debounce(async (val) => {
     if (val.country) {
       properties[val.country].setParams(val)
       properties[val.country].setFields()
     } else {
-      setSearchParams(
-        Object.assign({}, searchParams, {
-          ...val,
-        }),
-      )
+      const p = Object.assign({}, searchParams, {
+        ...val,
+      })
+
+      setSearchParams(p)
+      await fetchGages(p)
     }
   }, 300)
 
@@ -186,9 +196,8 @@ export const UserGages = (): JSX.Element => {
           <Divider />
           <Form.Item name={'id'} label={t('gageSearchResults')}>
             <Select
-              onSelect={(value) => {
-                setSelectedGageSiteId(value)
-              }}
+              loading={gageRequestStatus === 'loading'}
+              onSelect={(value) => setSelectedGageSiteId(value)}
             >
               {gages &&
                 gages.length > 0 &&

@@ -8,7 +8,7 @@ export const updateFeature = async (dto: FeatureUpdateDto) =>
     })
     .then((res) => checkResponse(res))
 
-export const deleteFeature = async (id: number) =>
+export const deleteFeature = async (id: string) =>
   http.delete(`/feature/${id}`).then((res) => checkResponse(res))
 
 export const createFeature = async (dto: FeatureCreateDto) =>

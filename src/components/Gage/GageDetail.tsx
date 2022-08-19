@@ -33,12 +33,14 @@ export const GageDetail = () => {
   const { id: gageId } = useParams()
   const { t } = useTranslation()
 
+  console.log('gageId: ', gageId)
+
   useEffect(() => {
     ;(async () => {
       try {
         setRequestStatus('loading')
         if (!gageId) return
-        const result = await getGage(parseInt(gageId, 10))
+        const result = await getGage(gageId)
         setGage(result)
         setRequestStatus('success')
       } catch (e) {

@@ -13,9 +13,15 @@ export type ReachProviderProps = {
   children: ReactNode
 }
 
+export const DEFAULT_PAGINATION = {
+  page: 1,
+  page_size: 25,
+}
+
 export const DEFAULT_SEARCH_PARAMS: ReachSearchParams = {
   country: Country.US,
-  state: 'AL',
+  state: 'AK',
+  ...DEFAULT_PAGINATION,
 }
 
 export const ReachProvider = ({ children }: ReachProviderProps) => {
@@ -27,11 +33,12 @@ export const ReachProvider = ({ children }: ReachProviderProps) => {
 
   const reset = () => setSearchParams(DEFAULT_SEARCH_PARAMS)
 
-  const load = async () => {
+  const load = async (params: ReachSearchParams) => {
     try {
       setRequestStatus('loading')
-      const result = await reachSearch(searchParams)
-      setReaches(result)
+      setSearchParams(params)
+      const { reaches } = await reachSearch(params)
+      setReaches(reaches)
       setRequestStatus('success')
     } catch (e) {
       console.error(e)
@@ -41,9 +48,9 @@ export const ReachProvider = ({ children }: ReachProviderProps) => {
 
   useLayoutEffect(() => {
     ;(async () => {
-      await load()
+      await load(searchParams)
     })()
-  }, [])
+  }, [searchParams])
 
   return (
     <ReachContext.Provider

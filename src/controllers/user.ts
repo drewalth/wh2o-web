@@ -14,7 +14,7 @@ export const whoAmI = async (): Promise<User> => {
   return http.get('/user/whoami').then((res) => checkResponse(res))
 }
 
-export const removeUserGage = async (gageId: number, userId: number) => {
+export const removeUserGage = async (gageId: string, userId: string) => {
   return http
     .post('/user/remove-gage', {
       body: JSON.stringify({
@@ -25,7 +25,7 @@ export const removeUserGage = async (gageId: number, userId: number) => {
     .then((res) => checkResponse(res))
 }
 
-export const addUserGage = async (gageId: number, userId: number) => {
+export const addUserGage = async (gageId: string, userId: string) => {
   return http
     .post('/user/add-gage', {
       body: JSON.stringify({
@@ -47,7 +47,7 @@ export const getAlerts = async () => {
 }
 
 export const updateAlert = async (
-  alertId: number,
+  alertId: string,
   updateAlertDto: UpdateAlertDto,
 ): Promise<Alert> => {
   return http
@@ -63,13 +63,13 @@ export const createAlert = async (
     .then((res) => checkResponse(res))
 }
 
-export const deleteAlert = async (alertId: number) => {
+export const deleteAlert = async (alertId: string) => {
   return http
     .delete(Endpoints.ALERT + `/${alertId}`)
     .then((res) => checkResponse(res))
 }
 
-export const deleteUser = async (id: number) => {
+export const deleteUser = async (id: string) => {
   return http.delete(`/user/${id}`).then((res) => checkResponse(res))
 }
 

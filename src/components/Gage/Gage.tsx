@@ -1,10 +1,9 @@
 import React, { useRef } from 'react'
 import GageTable from './GageTable'
-import { Button, Card, Collapse, Form, Input, PageHeader, Select } from 'antd'
-import { useGagesContext } from '../Provider/GageProvider'
+import { Card, Collapse, Form, Input, PageHeader, Select } from 'antd'
+import { DEFAULT_PAGINATION, useGagesContext } from '../Provider/GageProvider'
 import { Country, GageSearchParams, GageSource } from '../../types'
 import { canadianProvinces, StateEntry, usStates } from '../../lib'
-import { SyncOutlined } from '@ant-design/icons'
 import debounce from 'lodash.debounce'
 import { useTranslation } from 'react-i18next'
 import { useBreakpoint } from '../../hooks'
@@ -12,8 +11,13 @@ import { useBreakpoint } from '../../hooks'
 export const Gage = (): JSX.Element => {
   const { isMobile } = useBreakpoint()
   const formRef = useRef<HTMLFormElement>(null)
-  const { searchParams, setSearchParams, resetPagination, reset } =
-    useGagesContext()
+  const {
+    searchParams,
+    setSearchParams,
+    resetPagination,
+    fetchGages,
+    pagination,
+  } = useGagesContext()
   const { t } = useTranslation()
 
   const setFormAttributes = (country: Country) => {
@@ -71,35 +75,39 @@ export const Gage = (): JSX.Element => {
     },
   }
 
-  const handleCountryChange = (val: GageSearchParams, country: Country) => {
+  const handleCountryChange = async (
+    val: GageSearchParams,
+    country: Country,
+  ) => {
     resetPagination()
-    setSearchParams(
-      Object.assign({}, searchParams, {
-        ...val,
-        source: properties[country].sources[0],
-        state: properties[country].states[0].abbreviation,
-        country,
-      }),
-    )
+    const params: GageSearchParams = {
+      ...searchParams,
+      ...val,
+      ...pagination,
+      country,
+      source: properties[country].sources[0],
+      state: properties[country].states[0].abbreviation,
+      ...DEFAULT_PAGINATION,
+    }
+    setSearchParams(params)
+    await fetchGages(params)
   }
 
   const getStateInputLabel = () => {
-    if (searchParams.country === Country.CA) {
+    if (searchParams.country !== Country.US) {
       return t('province')
     }
     return t('state')
   }
 
-  const handleOnValuesChange = debounce((val) => {
+  const handleOnValuesChange = debounce(async (val) => {
     if (val.country) {
       properties[val.country].setParams(val)
       properties[val.country].setFields()
     } else {
-      setSearchParams(
-        Object.assign({}, searchParams, {
-          ...val,
-        }),
-      )
+      const params = { ...searchParams, ...val }
+      setSearchParams(params)
+      await fetchGages(params)
     }
   }, 300)
 
@@ -153,18 +161,6 @@ export const Gage = (): JSX.Element => {
       </Form.Item>
       <Form.Item name={'name'} label={t('gageName')}>
         <Input placeholder={t('gageName')} allowClear />
-      </Form.Item>
-      <Form.Item>
-        <Button
-          type={'ghost'}
-          title={t('resetSearch')}
-          onClick={() => {
-            reset()
-            setFormAttributes(Country.US)
-          }}
-        >
-          <SyncOutlined />
-        </Button>
       </Form.Item>
     </Form>
   )

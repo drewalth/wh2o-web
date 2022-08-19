@@ -35,6 +35,23 @@ export const FeatureCard = ({
     span: isMobile ? 24 : 4,
   }
 
+  const getDistance = (feature: Feature) => {
+    if (feature.putIn && feature.distance === 0) {
+      return 0
+    } else if (feature.distance === 0) {
+      return 'n/a'
+    }
+    return feature.distance
+  }
+
+  const getGrade = (feature: Feature) => {
+    if (feature.grade === '' || !feature.grade) {
+      return 'n/a'
+    }
+
+    return feature.grade
+  }
+
   const handleDelete = async () => {
     try {
       setRequestStatus('loading')
@@ -64,7 +81,14 @@ export const FeatureCard = ({
   }
 
   const getDescription = () => {
-    if (feature.description.length > 0) return feature.description
+    if (feature.description.length > 0)
+      return (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: feature.description,
+          }}
+        />
+      )
 
     return getEmptyMessage()
   }
@@ -102,6 +126,17 @@ export const FeatureCard = ({
               </Popconfirm>
             </>
           )}
+        </Col>
+        <Col span={24}>
+          <Divider style={{ marginTop: 8 }} />
+        </Col>
+      </Row>
+      <Row>
+        <Col span={3}>
+          <Typography.Text>Grade: {getGrade(feature)}</Typography.Text>
+        </Col>
+        <Col span={3}>
+          <Typography.Text>Distance: {getDistance(feature)}</Typography.Text>
         </Col>
         <Col span={24}>
           <Divider style={{ marginTop: 8 }} />

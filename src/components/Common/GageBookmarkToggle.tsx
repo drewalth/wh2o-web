@@ -14,7 +14,7 @@ type BookmarkButtonOptions = {
 }
 
 type GageBookmarkToggleProps = {
-  gageId: number
+  gageId: string
   type?: 'default' | 'icon'
 }
 
