@@ -8,6 +8,7 @@ import { Features } from './Features/Features'
 import { Media } from './Media/Media'
 import { ReachDetailProvider } from './ReachDetailProvider'
 import { Access } from './Access/Access'
+import { Source } from './Source/Source'
 import { useTranslation } from 'react-i18next'
 import { Flow } from './Flow/Flow'
 
@@ -36,6 +37,7 @@ export const ReachDetail = () => {
     t('features'),
     t('media'),
     t('access'),
+    t('source'),
     // 'Posts',
     // 'Subscribers',
   ]
@@ -53,6 +55,8 @@ export const ReachDetail = () => {
         return <Media />
       case '5':
         return <Access />
+      case '6':
+        return <Source />
     }
   }
 
@@ -64,7 +68,7 @@ export const ReachDetail = () => {
         style={{ padding: '0', background: '#fff' }}
       >
         {isMobile ? (
-          <div>
+          <div style={{ padding: '0 24px' }}>
             <Tabs>
               {tabs.map((tb, idx) => (
                 <Tabs.TabPane tab={tb} key={(idx + 1).toLocaleString()} />

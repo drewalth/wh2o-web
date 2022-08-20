@@ -61,7 +61,7 @@ export const Navigation = ({ children }: NavigationProps) => {
   const items: MenuItem[] = [
     getItem(t('search'), 'sub1', <SearchOutlined />, [
       getItem(t('gages'), 'gage'),
-      getItem(t('reaches'), 'reach'),
+      // getItem(t('reaches'), 'reach'),
     ]),
     getItem(t('prophet'), 'prophet', <EyeOutlined />),
     getItem(t('contact'), 'contact', <MailOutlined />),

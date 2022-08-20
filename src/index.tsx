@@ -19,7 +19,6 @@ ReactDOM.render(
 )
 
 if (isProduction) {
-  console.log('Registering service worker')
   serviceWorkerRegistration.register()
 } else {
   serviceWorkerRegistration.unregister()
