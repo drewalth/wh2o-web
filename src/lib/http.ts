@@ -6,6 +6,7 @@ const getHeaders = () => {
   const defaultHeaders = {
     headers: {
       'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': window.location.origin,
     },
   }
 
