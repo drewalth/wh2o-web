@@ -7,6 +7,7 @@ import { canadianProvinces, StateEntry, usStates } from '../../lib'
 import debounce from 'lodash.debounce'
 import { useTranslation } from 'react-i18next'
 import { useBreakpoint } from '../../hooks'
+import { SEO } from '../Common'
 
 export const Gage = (): JSX.Element => {
   const { isMobile } = useBreakpoint()
@@ -186,6 +187,7 @@ export const Gage = (): JSX.Element => {
         {getFiltersForm()}
         <GageTable />
       </Card>
+      <SEO title={'wh2o - Gage Search'} link={'https://wh2o.io/gage'} />
     </>
   )
 }

@@ -21,6 +21,7 @@ import { GageBookmarkToggle } from '../Common/GageBookmarkToggle'
 import { RiverForm } from '../Prophet/RiverForm'
 
 import { useTranslation } from 'react-i18next'
+import { SEO } from '../Common'
 
 const whiteBg: CSSProperties = {
   backgroundColor: '#fff',
@@ -33,7 +34,30 @@ export const GageDetail = () => {
   const { id: gageId } = useParams()
   const { t } = useTranslation()
 
-  console.log('gageId: ', gageId)
+  const getSEOTitle = () => {
+    if (gage) {
+      return `wh2o - ${gage.name} - ${gage.state}, ${gage.country}`
+    }
+    return 'wh2o'
+  }
+
+  const getSEOLink = () => {
+    if (gage) {
+      return `https://wh2o.io/gage/${gage.id}`
+    }
+    return `https://wh2o.io/gage`
+  }
+
+  const getSEODescription = () => {
+    if (gage) {
+      if (gage.source === GageSource.USGS) {
+        return `Historical flow data, forecasting, and custom reporting for the ${gage.name} river gage in ${gage.state}, ${gage.country}`
+      }
+      return `Historical flow data and custom reporting for the ${gage.name} river gage in ${gage.country}`
+    }
+
+    return ''
+  }
 
   useEffect(() => {
     ;(async () => {
@@ -163,6 +187,11 @@ export const GageDetail = () => {
           </Col>
         )}
       </Row>
+      <SEO
+        title={getSEOTitle()}
+        link={getSEOLink()}
+        description={getSEODescription()}
+      />
     </>
   )
 }

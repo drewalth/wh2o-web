@@ -24,6 +24,7 @@ import { Legal } from './pages/Legal'
 import { Reset } from './pages/Auth/Reset'
 import { ReachDetail } from './components/Reach/ReachDetail/ReachDetail'
 import { Reach } from './components/Reach/Reach'
+import { SEO } from './components/Common'
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
             <Route index element={<Home />} />
           </Routes>
         </Navigation>
+        <SEO />
       </AppProvider>
     </Router>
   )

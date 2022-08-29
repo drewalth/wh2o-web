@@ -1,9 +1,10 @@
 import { GageMap } from './GageMap'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { RiverForm } from './RiverForm'
 import { Alert, Col, PageHeader, Row } from 'antd'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { SEO } from '../Common'
 
 export const Prophet = () => {
   const { t } = useTranslation()
@@ -47,6 +48,11 @@ export const Prophet = () => {
           </Col>
         </Row>
       </div>
+      <SEO
+        title={'wh2o - Prophet'}
+        link={'https://wh2o.io/prophet'}
+        description={'River flow predictions for USGS river gages'}
+      />
     </>
   )
 }
