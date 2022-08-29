@@ -10,8 +10,6 @@ import {
   ImportOutlined,
   SearchOutlined,
   UserOutlined,
-  MailOutlined,
-  CodeOutlined,
 } from '@ant-design/icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
@@ -61,21 +59,8 @@ export const Navigation = ({ children }: NavigationProps) => {
   const items: MenuItem[] = [
     getItem(t('search'), 'sub1', <SearchOutlined />, [
       getItem(t('gages'), 'gage'),
-      // getItem(t('reaches'), 'reach'),
     ]),
     getItem(t('prophet'), 'prophet', <EyeOutlined />),
-    getItem(t('contact'), 'contact', <MailOutlined />),
-    getItem(
-      <a
-        href="https://wh2o-docs.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Developer
-      </a>,
-      'docs',
-      <CodeOutlined />,
-    ),
     ...authItems,
   ]
 
