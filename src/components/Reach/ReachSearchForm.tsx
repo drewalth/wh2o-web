@@ -76,7 +76,7 @@ export const ReachSearchForm = () => {
       layout={isMobile ? 'vertical' : 'inline'}
       style={{ marginBottom: 24 }}
     >
-      <Form.Item label={'country'} name={'country'}>
+      <Form.Item label={t('country')} name={'country'}>
         <Select>
           {Object.values(Country).map((c) => (
             <Select.Option key={c} value={c}>
@@ -97,7 +97,7 @@ export const ReachSearchForm = () => {
           ))}
         </Select>
       </Form.Item>
-      <Form.Item label={'state'} name={'state'}>
+      <Form.Item label={t('state')} name={'state'}>
         <Select>
           {properties[selectedCountry].states.map((c) => (
             <Select.Option key={c.abbreviation} value={c.abbreviation}>
@@ -106,7 +106,7 @@ export const ReachSearchForm = () => {
           ))}
         </Select>
       </Form.Item>
-      <Form.Item label={'name'} name={'name'}>
+      <Form.Item label={t('name')} name={'name'}>
         <Input />
       </Form.Item>
     </Form>

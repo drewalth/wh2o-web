@@ -10,7 +10,7 @@ import {
 
 export const DEFAULT_PAGINATION: TablePagination = {
   page: 1,
-  page_size: 10,
+  page_size: 25,
 }
 
 export const DEFAULT_GAGE_SEARCH_PARAMS: GageSearchParams = {
@@ -21,7 +21,7 @@ export const DEFAULT_GAGE_SEARCH_PARAMS: GageSearchParams = {
   ...DEFAULT_PAGINATION,
 }
 
-type GageContextData = {
+export type GageContextData = {
   gages: Gage[]
   searchParams: GageSearchParams
   setSearchParams: (params: GageSearchParams) => void

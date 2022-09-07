@@ -1,5 +1,4 @@
 import React from 'react'
-import './App.css'
 import './style/index.scss'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Settings from './components/User/Settings'

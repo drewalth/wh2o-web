@@ -1,6 +1,9 @@
 import { Card, Col, Modal, Row, Typography } from 'antd'
 import { Link } from 'react-router-dom'
 
+/**
+ * unofficial official legalese...
+ */
 export const LegalContent = () => {
   return (
     <>

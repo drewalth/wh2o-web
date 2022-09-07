@@ -120,37 +120,27 @@ const GageTable = (): JSX.Element => {
   ]
 
   return (
-    <div
-      style={{
-        position: 'relative',
-        width: '100%',
-        overflowX: 'scroll',
-        maxWidth: '100%',
-        backgroundColor: '#fff',
+    <Table
+      rowKey={(row) => row.id}
+      expandable={{
+        expandedRowRender: (g) => (
+          <GageReadingsChart readings={g.readings || []} metric={g.metric} />
+        ),
+        rowExpandable: (g) => (g.readings && g.readings.length > 0) || false,
       }}
-    >
-      <Table
-        rowKey={(row) => row.id}
-        expandable={{
-          expandedRowRender: (g) => (
-            <GageReadingsChart readings={g.readings || []} metric={g.metric} />
-          ),
-          rowExpandable: (g) => (g.readings && g.readings.length > 0) || false,
-        }}
-        loading={requestStatus === 'loading'}
-        dataSource={gages || []}
-        columns={columns}
-        pagination={{
-          total: pagination.total,
-          showSizeChanger: true,
-          current: pagination.page,
-          pageSize: pagination.page_size,
-          pageSizeOptions: [10, 25, 50],
-          onChange: (page, page_size) =>
-            fetchGages({ ...searchParams, page, page_size }),
-        }}
-      />
-    </div>
+      loading={requestStatus === 'loading'}
+      dataSource={gages || []}
+      columns={columns}
+      pagination={{
+        total: pagination.total,
+        showSizeChanger: true,
+        current: pagination.page,
+        pageSize: pagination.page_size,
+        pageSizeOptions: [25, 50, 100],
+        onChange: (page, page_size) =>
+          fetchGages({ ...searchParams, page, page_size }),
+      }}
+    />
   )
 }
 

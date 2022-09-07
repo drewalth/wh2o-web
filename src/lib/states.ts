@@ -12,10 +12,6 @@ export const usStates: StateEntry[] = [
     abbreviation: 'AK',
   },
   {
-    name: 'AMERICAN SAMOA',
-    abbreviation: 'AS',
-  },
-  {
     name: 'ARIZONA',
     abbreviation: 'AZ',
   },
@@ -44,20 +40,12 @@ export const usStates: StateEntry[] = [
     abbreviation: 'DC',
   },
   {
-    name: 'FEDERATED STATES OF MICRONESIA',
-    abbreviation: 'FM',
-  },
-  {
     name: 'FLORIDA',
     abbreviation: 'FL',
   },
   {
     name: 'GEORGIA',
     abbreviation: 'GA',
-  },
-  {
-    name: 'GUAM',
-    abbreviation: 'GU',
   },
   {
     name: 'HAWAII',
@@ -94,10 +82,6 @@ export const usStates: StateEntry[] = [
   {
     name: 'MAINE',
     abbreviation: 'ME',
-  },
-  {
-    name: 'MARSHALL ISLANDS',
-    abbreviation: 'MH',
   },
   {
     name: 'MARYLAND',
@@ -160,10 +144,6 @@ export const usStates: StateEntry[] = [
     abbreviation: 'ND',
   },
   {
-    name: 'NORTHERN MARIANA ISLANDS',
-    abbreviation: 'MP',
-  },
-  {
     name: 'OHIO',
     abbreviation: 'OH',
   },
@@ -176,16 +156,8 @@ export const usStates: StateEntry[] = [
     abbreviation: 'OR',
   },
   {
-    name: 'PALAU',
-    abbreviation: 'PW',
-  },
-  {
     name: 'PENNSYLVANIA',
     abbreviation: 'PA',
-  },
-  {
-    name: 'PUERTO RICO',
-    abbreviation: 'PR',
   },
   {
     name: 'RHODE ISLAND',
@@ -214,10 +186,6 @@ export const usStates: StateEntry[] = [
   {
     name: 'VERMONT',
     abbreviation: 'VT',
-  },
-  {
-    name: 'VIRGIN ISLANDS',
-    abbreviation: 'VI',
   },
   {
     name: 'VIRGINIA',

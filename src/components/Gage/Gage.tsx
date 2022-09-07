@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import GageTable from './GageTable'
-import { Card, Collapse, Form, Input, PageHeader, Select } from 'antd'
+import { Collapse, Form, Input, PageHeader, Select } from 'antd'
 import { DEFAULT_PAGINATION, useGagesContext } from '../Provider/GageProvider'
 import { Country, GageSearchParams, GageSource } from '../../types'
 import { canadianProvinces, StateEntry, usStates } from '../../lib'
@@ -122,7 +122,7 @@ export const Gage = (): JSX.Element => {
       style={{ marginBottom: 24 }}
     >
       <Form.Item name={'country'} label={t('country')}>
-        <Select>
+        <Select id={'country-select'}>
           {Object.values(Country).map((country) => (
             <Select.Option key={country} value={country}>
               {(() => {
@@ -183,10 +183,8 @@ export const Gage = (): JSX.Element => {
   return (
     <>
       <PageHeader title={`${t('gage')}  ${t('search')}`} />
-      <Card>
-        {getFiltersForm()}
-        <GageTable />
-      </Card>
+      {getFiltersForm()}
+      <GageTable />
       <SEO title={'wh2o - Gage Search'} link={'https://wh2o.io/gage'} />
     </>
   )
