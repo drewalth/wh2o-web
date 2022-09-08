@@ -32,3 +32,8 @@ npm ci
 # start the development server
 npm start
 ```
+
+## Projects
+
+- [wh2o-api](https://github.com/drewalth/wh2o-api)
+- [wh2o-native](https://github.com/drewalth/wh2o-native)
