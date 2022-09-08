@@ -1,5 +1,7 @@
 # wh2o-web
 
+<img alt="image" height="300" src="https://github.com/drewalth/wh2o-native/blob/master/assets/images/icon.png" width="300"/>
+
 The code that runs the [wh2o.io](https://wh2o.io/) browser client.
 
 ---
