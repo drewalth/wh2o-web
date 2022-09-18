@@ -11,6 +11,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User>()
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading')
 
+  const loaded = user && user.id !== '00000000-0000-0000-0000-000000000000'
+
   const reload = async () => {
     try {
       setRequestStatus('loading')
@@ -75,14 +77,14 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       value={{
         removeUserGage,
         appendUserAlerts,
-        canBookmarkGages: (user && user.gages.length < 15) || false,
+        canBookmarkGages: (loaded && user && user.gages.length < 15) || false,
         reload,
         removeUserAlert,
         requestStatus,
         reset: () => setUser(undefined),
         setUser: (user: User) => setUser(user),
         updateUserAlerts,
-        user,
+        user: loaded ? user : undefined,
         isAdmin,
         canContribute,
       }}
