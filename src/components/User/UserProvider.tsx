@@ -77,7 +77,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       value={{
         removeUserGage,
         appendUserAlerts,
-        canBookmarkGages: (loaded && user && user.gages.length < 15) || false,
+        canBookmarkGages: (loaded && user && user?.gages?.length < 15) || false,
         reload,
         removeUserAlert,
         requestStatus,
