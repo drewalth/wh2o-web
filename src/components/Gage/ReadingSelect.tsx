@@ -3,7 +3,7 @@ import { Select, Form, Typography } from 'antd'
 import { GageReading, GageMetric } from '../../types'
 
 type ReadingSelectProps = {
-  readings: GageReading[]
+  readings?: GageReading[]
   metric: GageMetric
   disabled: boolean
 }
@@ -43,7 +43,12 @@ export const ReadingSelect = ({
 
   const formattedReading = formatReading(reading)
 
-  if (readings.length === 0 || disabled || formattedReading === '-') {
+  if (
+    !readings ||
+    readings.length === 0 ||
+    disabled ||
+    formattedReading === '-'
+  ) {
     return <>-</>
   }
 

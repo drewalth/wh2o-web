@@ -8,7 +8,7 @@ import { HelpTooltip } from '../Common'
 import { useTranslation } from 'react-i18next'
 
 export type GageReadingsChartProps = {
-  readings: GageReading[]
+  readings?: GageReading[]
   chartId?: string
   metric: GageMetric
   gage?: Gage
@@ -27,6 +27,7 @@ export const GageReadingsChart = ({
   const { t } = useTranslation()
 
   const getAvailableMetrics = () => {
+    if (!readings) return
     const m = new Set(readings.map((r) => r.metric))
     const mArr = [...m]
     if (!mArr.includes(activeMetric)) {
@@ -37,7 +38,7 @@ export const GageReadingsChart = ({
   }
 
   const getChartData = () => {
-    if (readings?.length > 0) {
+    if (readings && readings?.length > 0) {
       const filteredReadings = readings.filter((r) => r.metric === activeMetric)
       return {
         categories: filteredReadings
@@ -134,7 +135,7 @@ export const GageReadingsChart = ({
           type="area"
           width={chartWidth}
         />
-        {readings?.length > 0 && (
+        {readings && readings?.length > 0 && (
           <>
             <Divider />
             <Form layout={'inline'}>
@@ -143,7 +144,7 @@ export const GageReadingsChart = ({
                   value={activeMetric}
                   onSelect={(metric: GageMetric) => setActiveMetric(metric)}
                 >
-                  {getAvailableMetrics().map((m) => (
+                  {(getAvailableMetrics() || []).map((m) => (
                     <Select.Option key={m} value={m}>
                       {m}
                     </Select.Option>
