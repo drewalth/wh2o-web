@@ -37,7 +37,7 @@ export const GageReadingsChart = ({
   }
 
   const getChartData = () => {
-    if (readings.length > 0) {
+    if (readings?.length > 0) {
       const filteredReadings = readings.filter((r) => r.metric === activeMetric)
       return {
         categories: filteredReadings
@@ -119,6 +119,8 @@ export const GageReadingsChart = ({
     }
   }, [])
 
+  if (!readings || readings.length === 0) return null
+
   return (
     <div ref={cardRef}>
       <Card
@@ -132,7 +134,7 @@ export const GageReadingsChart = ({
           type="area"
           width={chartWidth}
         />
-        {readings.length > 0 && (
+        {readings?.length > 0 && (
           <>
             <Divider />
             <Form layout={'inline'}>

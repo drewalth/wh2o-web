@@ -114,7 +114,7 @@ export const GageDetail = () => {
       </Row>
       <Row style={{ ...whiteBg }}>
         <Col span={24} md={24} lg={24}>
-          {gage && gage.readings && gage.readings.length > 0 && (
+          {gage && gage?.readings && gage?.readings?.length > 0 && (
             <GageReadingsChart
               readings={gage.readings}
               metric={gage.metric}
