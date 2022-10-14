@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+// import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import { disableReactDevTools } from '@fvilers/disable-react-devtools'
 import './locale/i18n'
 const isProduction = process.env.NODE_ENV === 'production'
@@ -17,8 +17,8 @@ ReactDOM.render(
   document.getElementById('root'),
 )
 
-if (isProduction) {
-  serviceWorkerRegistration.register()
-} else {
-  serviceWorkerRegistration.unregister()
-}
+// if (isProduction) {
+//   serviceWorkerRegistration.register()
+// } else {
+//   serviceWorkerRegistration.unregister()
+// }
