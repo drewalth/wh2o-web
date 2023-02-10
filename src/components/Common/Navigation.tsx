@@ -4,16 +4,16 @@ import { Layout, Menu, MenuProps, Typography, Divider, Select } from 'antd'
 import { useTranslation } from 'react-i18next'
 import 'antd/dist/antd.css'
 import {
-  DashboardOutlined,
-  ExportOutlined,
+  // DashboardOutlined,
+  // ExportOutlined,
   EyeOutlined,
-  ImportOutlined,
+  // ImportOutlined,
   SearchOutlined,
-  UserOutlined,
+  // UserOutlined,
 } from '@ant-design/icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
-import { useUserContext } from '../User/UserContext'
+// import { useUserContext } from '../User/UserContext'
 import { languages } from '../../lib/languages'
 import './navigation.scss'
 
@@ -44,17 +44,17 @@ const externalLinks: string[] = ['docs']
 export const Navigation = ({ children }: NavigationProps) => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { user } = useUserContext()
+  // const { user } = useUserContext()
   const { t, i18n } = useTranslation()
   const [navOpen, setNavOpen] = useState(false)
 
-  const authItems: MenuItem[] = user
-    ? [
-        getItem(t('dashboard'), 'user/dashboard', <DashboardOutlined />),
-        getItem(t('account'), 'user/settings', <UserOutlined />),
-        getItem(t('signOut'), 'auth/logout', <ExportOutlined />),
-      ]
-    : [getItem(t('signIn'), 'auth/login', <ImportOutlined />)]
+  // const authItems: MenuItem[] = user
+  //   ? [
+  //       getItem(t('dashboard'), 'user/dashboard', <DashboardOutlined />),
+  //       getItem(t('account'), 'user/settings', <UserOutlined />),
+  //       getItem(t('signOut'), 'auth/logout', <ExportOutlined />),
+  //     ]
+  //   : [getItem(t('signIn'), 'auth/login', <ImportOutlined />)]
 
   const items: MenuItem[] = [
     getItem(t('search'), 'sub1', <SearchOutlined />, [
@@ -62,7 +62,7 @@ export const Navigation = ({ children }: NavigationProps) => {
       // getItem(t('reaches'), 'reach'),
     ]),
     getItem(t('prophet'), 'prophet', <EyeOutlined />),
-    ...authItems,
+    // ...authItems,
   ]
 
   const currentPath = location.pathname
