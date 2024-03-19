@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Col, Popover, Row, Typography, Grid } from 'antd'
+import { Button, Col, Popover, Row, Typography, Grid, Alert } from 'antd'
 import cover from '../../assets/john-huisjen-cover.jpeg'
 import { CameraOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
@@ -48,6 +48,13 @@ export const Hero = () => {
           <Typography.Title type={'secondary'} style={{ color: '#fff' }}>
             {t('hero.primary')}
           </Typography.Title>
+          <Alert
+            type={'error'}
+            message={'This project is no longer actively maintained.'}
+            description={
+              'Please visit americanwhitewater.org for river flow data.'
+            }
+          />
         </Col>
       </Row>
 
